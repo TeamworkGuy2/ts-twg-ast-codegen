@@ -1,12 +1,7 @@
-﻿/// <reference path="./cstypes.d.ts" />
+﻿/// <reference path="./lib/node.d.ts" />
+/// <reference path="./cstypes.d.ts" />
 /// <reference path="./types.d.ts" />
 /// <reference path="./utils.d.ts" />
-
-declare module 'fs' {
-    export function readFile(...args: any[]): any;
-}
-
-declare module 'vm' { }
 
 declare module 'gulp' {
     export function dest(...args: any[]): any;
@@ -53,10 +48,6 @@ declare module 'vinyl-source-stream' {
 declare module 'gulp-6to5' { }
 
 declare module 'q' { }
-
-declare module 'child_process' {
-    export var exec: any;
-}
 
 declare module 'exorcist' {
     function exorcist(...args: any[]): any;

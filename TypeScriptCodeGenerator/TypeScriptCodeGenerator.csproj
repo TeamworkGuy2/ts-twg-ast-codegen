@@ -18,17 +18,15 @@
     <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <ItemGroup>
-    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ui\CompileRunner.html" />
-    <Content Include="web.config" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="package.json" />
     <TypeScriptCompile Include="gulpfile.ts" />
+    <TypeScriptCompile Include="tsMeta\definitions\lib\node.d.ts" />
+    <TypeScriptCompile Include="tsMeta\file-io\FileSectionManipulator.ts" />
+    <TypeScriptCompile Include="tsMeta\file-io\ReadFile.ts" />
+    <TypeScriptCompile Include="tsMeta\file-io\vsproj\VsProjManipulator.ts" />
+    <TypeScriptCompile Include="tsMeta\file-io\WriteFile.ts" />
     <TypeScriptCompile Include="tsMeta\modifiers\Access.ts" />
-    <TypeScriptCompile Include="tsMeta\app.ts" />
+    <TypeScriptCompile Include="tsMeta\App.ts" />
     <TypeScriptCompile Include="tsMeta\definitions\cstypes.d.ts" />
     <TypeScriptCompile Include="tsMeta\definitions\tsmeta.d.ts" />
     <TypeScriptCompile Include="tsMeta\definitions\types.d.ts" />
@@ -41,11 +39,23 @@
     <TypeScriptCompile Include="tsMeta\templates\generators\c-sharp\CsServiceModel.ts" />
     <TypeScriptCompile Include="tsMeta\templates\generators\c-sharp\CsToSource.ts" />
     <TypeScriptCompile Include="tsMeta\templates\generators\DefaultGenTools.ts" />
+    <TypeScriptCompile Include="tsMeta\Tests.ts" />
+    <TypeScriptCompile Include="tsMeta\tests\test-types.d.ts" />
+    <TypeScriptCompile Include="tsMeta\tests\TestUtil.ts" />
+    <TypeScriptCompile Include="tsMeta\tests\utils\StringUtilTest.ts" />
     <TypeScriptCompile Include="tsMeta\utils\ArrayUtil.ts" />
     <TypeScriptCompile Include="tsMeta\utils\EnumUtil.ts" />
     <TypeScriptCompile Include="tsMeta\utils\ObjectUtil.ts" />
+    <TypeScriptCompile Include="tsMeta\utils\StringUtil.ts" />
     <TypeScriptCompile Include="tsMeta\whitespace\DefaultPrettyPrinter.ts" />
     <TypeScriptCompile Include="tsMeta\whitespace\EmptyLine.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ui\CompileRunner.html" />
+    <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="tsMeta\templates\generators\type-script\" />

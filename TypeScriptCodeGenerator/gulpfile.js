@@ -4,16 +4,19 @@ var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 var watchify = require('watchify');
 var es6ify = require('es6ify');
-var reactify = require('reactify');
+//import reactify = require('reactify');
 var vinylSourceSource = require('vinyl-source-stream');
 var execObj = require('child_process');
 var exorcist = require('exorcist');
+// testing...
+var App = require("./tsMeta/App");
+var Tests = require("./tsMeta/Tests");
 var exec = execObj.exec;
 /** File paths */
 var dstDir = "bin/";
-var requireFiles = "./tsMeta/app.js";
+//var requireFiles = "./tsMeta/App.js";
 var watchifyOptions = {
-    entries: ["./tsMeta/app.js"],
+    entries: ["./tsMeta/App.js"],
     extensions: [".js", ".jsx"],
     paths: ["node_modules", "./tsMeta/stringManipulation", "./tsMeta/templates", "./tsMeta/templates/generators"]
 };
@@ -24,8 +27,8 @@ function compileScripts(debug) {
     var srcMapFile = dstDir + dstFileName + ".map";
     es6ify.traceurOverrides = { experimental: true };
     var bundler = watchify(watchifyOptions);
-    bundler.require(requireFiles);
-    bundler.transform(reactify);
+    //bundler.require(requireFiles);
+    //bundler.transform(reactify);
     bundler.transform(es6ify.configure(/.jsx|tsMeta\\(?!.*\.ts)|tsMeta\/(?!.*\.ts)/));
     var pathChecks = [
         "tsMeta/",
@@ -96,6 +99,12 @@ gulp.task("checkFileEncoding", function () {
             }
         }
     });
+});
+gulp.task("runTests", function () {
+    Tests.runAll(gutil.log);
+});
+gulp.task("testReadFileSections", function () {
+    App.main(null, gutil);
 });
 // "--debug true/false" (default true) whether to include extra debug info in compiled files like source maps
 gulp.task("default", function () {

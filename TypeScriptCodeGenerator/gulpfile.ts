@@ -10,20 +10,23 @@ import uglify = require('gulp-uglify');
 import browserify = require('browserify');
 import watchify = require('watchify');
 import es6ify = require('es6ify');
-import reactify = require('reactify');
+//import reactify = require('reactify');
 import vinylSourceSource = require('vinyl-source-stream');
 import to5 = require('gulp-6to5');
 import Q = require('q');
 import execObj = require('child_process');
 import exorcist = require('exorcist');
+// testing...
+import App = require("./tsMeta/App");
+import Tests = require("./tsMeta/Tests");
 
 var exec = execObj.exec;
 
 /** File paths */
 var dstDir = "bin/";
-var requireFiles = "./tsMeta/app.js";
+//var requireFiles = "./tsMeta/App.js";
 var watchifyOptions = {
-    entries: ["./tsMeta/app.js"],
+    entries: ["./tsMeta/App.js"],
     extensions: [".js", ".jsx"],
     paths: ["node_modules", "./tsMeta/stringManipulation", "./tsMeta/templates", "./tsMeta/templates/generators"]
 };
@@ -37,8 +40,8 @@ function compileScripts(debug: boolean) {
     var srcMapFile = dstDir + dstFileName + ".map";
     es6ify.traceurOverrides = { experimental: true };
     var bundler = watchify(watchifyOptions);
-    bundler.require(requireFiles);
-    bundler.transform(reactify);
+    //bundler.require(requireFiles);
+    //bundler.transform(reactify);
     bundler.transform(es6ify.configure(/.jsx|tsMeta\\(?!.*\.ts)|tsMeta\/(?!.*\.ts)/));
 
     var pathChecks = [
@@ -119,6 +122,16 @@ gulp.task("checkFileEncoding", function () {
             }
         }
     });
+});
+
+
+gulp.task("runTests", function () {
+    Tests.runAll(gutil.log);
+});
+
+
+gulp.task("testReadFileSections", function () {
+    App.main(null, gutil);
 });
 
 
