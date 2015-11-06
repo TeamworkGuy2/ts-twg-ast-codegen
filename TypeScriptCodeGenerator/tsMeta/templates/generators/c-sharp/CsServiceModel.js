@@ -52,17 +52,17 @@ var CsServiceModel;
             className: className,
         };
         var classConstructors = [{
-            methodComments: [
-                "/// <summary>",
-                "/// <para>",
-                "/// Initializes a new instance of the <see cref=\"" + className + "\"/> class.",
-                "/// </para>",
-                "/// </summary>"
-            ],
-            accessModifiers: ["public"],
-            name: className,
-            code: []
-        }];
+                methodComments: [
+                    "/// <summary>",
+                    "/// <para>",
+                    "/// Initializes a new instance of the <see cref=\"" + className + "\"/> class.",
+                    "/// </para>",
+                    "/// </summary>"
+                ],
+                accessModifiers: ["public"],
+                name: className,
+                code: []
+            }];
         var properties = [];
         for (var i = 0, size = props.length; i < size; i++) {
             var prop = props[i];

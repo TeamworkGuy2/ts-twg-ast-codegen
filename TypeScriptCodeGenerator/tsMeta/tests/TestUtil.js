@@ -3,7 +3,8 @@ var TestUtil;
 (function (TestUtil) {
     function runTests(compareFunc, testValues, expectedResults, func, context) {
         if (testValues.length !== expectedResults.length) {
-            throw new Error("context: running code test; " + "problem: number of test values (" + testValues.length + ") does not equal number of results (" + expectedResults.length + ")");
+            throw new Error("context: running code test; " +
+                "problem: number of test values (" + testValues.length + ") does not equal number of results (" + expectedResults.length + ")");
         }
         for (var i = 0, size = testValues.length; i < size; i++) {
             var values = testValues[i];

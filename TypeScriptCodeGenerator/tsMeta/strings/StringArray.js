@@ -48,6 +48,7 @@ var StringArray = (function () {
         }
         else if (!Array.isArray(obj)) {
             var props = Object.keys(obj);
+            // Object properties
             for (var i = 0, size = props.length; i < size; i++) {
                 var prop = obj[props[i]];
                 // String

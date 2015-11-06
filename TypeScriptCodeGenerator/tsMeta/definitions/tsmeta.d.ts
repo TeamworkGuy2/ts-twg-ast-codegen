@@ -4,6 +4,7 @@
 /// <reference path="./utils.d.ts" />
 
 declare module 'gulp' {
+    export function src(...args: any[]): any;
     export function dest(...args: any[]): any;
     export function task(...args: any[]): any;
 }
@@ -13,7 +14,10 @@ declare module 'gulp-util' {
     export function log(...args: any[]): any;
 }
 
-declare module 'gulp-concat' { }
+declare module 'gulp-concat' {
+    function gulpConcat(...args: any[]): any;
+    export = gulpConcat;
+}
 
 declare module 'gulp-sass' { }
 
@@ -24,7 +28,10 @@ declare module 'gulp-rename' {
     export = gulpRename;
 }
 
-declare module 'gulp-uglify' { }
+declare module 'gulp-uglify' {
+    function gulpUglify(...args: any[]): any;
+    export = gulpUglify;
+}
 
 declare module 'browserify' { }
 

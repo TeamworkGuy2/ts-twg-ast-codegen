@@ -9,7 +9,8 @@ var EnumUtil;
             this.enumConstants = enumConstants;
         }
         EnumClassImpl.prototype.isInstance = function (obj) {
-            return obj != null && (obj.constructor != null && ((obj.constructor.name === this.enumConstantClass.name) || (obj instanceof this.enumConstantClass)));
+            return obj != null && (obj.constructor != null &&
+                ((obj.constructor.name === this.enumConstantClass.name) || (obj instanceof this.enumConstantClass)));
         };
         EnumClassImpl.prototype.values = function () {
             return this.enumConstants;

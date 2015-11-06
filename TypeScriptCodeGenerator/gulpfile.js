@@ -20,8 +20,7 @@ var watchifyOptions = {
     extensions: [".js", ".jsx"],
     paths: ["node_modules", "./tsMeta/stringManipulation", "./tsMeta/templates", "./tsMeta/templates/generators"]
 };
-function noop() {
-}
+function noop() { }
 function compileScripts(debug) {
     var dstFileName = "code-generator.js";
     var srcMapFile = dstDir + dstFileName + ".map";
@@ -43,12 +42,8 @@ function compileScripts(debug) {
             debug: debug,
             filter: function (path) {
                 // tries to valid import statements for incorrect casing ('psUtils' vs. 'psutils') or absolute directories (not starting with './' or '../')
-                var notPath = pathChecks.reduce(function (prev, cur) {
-                    return prev && path.indexOf(cur) === -1;
-                }, true);
-                var notPathLowerCase = pathChecks.reduce(function (prev, cur) {
-                    return prev && path.toLowerCase().indexOf(cur.toLowerCase()) === -1;
-                }, true);
+                var notPath = pathChecks.reduce(function (prev, cur) { return prev && path.indexOf(cur) === -1; }, true);
+                var notPathLowerCase = pathChecks.reduce(function (prev, cur) { return prev && path.toLowerCase().indexOf(cur.toLowerCase()) === -1; }, true);
                 if ((!notPath && !(path.indexOf("./") === 0 || path.indexOf("../") === 0)) || (notPath && !notPathLowerCase)) {
                     gutil.log("incorrect import: '" + path + "', ensure name case is correct and path begins with relative './' or '../'");
                 }

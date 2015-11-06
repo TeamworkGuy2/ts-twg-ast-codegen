@@ -12,12 +12,11 @@ var App = (function () {
     }
     App.generateClass = function (el) {
         var genTools = DefaultGenTools.newInst(DefaultPrettyPrinter.newInst("    ", 0));
-        var csClass = CsServicesModel.generateServiceNamespaceSource(genTools, "CorningstoneApp", "TestingClass", [
+        var csClass = CsServicesModel.generateServiceNamespaceSource(genTools, "test-project", "TestingClass", [
             {
                 name: "Id",
                 typeName: "string"
-            },
-            {
+            }, {
                 name: "bebo",
                 typeName: "decimal",
                 required: false
@@ -25,7 +24,7 @@ var App = (function () {
         ], ["For example a copyright notice."], "Author Name");
         var lines = [];
         console.log("C# class object: ", csClass);
-        CsToSource.namespaceClassToLines(genTools, "CorningstoneApp", csClass, true, lines);
+        CsToSource.namespaceClassToLines(genTools, "test-project", csClass, true, lines);
         console.log("lines: ", lines);
         for (var i = 0, size = lines.length; i < size; i++) {
             var line = lines[i];
@@ -67,16 +66,16 @@ var App = (function () {
     };
     App.main = function (el, gutil) {
         //App.generateClass(el);
-        var projectDir = "C:\\Users\\TeamworkGuy2\\Documents\\Visual Studio 2015\\Projects\\HDSTeamBuilding\\HDSTeamBuilding\\CorningstoneApp\\";
-        var csProjFile = projectDir + "CorningstoneApp.csproj";
+        var projectDir = "C:\\Users\\TeamworkGuy2\\Documents\\Visual Studio 2015\\Projects\\TestProject\\test-project\\";
+        var csProjFile = projectDir + "test-project.csproj";
         var webConfigFile = projectDir + "Web.config";
         gutil.log("==== File content ====");
         var projManipulator = new VsProjManipulator(csProjFile, webConfigFile);
-        //projManipulator.addServiceNamespace("CorningstoneApp", "Services.Impl.ExampleTest", "Services.IExampleTest", "itlm/ExampleTest.svc");
+        //projManipulator.addServiceNamespace("test-project", "Services.Impl.ExampleTest", "Services.IExampleTest", "test/ExampleTest.svc");
         gutil.log("proj file sections: ", (projManipulator.getProjFileSections()["Compile"]));
         gutil.log("web config file sections: ", (projManipulator.getWebConfigFileSections()["serviceActivations"]));
         gutil.log("web config file sections: ", (projManipulator.getWebConfigFileSections()["services"]));
-        projManipulator.saveProjectFiles(projectDir + "CorningstoneApp.csproj.test", projectDir + "Web.config.test");
+        projManipulator.saveProjectFiles(projectDir + "test-project.csproj.test", projectDir + "Web.config.test");
     };
     App.logObject = function (log, obj) {
         var indent = "\t";
