@@ -1,7 +1,7 @@
 "use strict";
 var CsClass;
 (function (CsClass) {
-    function toCsClassSource(csClass) {
+    function copyShallow(csClass) {
         return {
             classStart: csClass.classStart,
             fields: csClass.fields,
@@ -11,6 +11,6 @@ var CsClass;
             staticMethods: csClass.staticMethods,
         };
     }
-    CsClass.toCsClassSource = toCsClassSource;
+    CsClass.copyShallow = copyShallow;
 })(CsClass || (CsClass = {}));
 module.exports = CsClass;

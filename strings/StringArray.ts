@@ -1,43 +1,10 @@
-﻿
-"use strict";
+﻿"use strict";
 
-class StringArray {
-
-    /** Add a common prefix and suffix string to each of the strings in an array of strings
-     * @return {@code strs} with prefix and suffix strings added
-     */
-    public static addCommonPreSuffix(commonPrefix: string, commonSuffix: string, strs: string[], dst: string[] = []): string[] {
-
-        if (commonPrefix || commonSuffix) {
-            if (commonPrefix && commonSuffix) {
-                for (var i = 0, size = strs.length; i < size; i++) {
-                    dst.push(commonPrefix + strs[i] + commonSuffix);
-                }
-            }
-            else if (commonPrefix && !commonSuffix) {
-                for (var i = 0, size = strs.length; i < size; i++) {
-                    dst.push(commonPrefix + strs[i]);
-                }
-            }
-            else if (!commonPrefix && commonSuffix) {
-                for (var i = 0, size = strs.length; i < size; i++) {
-                    dst.push(strs[i] + commonSuffix);
-                }
-            }
-        }
-        else {
-            for (var i = 0, size = strs.length; i < size; i++) {
-                dst.push(strs[i]);
-            }
-        }
-
-        return dst;
-    }
-
+module StringArray {
 
     /** Alias for {@link #toStringFromObjectsDeep()} 
      */
-    public static toStrings(obj: any): string[] {
+    export function toStrings(obj: any): string[] {
         var lines: string[] = [];
         StringArray.toStringFromObjectsDeep(obj, lines);
         return lines;
@@ -46,7 +13,7 @@ class StringArray {
 
     /** Convert a multi-level object to an array of string by recursively traversing each property of the object and appending string, string[] properties to the returned array
      */
-    public static toStringFromObjectsDeep(obj: any, dst: string[] = []) {
+    export function toStringFromObjectsDeep(obj: any, dst: string[] = []) {
         // String
         if (typeof obj === "string") {
             dst.push(obj);
@@ -97,7 +64,7 @@ class StringArray {
     /** Convert a single level object containing string or string[] properties to an array of strings
      * @return the flattened object with {@code join} string[] inserted between each property
      */
-    public static stringMapToArrayJoin(obj: { [id: string]: string[]| string }, join: string[], dst: string[] = []): string[] {
+    export function stringMapToArrayJoin(obj: { [id: string]: string[]| string }, join: string[], dst: string[] = []): string[] {
         var props = Object.keys(obj);
         for (var i = 0, size = props.length; i < size; i++) {
             var prop = obj[props[i]];
@@ -117,31 +84,32 @@ class StringArray {
     }
 
 
-    public static flatten(strsAry: string[][]): string[] {
-        return StringArray.stringArrayJoin(strsAry, null, []);
+    export function flatten(strsAry: string[][]): string[] {
+        return StringArray.joinMulti(strsAry, null, []);
     }
 
 
     /** Flatten a string[][] and optionally insert a 'join' string[] between each array
      * @return the flattened {@code strsAry} joined by {@code join}
      */
-    public static stringArrayJoin(strsAry: string[][], join?: string[], dst: string[] = []): string[] {
-        for (var i = 0, size = strsAry.length; i < size; i++) {
-            var strs = strsAry[i];
-            Array.prototype.push.apply(dst, strs);
-
-            if (join && i < size - 1) {
+    export function joinMulti(strArys: string[][], join?: string[], dst: string[] = []): string[] {
+        var sizeN1 = strArys.length - 1;
+        if (sizeN1 > 0) {
+            for (var i = 0; i < sizeN1; i++) {
+                var strs = strArys[i];
+                Array.prototype.push.apply(dst, strs);
                 Array.prototype.push.apply(dst, join);
             }
+            Array.prototype.push.apply(dst, strArys[sizeN1 - 1]);
         }
 
         return dst;
     }
 
 
-    /** Added an optional prefix and suffix to a string and return the result
+    /** Add an optional prefix and suffix to a string and return the result
      */
-    public static of(prefix: string, str: string, suffix: string) {
+    export function preAppend(prefix: string, str: string, suffix: string): string {
         if (prefix || suffix) {
             if (prefix && suffix) {
                 return prefix + str + suffix;
@@ -159,9 +127,9 @@ class StringArray {
     }
 
 
-    /** Add a string to the beginning and end of an array
+    /** Add optional prefix and suffix strings to an array of strings
      */
-    public static addPrePostStrings(prefix: string, ary: string[], suffix: string): string[] {
+    export function preAppendArray(prefix: string, ary: string[], suffix: string): string[] {
         if (prefix) {
             ary.unshift(prefix);
         }
@@ -170,6 +138,39 @@ class StringArray {
         }
         return ary;
     }
+
+
+    /** Add a common prefix and suffix string to each of the strings in an array of strings
+     * @return {@code strs} with prefix and suffix strings added
+     */
+    export function preAppendEach(prefix: string, suffix: string, strs: string[], dst: string[] = []): string[] {
+
+        if (prefix || suffix) {
+            if (prefix && suffix) {
+                for (var i = 0, size = strs.length; i < size; i++) {
+                    dst.push(prefix + strs[i] + suffix);
+                }
+            }
+            else if (prefix && !suffix) {
+                for (var i = 0, size = strs.length; i < size; i++) {
+                    dst.push(prefix + strs[i]);
+                }
+            }
+            else if (!prefix && suffix) {
+                for (var i = 0, size = strs.length; i < size; i++) {
+                    dst.push(strs[i] + suffix);
+                }
+            }
+        }
+        else {
+            for (var i = 0, size = strs.length; i < size; i++) {
+                dst.push(strs[i]);
+            }
+        }
+
+        return dst;
+    }
+
 
 }
 

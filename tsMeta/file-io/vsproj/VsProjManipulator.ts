@@ -1,5 +1,5 @@
 ﻿"use strict";
-import StringUtil = require("../../utils/StringUtil");
+import Strings = require("../../../lib/ts-mortar/utils/Strings");
 import FileSectionManipulator = require("../FileSectionManipulator");
 
 /**
@@ -40,8 +40,8 @@ class VsProjManipulator {
 
 
     public addServiceNamespace(projectNamespaceName: string, serviceImplNamespace: string, serviceInterfacePathNamespace: string, serviceWebAddressPath: string): void {
-        this.addService(StringUtil.replaceAll(serviceImplNamespace, ".", "\\"), serviceImplNamespace.substr(projectNamespaceName.length + 1),
-            StringUtil.replaceAll(serviceInterfacePathNamespace, ".", "\\"), serviceInterfacePathNamespace.substr(projectNamespaceName.length + 1),
+        this.addService(Strings.replaceAll(serviceImplNamespace, ".", "\\"), serviceImplNamespace.substr(projectNamespaceName.length + 1),
+            Strings.replaceAll(serviceInterfacePathNamespace, ".", "\\"), serviceInterfacePathNamespace.substr(projectNamespaceName.length + 1),
             serviceWebAddressPath);
     }
 

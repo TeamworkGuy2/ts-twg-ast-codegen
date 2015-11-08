@@ -1,25 +1,32 @@
 "use strict";
+var Arrays = require("../../lib/ts-mortar/utils/Arrays");
 var EmptyLine;
 (function (EmptyLine) {
-    function prePostIfAny(strs, preToAddIfAny, preToAddIfNone, prevLines, postToAddIfAny, postToAddIfNone, nextLines, dst) {
+    function preAppendIfAny(strs, preToAddIfAny, preToAddIfNone, prevLines, postToAddIfAny, postToAddIfNone, nextLines, dst) {
         if (dst === void 0) { dst = []; }
         if (strs && strs.length > 0) {
             if (prevLines && prevLines.length > 0) {
-                Array.prototype.push.apply(dst, preToAddIfAny);
+                Arrays.addAll(dst, preToAddIfAny);
             }
             else {
-                Array.prototype.push.apply(dst, preToAddIfNone);
+                Arrays.addAll(dst, preToAddIfNone);
             }
-            Array.prototype.push.apply(dst, strs);
+            Arrays.addAll(dst, strs);
             if (nextLines && nextLines.length > 0) {
-                Array.prototype.push.apply(dst, postToAddIfAny);
+                Arrays.addAll(dst, postToAddIfAny);
             }
             else {
-                Array.prototype.push.apply(dst, postToAddIfNone);
+                Arrays.addAll(dst, postToAddIfNone);
             }
         }
         return dst;
     }
-    EmptyLine.prePostIfAny = prePostIfAny;
+    EmptyLine.preAppendIfAny = preAppendIfAny;
+    function preAppendIndentIfAny(genTools, strs, preToAddIfAny, preToAddIfNone, prevLines, postToAddIfAny, postToAddIfNone, nextLines, dst) {
+        if (dst === void 0) { dst = []; }
+        var res = preAppendIfAny(strs, preToAddIfAny, preToAddIfNone, prevLines, postToAddIfAny, postToAddIfNone, nextLines, dst);
+        return res;
+    }
+    EmptyLine.preAppendIndentIfAny = preAppendIndentIfAny;
 })(EmptyLine || (EmptyLine = {}));
 module.exports = EmptyLine;

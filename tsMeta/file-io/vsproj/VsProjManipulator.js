@@ -1,5 +1,5 @@
 "use strict";
-var StringUtil = require("../../utils/StringUtil");
+var Strings = require("../../../lib/ts-mortar/utils/Strings");
 var FileSectionManipulator = require("../FileSectionManipulator");
 /**
  * @since 2015-8-11
@@ -24,7 +24,7 @@ var VsProjManipulator = (function () {
         this.vsProjFileManipulator.addSectionLines("Compile", ['    <Compile Include="' + fileRelativePath + '" />']);
     };
     VsProjManipulator.prototype.addServiceNamespace = function (projectNamespaceName, serviceImplNamespace, serviceInterfacePathNamespace, serviceWebAddressPath) {
-        this.addService(StringUtil.replaceAll(serviceImplNamespace, ".", "\\"), serviceImplNamespace.substr(projectNamespaceName.length + 1), StringUtil.replaceAll(serviceInterfacePathNamespace, ".", "\\"), serviceInterfacePathNamespace.substr(projectNamespaceName.length + 1), serviceWebAddressPath);
+        this.addService(Strings.replaceAll(serviceImplNamespace, ".", "\\"), serviceImplNamespace.substr(projectNamespaceName.length + 1), Strings.replaceAll(serviceInterfacePathNamespace, ".", "\\"), serviceInterfacePathNamespace.substr(projectNamespaceName.length + 1), serviceWebAddressPath);
     };
     VsProjManipulator.prototype.addService = function (serviceImplPath, serviceImplNamespace, serviceInterfacePath, serviceInterfacePathNamespace, serviceWebAddressPath) {
         var serviceActivationsLines = ['        <add service="' + serviceImplNamespace + '" factory="System.ServiceModel.Activation.WebServiceHostFactory" relativeAddress="' + serviceWebAddressPath + '" />'];

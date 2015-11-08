@@ -1,4 +1,5 @@
 "use strict";
+var Arrays = require("../../lib/ts-mortar/utils/Arrays");
 var fs = require("fs");
 /**
  * @since 2015-8-10
@@ -13,7 +14,7 @@ var WriteFile;
         var allLines = [];
         var props = Object.keys(linesSections);
         for (var i = 0, size = props.length; i < size; i++) {
-            Array.prototype.push.apply(allLines, linesSections[props[i]]);
+            Arrays.addAll(allLines, linesSections[props[i]]);
         }
         writeFile(filePath, allLines);
     }

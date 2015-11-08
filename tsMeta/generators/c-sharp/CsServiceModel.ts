@@ -1,6 +1,6 @@
 ﻿"use strict";
 import StringArray = require("../../../strings/StringArray");
-import Modifier = require("../../../modifiers/Modifier");
+import Modifier = require("../../modifiers/Modifier");
 import CsClass = require("./CsClass");
 
 /**
@@ -9,7 +9,7 @@ import CsClass = require("./CsClass");
 module CsServiceModel {
 
     export function getDefaultServiceClassImports(genTools: GenTools): string[] {
-        return StringArray.addCommonPreSuffix(genTools.getIndent(), null, [
+        return genTools.indent([
             "using System.Runtime.Serialization;",
             "using System;"
         ]);
@@ -32,26 +32,26 @@ module CsServiceModel {
     export function generateServiceClass(genTools: GenTools, className: string, props: NamedProperty[], copyrightLines?: string[], authorName?: string): CsClassWithImportExportSource {
 
         var classComments = [
-            "    /// <summary>",
-            "    /// <para>",
-            "    /// An entity class that represents a " + className + ".",
-            "    /// </para>",
-            "    /// </summary>",
-            "    /// <threadsafety>This class is mutable, so it is not thread-safe.</threadsafety>",
+            "/// <summary>",
+            "/// <para>",
+            "/// An entity class that represents a " + className + ".",
+            "/// </para>",
+            "/// </summary>",
+            "/// <threadsafety>This class is mutable, so it is not thread-safe.</threadsafety>",
         ];
         if (authorName) {
-            classComments.push("    /// <author>" + authorName + "</author>");
+            classComments.push("/// <author>" + authorName + "</author>");
         }
-        classComments.push("    /// <version>1.0</version>");
+        classComments.push("/// <version>1.0</version>");
         if (copyrightLines) {
             if (copyrightLines.length === 1) {
-                classComments.push("    /// <copyright>" + copyrightLines + "</copyright>");
+                classComments.push("/// <copyright>" + copyrightLines + "</copyright>");
             }
             else {
-                StringArray.addPrePostStrings(
-                    "    /// <copyright>",
-                    StringArray.addCommonPreSuffix("    /// ", null, copyrightLines, classComments),
-                    "    /// </copyright>");
+                StringArray.preAppendArray(
+                    "/// <copyright>",
+                    StringArray.preAppendEach("/// ", null, copyrightLines, classComments),
+                    "/// </copyright>");
             }
         }
 
@@ -62,7 +62,7 @@ module CsServiceModel {
         };
 
         var classConstructors: CsConstructorSource[] = [{
-            methodComments: [
+            comments: [
                 "/// <summary>",
                 "/// <para>",
                 "/// Initializes a new instance of the <see cref=\"" + className + "\"/> class.",
@@ -99,14 +99,14 @@ module CsServiceModel {
     }
 
 
-    export function generateServiceNamespaceSource(genTools: GenTools, namespaceName: string, className: string, props: NamedProperty[], copyrightLines?: string[], authorName?: string): CsNamespaceSource {
+    export function generateServiceNamespaceSrc(genTools: GenTools, namespaceName: string, className: string, props: NamedProperty[], copyrightLines?: string[], authorName?: string): CsNamespaceSource {
         var classObj = generateServiceClass(genTools, className, props, copyrightLines, authorName);
         var importStrs: string[] = classObj.classImports;
 
         return {
             classImports: importStrs,
             namespaceStart: getDefaultServiceClassNamespaceStart(genTools, namespaceName),
-            classes: [CsClass.toCsClassSource(classObj)],
+            classes: [CsClass.copyShallow(classObj)],
             namespaceEnd: getDefaultServiceClassNamespaceEnd(genTools)
         };
     }

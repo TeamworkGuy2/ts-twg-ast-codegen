@@ -1,9 +1,9 @@
-/// <reference path="./definitions/tsmeta.d.ts" />
+/// <reference path="../definitions/tsmeta.d.ts" />
 "use strict";
 var DefaultPrettyPrinter = require("./whitespace/DefaultPrettyPrinter");
-var DefaultGenTools = require("./templates/generators/DefaultGenTools");
-var CsServicesModel = require("./templates/generators/c-sharp/CsServiceModel");
-var CsToSource = require("./templates/generators/c-sharp/CsToSource");
+var DefaultGenTools = require("./generators/DefaultGenTools");
+var CsServicesModel = require("./generators/c-sharp/CsServiceModel");
+var CsToSource = require("./generators/c-sharp/CsToSource");
 var VsProjManipulator = require("./file-io/vsproj/VsProjManipulator");
 /** The root of the app for both web apps (.html pages and node.js cli)
  */
@@ -12,7 +12,7 @@ var App = (function () {
     }
     App.generateClass = function (el) {
         var genTools = DefaultGenTools.newInst(DefaultPrettyPrinter.newInst("    ", 0));
-        var csClass = CsServicesModel.generateServiceNamespaceSource(genTools, "test-project", "TestingClass", [
+        var csClass = CsServicesModel.generateServiceNamespaceSrc(genTools, "test-project", "TestingClass", [
             {
                 name: "Id",
                 typeName: "string"

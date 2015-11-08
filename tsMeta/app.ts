@@ -1,9 +1,9 @@
-﻿/// <reference path="./definitions/tsmeta.d.ts" />
+﻿/// <reference path="../definitions/tsmeta.d.ts" />
 "use strict";
 import DefaultPrettyPrinter = require("./whitespace/DefaultPrettyPrinter");
-import DefaultGenTools = require("./templates/generators/DefaultGenTools");
-import CsServicesModel = require("./templates/generators/c-sharp/CsServiceModel");
-import CsToSource = require("./templates/generators/c-sharp/CsToSource");
+import DefaultGenTools = require("./generators/DefaultGenTools");
+import CsServicesModel = require("./generators/c-sharp/CsServiceModel");
+import CsToSource = require("./generators/c-sharp/CsToSource");
 import ReadFile = require("./file-io/ReadFile");
 import WriteFile = require("./file-io/WriteFile");
 import VsProjManipulator = require("./file-io/vsproj/VsProjManipulator");
@@ -18,7 +18,7 @@ class App {
     public static generateClass(el: HTMLElement) {
         var genTools = DefaultGenTools.newInst(DefaultPrettyPrinter.newInst("    ", 0));
 
-        var csClass = CsServicesModel.generateServiceNamespaceSource(genTools, "test-project", "TestingClass", [
+        var csClass = CsServicesModel.generateServiceNamespaceSrc(genTools, "test-project", "TestingClass", [
             {
                 name: "Id",
                 typeName: "string"

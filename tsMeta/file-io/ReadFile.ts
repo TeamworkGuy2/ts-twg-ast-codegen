@@ -1,15 +1,13 @@
 ﻿"use strict";
-import StringUtil = require("../utils/StringUtil");
-
+import Strings = require("../../lib/ts-mortar/utils/Strings");
 import fs = require("fs");
-
 
 /**
  * @since 2015-8-10
  */
 module ReadFile {
 
-    export function readLines(filePath: string): string[]{
+    export function readLines(filePath: string): string[] {
         var content = fs.readFileSync(filePath, null).toString();
         var lines = content.split('\n');
         for (var i = 0, size = lines.length; i < size; i++) {
@@ -26,11 +24,9 @@ module ReadFile {
     export function readLinesSection(lines: string[], sectionStartLine: string, sectionEndLine: string, includeStartEndLinesInSection: boolean): { beforeLines: string[]; sectionLines: string[]; afterLines: string[] } {
         var sectionEndLineTrimmed = sectionEndLine.trim();
         var sectionStartLineTrimmed = sectionStartLine.trim();
-        var linesSection = {
-            beforeLines: [],
-            sectionLines: [],
-            afterLines: [],
-        }
+        var beforeLines: string[] = [];
+        var sectionLines: string[] = [];
+        var afterLines: string[] = [];
 
         var BEFORE_SECTION = 1;
         var IN_SECTION = 2;
@@ -40,28 +36,28 @@ module ReadFile {
         for (var i = 0, size = lines.length; i < size; i++) {
             var line = lines[i];
             if (state === AFTER_SECTION) {
-                linesSection.afterLines.push(line);
+                afterLines.push(line);
             }
             else if (state === IN_SECTION) {
                 if (line.trim() === sectionEndLineTrimmed) {
                     state = AFTER_SECTION;
 
-                    if (includeStartEndLinesInSection) { linesSection.sectionLines.push(line); }
-                    else { linesSection.afterLines.push(line); }
+                    if (includeStartEndLinesInSection) { sectionLines.push(line); }
+                    else { afterLines.push(line); }
                 }
                 else {
-                    linesSection.sectionLines.push(line);
+                    sectionLines.push(line);
                 }
             }
             else if (state === BEFORE_SECTION) {
                 if (line.trim() === sectionStartLineTrimmed) {
                     state = IN_SECTION;
 
-                    if (includeStartEndLinesInSection) { linesSection.sectionLines.push(line); }
-                    else { linesSection.beforeLines.push(line); }
+                    if (includeStartEndLinesInSection) { sectionLines.push(line); }
+                    else { beforeLines.push(line); }
                 }
                 else {
-                    linesSection.beforeLines.push(line);
+                    beforeLines.push(line);
                 }
             }
             else {
@@ -69,9 +65,12 @@ module ReadFile {
             }
         }
 
-        return linesSection;
+        return {
+            beforeLines: beforeLines,
+            sectionLines: sectionLines,
+            afterLines: afterLines,
+        };
     }
-
 
 
     // split a set of lines into a matching section and the lines that come before and after that section
@@ -85,8 +84,8 @@ module ReadFile {
             var types: { [startsWith: string]: number } = {};
 
             for (var i = 0, size = lines.length; i < size; i++) {
-                var line = StringUtil.removeLeading(lines[i].trim(), "<");
-                line = StringUtil.removeTrailing(line, ">");
+                var line = Strings.removeLeading(lines[i].trim(), "<");
+                line = Strings.removeTrailing(line, ">");
                 var startStr = line.split(' ', 2)[0];
 
                 types[startStr] = (types[startStr] || 0) + 1;
