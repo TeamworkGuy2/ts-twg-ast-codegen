@@ -47,9 +47,9 @@ interface TypeProperty extends TypeInfo {
 
 interface ServiceProperty extends TypeProperty {
     /** the service property name */
-    servicePropName: string;
+    servicePropName?: string;
     /** the service property's data type, defaults to the same value as 'type' */
-    servicePropType: string; //PropertyType;
+    servicePropType?: string; //PropertyType;
     /** template code can be used to convert the property to a value that can be sent to a web service */
     toService?: string;
     /** template code can be used to get this property from another object and convert it to a valid value for this model */
