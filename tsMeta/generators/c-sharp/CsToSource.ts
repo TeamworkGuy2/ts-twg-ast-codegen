@@ -178,7 +178,7 @@ class CsToSource {
 
     public static methodToSrc(genTools: GenTools, method: CsMethodSource | CsConstructorSource, dst: string[]): string[]{
         var paramStrs = (method.parameters ? method.parameters.map((prop) => {
-            var propStr = prop.typeName + " " + prop.propName + (prop.required === false ? (prop.defaultValue ? " = " + prop.defaultValue : "?") : "");
+            var propStr = prop.type + " " + prop.propName + (prop.required === false ? (prop.defaultValue ? " = " + prop.defaultValue : "?") : "");
             return propStr;
         }) : []);
         var signature = method.accessModifiers.join(" ") + " " + (method["returnType"] ? method["returnType"] + " " : "") + method.name + "(" + paramStrs.join(", ") + ")";
@@ -204,7 +204,7 @@ class CsToSource {
         genTools.addIndentsToNonEmpty(dst, prop.comments);
         genTools.addIndentsToNonEmpty(dst, prop.annotations);
 
-        genTools.addIndent(dst, prop.accessModifiers.join(" ") + " " + prop.typeName + (prop.required === false ? "?" : "") + " " + prop.propName);
+        genTools.addIndent(dst, prop.accessModifiers.join(" ") + " " + prop.type + (prop.required === false ? "?" : "") + " " + prop.propName);
         genTools.addIndent(dst, "{");
         genTools.printer.indent();
 
@@ -223,7 +223,7 @@ class CsToSource {
     public static fieldsToSrc(genTools: GenTools, fields: PropInfo[], dst: string[] = []): string[] {
         for (var i = 0, size = fields.length; i < size; i++) {
             var field = fields[i];
-            genTools.addIndent(dst, field.typeName + (field.required === false ? "?" : "") + " " + field.propName + (field["defaultValue"] ? " = " + field.defaultValue : "") + ";");
+            genTools.addIndent(dst, field.type + (field.required === false ? "?" : "") + " " + field.propName + (field["defaultValue"] ? " = " + field.defaultValue : "") + ";");
         }
         return dst;
     }

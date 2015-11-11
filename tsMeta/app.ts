@@ -1,4 +1,7 @@
-﻿/// <reference path="../definitions/tsmeta.d.ts" />
+﻿/// <reference path="../definitions/node-modules-custom.d.ts" />
+/// <reference path="../code-types/cstypes.d.ts" />
+/// <reference path="../code-types/model-types.d.ts" />
+/// <reference path="../code-types/utils.d.ts" />
 "use strict";
 import DefaultPrettyPrinter = require("./whitespace/DefaultPrettyPrinter");
 import DefaultGenTools = require("./generators/DefaultGenTools");
@@ -21,10 +24,10 @@ class App {
         var csClass = CsServicesModel.generateServiceNamespaceSrc(genTools, "test-project", "TestingClass", [
             {
                 name: "Id",
-                typeName: "string"
+                type: "string"
             }, {
                 name: "bebo",
-                typeName: "decimal",
+                type: "decimal",
                 required: false
             }
         ], ["For example a copyright notice."], "Author Name");

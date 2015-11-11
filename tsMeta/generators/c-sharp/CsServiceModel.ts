@@ -82,7 +82,7 @@ module CsServiceModel {
                 required: prop.required,
                 accessModifiers: ["public"],
                 propName: prop.name,
-                typeName: prop.typeName
+                type: prop.type
             };
             properties.push(propLines);
         }

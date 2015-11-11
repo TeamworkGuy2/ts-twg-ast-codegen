@@ -1,6 +1,6 @@
 ﻿// Type definitions for code generators
 
-interface IndexedMap<T> {
+interface IndexMap<T> {
     [id: number]: T;
 }
 
@@ -12,7 +12,8 @@ interface StringMap<T> {
 
 interface TypeInfo {
     /** the property's data type */
-    typeName: string;
+    type: string;
+    required?: boolean;
 }
 
 
@@ -30,7 +31,7 @@ interface PropertyField extends PropInfo {
 
 interface TypeProperty extends TypeInfo {
     /** the property's data type, used to fill in default 'value', 'toService', 'toLocal', etc. */
-    typeName: string;
+    type: string;
     /** default value of the property */
     defaultValue?: any;
     /** true if this property is a primary key for the model, false or absent if not */
@@ -46,9 +47,9 @@ interface TypeProperty extends TypeInfo {
 
 interface ServiceProperty extends TypeProperty {
     /** the service property name */
-    servicePropName?: string;
+    servicePropName: string;
     /** the service property's data type, defaults to the same value as 'type' */
-    serviceTypeName?: string; //PropertyType;
+    servicePropType: string; //PropertyType;
     /** template code can be used to convert the property to a value that can be sent to a web service */
     toService?: string;
     /** template code can be used to get this property from another object and convert it to a valid value for this model */
@@ -74,7 +75,7 @@ interface TypesDefinition {
 }
 
 
-interface ServiceTypesDefinition {
+interface WebServiceModelDef {
     toServiceNameConverter: (string) => string; // a function that takes a 'properties.propName' string and converts it to a different format for service calls
     /** the properties/fields this model has, see {@link ModelProperty} */
     properties: { [id: string]: ServiceProperty };
