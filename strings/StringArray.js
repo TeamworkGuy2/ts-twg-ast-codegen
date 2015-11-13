@@ -1,4 +1,137 @@
 "use strict";
+var Arrays = require("../lib/ts-mortar/utils/Arrays");
+var StringArray = (function () {
+    function StringArray() {
+        this.strs = [];
+    }
+    StringArray.prototype.add = function (str) {
+        this.strs.push(String(str));
+        return this;
+    };
+    StringArray.prototype.addAll = function (strAry) {
+        for (var i = 0, size = strAry.length; i < size; i++) {
+            this.strs.push(String(strAry[i]));
+        }
+        return this;
+    };
+    StringArray.prototype.insert = function (str, idx) {
+        if (idx === void 0) { idx = 0; }
+        if (idx === 0) {
+            this.strs.unshift(String(str));
+        }
+        else {
+            this.strs = Arrays.splice(this.strs, [String(str)], idx, 0);
+        }
+        return this;
+    };
+    StringArray.prototype.insertAll = function (strAry, idx) {
+        if (idx === void 0) { idx = 0; }
+        if (idx === 0) {
+            for (var i = strAry.length - 1; i > -1; i--) {
+                this.strs.unshift(String(strAry[i]));
+            }
+        }
+        else {
+            this.strs = Arrays.splice(this.strs, strAry.map(function (s) { return String(s); }), idx, 0);
+        }
+        return this;
+    };
+    StringArray.prototype.addLines = function (str) {
+        var lines = str.split(/\n|\r\n/);
+        for (var i = 0, size = lines.length; i < size; i++) {
+            this.strs.push(lines[i]);
+        }
+        return this;
+    };
+    StringArray.prototype.prefixAll = function (prefix) {
+        for (var i = 0, size = this.strs.length; i < size; i++) {
+            this.strs[i] = prefix + this.strs[i];
+        }
+        return this;
+    };
+    StringArray.prototype.suffixAll = function (suffix) {
+        for (var i = 0, size = this.strs.length; i < size; i++) {
+            this.strs[i] = this.strs[i] + suffix;
+        }
+        return this;
+    };
+    StringArray.prototype.prefixNonEmpty = function (prefix) {
+        for (var i = 0, size = this.strs.length; i < size; i++) {
+            var str = this.strs[i];
+            if (str.length > 0) {
+                this.strs[i] = prefix + str;
+            }
+        }
+        return this;
+    };
+    StringArray.prototype.suffixNonEmpty = function (suffix) {
+        for (var i = 0, size = this.strs.length; i < size; i++) {
+            var str = this.strs[i];
+            if (str.length > 0) {
+                this.strs[i] = str + suffix;
+            }
+        }
+        return this;
+    };
+    StringArray.prototype.addPrefixAll = function (strAry, prefix) {
+        for (var i = 0, size = strAry.length; i < size; i++) {
+            this.strs.push(prefix + strAry[i]);
+        }
+        return this;
+    };
+    StringArray.prototype.addSuffixAll = function (strAry, suffix) {
+        for (var i = 0, size = strAry.length; i < size; i++) {
+            this.strs.push(strAry[i] + suffix);
+        }
+        return this;
+    };
+    StringArray.prototype.addPrefixNonEmpty = function (strAry, prefix) {
+        for (var i = 0, size = strAry.length; i < size; i++) {
+            var str = strAry[i];
+            this.strs.push(str.length > 0 ? prefix + str : str);
+        }
+        return this;
+    };
+    StringArray.prototype.addSuffixNonEmpty = function (strAry, suffix) {
+        for (var i = 0, size = strAry.length; i < size; i++) {
+            var str = strAry[i];
+            this.strs.push(str.length > 0 ? str + suffix : str);
+        }
+        return this;
+    };
+    StringArray.prototype.filterOutEmpty = function () {
+        var res = [];
+        for (var i = 0, size = this.strs.length; i < size; i++) {
+            var str = this.strs[i];
+            if (str.length > 0) {
+                res.push(str);
+            }
+        }
+        this.strs = res;
+        return this;
+    };
+    StringArray.prototype.getLines = function (copy) {
+        if (copy === void 0) { copy = true; }
+        return copy ? this.strs.slice() : this.strs;
+    };
+    StringArray.prototype.join = function (separator) {
+        return this.strs.join(separator);
+    };
+    StringArray.prototype.copy = function () {
+        return StringArray.of(this.strs, true);
+    };
+    StringArray.of = function (strs, copy) {
+        if (copy === void 0) { copy = true; }
+        var inst = new StringArray();
+        inst.strs = Array.isArray(strs) ? (copy ? strs.slice() : strs) : [strs];
+        return inst;
+    };
+    StringArray.newInst = function () {
+        var inst = new StringArray();
+        return inst;
+    };
+    return StringArray;
+})();
 var StringArray;
 (function (StringArray) {
     /** Alias for {@link #toStringFromObjectsDeep()}
@@ -90,7 +223,9 @@ var StringArray;
             for (var i = 0; i < sizeN1; i++) {
                 var strs = strArys[i];
                 Array.prototype.push.apply(dst, strs);
-                Array.prototype.push.apply(dst, join);
+                if (join) {
+                    Array.prototype.push.apply(dst, join);
+                }
             }
             Array.prototype.push.apply(dst, strArys[sizeN1 - 1]);
         }
@@ -99,7 +234,7 @@ var StringArray;
     StringArray.joinMulti = joinMulti;
     /** Add an optional prefix and suffix to a string and return the result
      */
-    function preAppend(prefix, str, suffix) {
+    function preAppendStr(prefix, str, suffix) {
         if (prefix || suffix) {
             if (prefix && suffix) {
                 return prefix + str + suffix;
@@ -115,7 +250,7 @@ var StringArray;
             return str;
         }
     }
-    StringArray.preAppend = preAppend;
+    StringArray.preAppendStr = preAppendStr;
     /** Add optional prefix and suffix strings to an array of strings
      */
     function preAppendArray(prefix, ary, suffix) {
@@ -131,7 +266,7 @@ var StringArray;
     /** Add a common prefix and suffix string to each of the strings in an array of strings
      * @return {@code strs} with prefix and suffix strings added
      */
-    function preAppendEach(prefix, suffix, strs, dst) {
+    function preAppend(prefix, suffix, strs, dst) {
         if (dst === void 0) { dst = []; }
         if (prefix || suffix) {
             if (prefix && suffix) {
@@ -157,6 +292,39 @@ var StringArray;
         }
         return dst;
     }
-    StringArray.preAppendEach = preAppendEach;
+    StringArray.preAppend = preAppend;
+    /** Add a common prefix and suffix string to each of the non-empty strings in an array of strings
+     * @return {@code strs} with prefix and suffix strings added
+     */
+    function preAppendNonEmpty(prefix, suffix, strs, dst) {
+        if (dst === void 0) { dst = []; }
+        if (prefix || suffix) {
+            if (prefix && suffix) {
+                for (var i = 0, size = strs.length; i < size; i++) {
+                    var str = strs[i];
+                    dst.push(str.length > 0 ? prefix + str + suffix : str);
+                }
+            }
+            else if (prefix && !suffix) {
+                for (var i = 0, size = strs.length; i < size; i++) {
+                    var str = strs[i];
+                    dst.push(str.length > 0 ? prefix + str : str);
+                }
+            }
+            else if (!prefix && suffix) {
+                for (var i = 0, size = strs.length; i < size; i++) {
+                    var str = strs[i];
+                    dst.push(str.length > 0 ? str + suffix : str);
+                }
+            }
+        }
+        else {
+            for (var i = 0, size = strs.length; i < size; i++) {
+                dst.push(strs[i]);
+            }
+        }
+        return dst;
+    }
+    StringArray.preAppendNonEmpty = preAppendNonEmpty;
 })(StringArray || (StringArray = {}));
 module.exports = StringArray;

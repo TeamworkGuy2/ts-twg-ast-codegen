@@ -1,4 +1,4 @@
-﻿/// <reference path="./lib/node.d.ts" />
+﻿/// <reference path="./node.d.ts" />
 
 declare module 'gulp' {
     export function src(...args: any[]): any;
