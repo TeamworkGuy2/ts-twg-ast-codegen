@@ -1,15 +1,15 @@
-﻿/// <reference path="../definitions/node-modules-custom.d.ts" />
+﻿/// <reference path="../definitions/node/node-modules-custom.d.ts" />
 /// <reference path="../code-types/cstypes.d.ts" />
 /// <reference path="../code-types/model-types.d.ts" />
 /// <reference path="../code-types/utils.d.ts" />
 "use strict";
 import DefaultPrettyPrinter = require("./whitespace/DefaultPrettyPrinter");
-import DefaultGenTools = require("./generators/DefaultGenTools");
-import CsServicesModel = require("./generators/c-sharp/CsServiceModel");
-import CsToSource = require("./generators/c-sharp/CsToSource");
-import ReadFile = require("./file-io/ReadFile");
-import WriteFile = require("./file-io/WriteFile");
-import VsProjManipulator = require("./file-io/vsproj/VsProjManipulator");
+import DefaultGenTools = require("../generators/DefaultGenTools");
+import CsServicesModel = require("../generators/c-sharp/CsServiceModel");
+import CsToSource = require("../generators/c-sharp/CsToSource");
+import ReadFile = require("../file-io/ReadFile");
+import WriteFile = require("../file-io/WriteFile");
+import VsProjManipulator = require("../file-io/vsproj/VsProjManipulator");
 
 /** The root of the app for both web apps (.html pages and node.js cli)
  */

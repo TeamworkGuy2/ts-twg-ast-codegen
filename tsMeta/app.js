@@ -1,13 +1,13 @@
-/// <reference path="../definitions/node-modules-custom.d.ts" />
+/// <reference path="../definitions/node/node-modules-custom.d.ts" />
 /// <reference path="../code-types/cstypes.d.ts" />
 /// <reference path="../code-types/model-types.d.ts" />
 /// <reference path="../code-types/utils.d.ts" />
 "use strict";
 var DefaultPrettyPrinter = require("./whitespace/DefaultPrettyPrinter");
-var DefaultGenTools = require("./generators/DefaultGenTools");
-var CsServicesModel = require("./generators/c-sharp/CsServiceModel");
-var CsToSource = require("./generators/c-sharp/CsToSource");
-var VsProjManipulator = require("./file-io/vsproj/VsProjManipulator");
+var DefaultGenTools = require("../generators/DefaultGenTools");
+var CsServicesModel = require("../generators/c-sharp/CsServiceModel");
+var CsToSource = require("../generators/c-sharp/CsToSource");
+var VsProjManipulator = require("../file-io/vsproj/VsProjManipulator");
 /** The root of the app for both web apps (.html pages and node.js cli)
  */
 var App = (function () {

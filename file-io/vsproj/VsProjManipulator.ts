@@ -1,5 +1,5 @@
 ﻿"use strict";
-import Strings = require("../../../lib/ts-mortar/utils/Strings");
+import Strings = require("../../lib/ts-mortar/utils/Strings");
 import FileSectionManipulator = require("../FileSectionManipulator");
 
 /**

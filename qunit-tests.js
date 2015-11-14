@@ -21,3 +21,7 @@ testRunner.run({
     code: "./strings/StringArray",
     tests: "./test/strings/StringArray.js"
 }, callback);
+testRunner.run({
+    code: "./generators/SimpleTemplateCompiler",
+    tests: "./test/generators/SimpleTemplateCompiler.js"
+}, callback);

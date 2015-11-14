@@ -1,6 +1,6 @@
 ﻿"use strict";
-import StringArray = require("../../../strings/StringArray");
-import Modifier = require("../../modifiers/Modifier");
+import StringArray = require("../../strings/StringArray");
+import Modifier = require("../../code-types/modifiers/Modifier");
 import CsClass = require("./CsClass");
 
 /**
@@ -50,7 +50,7 @@ module CsServiceModel {
             else {
                 StringArray.preAppendArray(
                     "/// <copyright>",
-                    StringArray.preAppendEach("/// ", null, copyrightLines, classComments),
+                    StringArray.preAppend("/// ", null, copyrightLines, classComments),
                     "/// </copyright>");
             }
         }
