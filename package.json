@@ -1,10 +1,11 @@
 {
   "name": "ts-code-generator",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "TypeScript code generator utilities for C#, Java, TypeScript, etc.",
   "author": "TeamworkGuy2",
   "license": "MIT",
   "dependencies": {
+    "q": "^1.1.2",
     "ts-mortar": "^0.3.0"
   },
   "devDependencies": {

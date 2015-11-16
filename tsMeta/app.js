@@ -1,3 +1,4 @@
+/// <reference path="../definitions/lib/Q.d.ts" />
 /// <reference path="../definitions/node/node-modules-custom.d.ts" />
 /// <reference path="../code-types/cstypes.d.ts" />
 /// <reference path="../code-types/model-types.d.ts" />
