@@ -43,11 +43,8 @@ module TypeConverter {
 
         static parseCsOrJavaType(dataType: string): string {
             var optionalInfo = TypeScript.parseType(dataType);
+            var arrayCount = optionalInfo.arrayDimensionCount;
             dataType = optionalInfo.dataType;
-
-            var dimensionInfo = TypeScript.parseTypeArrayDimensions(dataType);
-            var arrayCount = dimensionInfo.dimensionCount;
-            dataType = dimensionInfo.dataType;
 
             var tsType: string = null;
 
@@ -92,11 +89,8 @@ module TypeConverter {
 
         static createTypeToStringCode(dataType: string, variableName: string): string {
             var optionalInfo = TypeScript.parseType(dataType);
+            var arrayCount = optionalInfo.arrayDimensionCount;
             dataType = optionalInfo.dataType;
-
-            var dimensionInfo = TypeScript.parseTypeArrayDimensions(dataType);
-            var arrayCount = dimensionInfo.dimensionCount;
-            dataType = dimensionInfo.dataType;
 
             switch (dataType) {
                 case "boolean":

@@ -38,10 +38,8 @@ var TypeConverter;
         };
         TypeScript.parseCsOrJavaType = function (dataType) {
             var optionalInfo = TypeScript.parseType(dataType);
+            var arrayCount = optionalInfo.arrayDimensionCount;
             dataType = optionalInfo.dataType;
-            var dimensionInfo = TypeScript.parseTypeArrayDimensions(dataType);
-            var arrayCount = dimensionInfo.dimensionCount;
-            dataType = dimensionInfo.dataType;
             var tsType = null;
             switch (dataType) {
                 case "boolean":
@@ -81,10 +79,8 @@ var TypeConverter;
         };
         TypeScript.createTypeToStringCode = function (dataType, variableName) {
             var optionalInfo = TypeScript.parseType(dataType);
+            var arrayCount = optionalInfo.arrayDimensionCount;
             dataType = optionalInfo.dataType;
-            var dimensionInfo = TypeScript.parseTypeArrayDimensions(dataType);
-            var arrayCount = dimensionInfo.dimensionCount;
-            dataType = dimensionInfo.dataType;
             switch (dataType) {
                 case "boolean":
                     if (arrayCount > 0) {

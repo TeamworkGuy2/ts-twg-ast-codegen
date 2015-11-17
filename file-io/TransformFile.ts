@@ -1,13 +1,14 @@
 ﻿"use strict";
 import Q = require("q");
 import fs = require("fs");
+import gutil = require("gulp-util");
 
 /**
  * @author TeamworkGuy2
  */
 module TransformFile {
 
-    enum MatchOperation {
+    export enum MatchOperation {
         REPLACE_LINES,
         REPLACE_MATCHING_PORTION,
         DELETE_LINES,
@@ -18,9 +19,9 @@ module TransformFile {
     }
 
 
-    interface ReplaceVar {
+    export interface ReplaceVar {
         op: MatchOperation;
-        opParam: string | string[]
+        opParam: string | string[];
     }
 
 

@@ -1,12 +1,12 @@
 "use strict";
 var Q = require("q");
 var fs = require("fs");
+var gutil = require("gulp-util");
 /**
  * @author TeamworkGuy2
  */
 var TransformFile;
 (function (TransformFile) {
-    var MatchOperation;
     (function (MatchOperation) {
         MatchOperation[MatchOperation["REPLACE_LINES"] = 0] = "REPLACE_LINES";
         MatchOperation[MatchOperation["REPLACE_MATCHING_PORTION"] = 1] = "REPLACE_MATCHING_PORTION";
@@ -15,7 +15,8 @@ var TransformFile;
         MatchOperation[MatchOperation["RETURN_MATCHING_LINES"] = 4] = "RETURN_MATCHING_LINES";
         MatchOperation[MatchOperation["RETURN_MATCHING_PORTIONS"] = 5] = "RETURN_MATCHING_PORTIONS";
         MatchOperation[MatchOperation["PRINT_LINES"] = 6] = "PRINT_LINES";
-    })(MatchOperation || (MatchOperation = {}));
+    })(TransformFile.MatchOperation || (TransformFile.MatchOperation = {}));
+    var MatchOperation = TransformFile.MatchOperation;
     /** Split a file's contents into lines at either '\n' or '\r\n'
      * @param fileContent
      */
