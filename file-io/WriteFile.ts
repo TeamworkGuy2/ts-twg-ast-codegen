@@ -47,7 +47,6 @@ module WriteFile {
 
         fs.writeFile(fileName, text, function (writeErr) {
             if (writeErr) {
-                gutil.log("error writing generated '" + fileName + "': " + writeErr);
                 errorCb("error writing generated '" + fileName + "': " + writeErr);
                 return;
             }
