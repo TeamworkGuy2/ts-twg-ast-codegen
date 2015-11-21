@@ -160,12 +160,12 @@ module TransformFile {
 
 
     export function transformFile(srcFile: string, startVarMark: string, endVarMark: string, transformations: { [id: string]: ReplaceVar }): string[] {
-        var f = fs.readFileSync(srcFile);
+        var fileSrc = fs.readFileSync(srcFile);
         //if (err) {
         //    gutil.log("error reading file '" + srcFile + "': " + err + "");
         //    return;
         //}
-        var fileLines = splitFileLines(f.toString());
+        var fileLines = splitFileLines(fileSrc.toString());
         var lines = transformLines(srcFile, fileLines, startVarMark, endVarMark, transformations);
         return lines;
     }
@@ -200,7 +200,7 @@ module TransformFile {
     /** Transform a file's contents and write it to a destination file
      * @return a message about the text written to the file
      */
-    export function transformFileToFile(matchOp: MatchOperation, srcFile: string, dstFile: string, compileTypeScript: boolean, startVarMark: string, endVarMark: string,
+    export function transformFileToFile(matchOp: MatchOperation, srcFile: string, dstFile: string, startVarMark: string, endVarMark: string,
             variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }) {
 
         var { srcLines, resLines } = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
@@ -210,7 +210,7 @@ module TransformFile {
     }
 
 
-    export function transformFileToFileAsync(matchOp: MatchOperation, srcFile: string, dstFile: string, compileTypeScript: boolean, startVarMark: string, endVarMark: string,
+    export function transformFileToFileAsync(matchOp: MatchOperation, srcFile: string, dstFile: string, startVarMark: string, endVarMark: string,
             variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }, doneCb: (msg: string) => void, errorCb: (errMsg: string) => void,
             postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void) {
 
@@ -227,14 +227,9 @@ module TransformFile {
      * @param postFileWritten: a callback to call after writing the destination file
      * @param successMsg: a success message to pass to the resolved returned promise
      */
-    export function convertTemplateFile(srcFile: string, dstFile: string, variablesNamesToLines: { [id: string]: string | string[] },
-            successMsg?: string, delimiterStart: string = "$", delimiterEnd: string = "$") {
-        var dfd = Q.defer<string>();
-
-        var msg = transformFileToFile(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, true, delimiterStart, delimiterEnd, variablesNamesToLines);
-        dfd.resolve((successMsg ? successMsg + ": " : "") + msg);
-
-        return dfd.promise;
+    export function convertTemplateFile(srcFile: string, dstFile: string, variablesNamesToLines: { [id: string]: string | string[] }, delimiterStart: string = "$", delimiterEnd: string = "$") {
+        var msg = transformFileToFile(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, delimiterStart, delimiterEnd, variablesNamesToLines);
+        return msg;
     }
 
 
@@ -242,7 +237,7 @@ module TransformFile {
             postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void, successMsg?: string, delimiterStart: string = "$", delimiterEnd: string = "$") {
         var dfd = Q.defer<string>();
 
-        transformFileToFileAsync(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, true, delimiterStart, delimiterEnd, variablesNamesToLines, function (msg) {
+        transformFileToFileAsync(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, delimiterStart, delimiterEnd, variablesNamesToLines, function (msg) {
             dfd.resolve((successMsg ? successMsg + ": " : "") + msg);
         }, function (err) {
             dfd.reject(err);

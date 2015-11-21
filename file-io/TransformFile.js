@@ -145,12 +145,12 @@ var TransformFile;
     }
     TransformFile.transformLines = transformLines;
     function transformFile(srcFile, startVarMark, endVarMark, transformations) {
-        var f = fs.readFileSync(srcFile);
+        var fileSrc = fs.readFileSync(srcFile);
         //if (err) {
         //    gutil.log("error reading file '" + srcFile + "': " + err + "");
         //    return;
         //}
-        var fileLines = splitFileLines(f.toString());
+        var fileLines = splitFileLines(fileSrc.toString());
         var lines = transformLines(srcFile, fileLines, startVarMark, endVarMark, transformations);
         return lines;
     }
@@ -177,14 +177,14 @@ var TransformFile;
     /** Transform a file's contents and write it to a destination file
      * @return a message about the text written to the file
      */
-    function transformFileToFile(matchOp, srcFile, dstFile, compileTypeScript, startVarMark, endVarMark, variablesNamesToLines) {
+    function transformFileToFile(matchOp, srcFile, dstFile, startVarMark, endVarMark, variablesNamesToLines) {
         var _a = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines), srcLines = _a.srcLines, resLines = _a.resLines;
         gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
         WriteFile.writeFileLines(dstFile, resLines);
         return "'" + srcFile + "' " + srcLines.length + " lines";
     }
     TransformFile.transformFileToFile = transformFileToFile;
-    function transformFileToFileAsync(matchOp, srcFile, dstFile, compileTypeScript, startVarMark, endVarMark, variablesNamesToLines, doneCb, errorCb, postFileWritten) {
+    function transformFileToFileAsync(matchOp, srcFile, dstFile, startVarMark, endVarMark, variablesNamesToLines, doneCb, errorCb, postFileWritten) {
         var _a = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines), srcLines = _a.srcLines, resLines = _a.resLines;
         gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
         WriteFile.writeFileLinesAsync(dstFile, resLines, doneCb, errorCb, postFileWritten);
@@ -197,20 +197,18 @@ var TransformFile;
      * @param postFileWritten: a callback to call after writing the destination file
      * @param successMsg: a success message to pass to the resolved returned promise
      */
-    function convertTemplateFile(srcFile, dstFile, variablesNamesToLines, successMsg, delimiterStart, delimiterEnd) {
+    function convertTemplateFile(srcFile, dstFile, variablesNamesToLines, delimiterStart, delimiterEnd) {
         if (delimiterStart === void 0) { delimiterStart = "$"; }
         if (delimiterEnd === void 0) { delimiterEnd = "$"; }
-        var dfd = Q.defer();
-        var msg = transformFileToFile(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, true, delimiterStart, delimiterEnd, variablesNamesToLines);
-        dfd.resolve((successMsg ? successMsg + ": " : "") + msg);
-        return dfd.promise;
+        var msg = transformFileToFile(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, delimiterStart, delimiterEnd, variablesNamesToLines);
+        return msg;
     }
     TransformFile.convertTemplateFile = convertTemplateFile;
     function convertTemplateFileAsync(srcFile, dstFile, variablesNamesToLines, postFileWritten, successMsg, delimiterStart, delimiterEnd) {
         if (delimiterStart === void 0) { delimiterStart = "$"; }
         if (delimiterEnd === void 0) { delimiterEnd = "$"; }
         var dfd = Q.defer();
-        transformFileToFileAsync(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, true, delimiterStart, delimiterEnd, variablesNamesToLines, function (msg) {
+        transformFileToFileAsync(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, delimiterStart, delimiterEnd, variablesNamesToLines, function (msg) {
             dfd.resolve((successMsg ? successMsg + ": " : "") + msg);
         }, function (err) {
             dfd.reject(err);
