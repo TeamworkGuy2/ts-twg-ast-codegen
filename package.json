@@ -1,7 +1,7 @@
 {
   "name": "ts-code-generator",
-  "version": "0.4.2",
-  "description": "TypeScript code generator utilities for C#, Java, TypeScript, etc.",
+  "version": "0.5.0",
+  "description": "TypeScript code generator utilities for C#, Java, TypeScript, etc. and reading/writing node.js files",
   "author": "TeamworkGuy2",
   "license": "MIT",
   "dependencies": {

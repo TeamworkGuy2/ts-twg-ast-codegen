@@ -2,6 +2,7 @@
 var Q = require("q");
 var fs = require("fs");
 var gutil = require("gulp-util");
+var WriteFile = require("./WriteFile");
 /**
  * @author TeamworkGuy2
  */
@@ -143,68 +144,52 @@ var TransformFile;
         return newLines || [];
     }
     TransformFile.transformLines = transformLines;
-    function transformFile(srcFile, startVarMark, endVarMark, transformations, doneCb) {
-        fs.readFile(srcFile, function (err, f) {
-            if (err) {
-                gutil.log("error reading file '" + srcFile + "': " + err + "");
-                return;
-            }
-            var fileLines = splitFileLines(f.toString());
-            var lines = transformLines(srcFile, fileLines, startVarMark, endVarMark, transformations);
-            doneCb(lines);
-        });
+    function transformFile(srcFile, startVarMark, endVarMark, transformations) {
+        var f = fs.readFileSync(srcFile);
+        //if (err) {
+        //    gutil.log("error reading file '" + srcFile + "': " + err + "");
+        //    return;
+        //}
+        var fileLines = splitFileLines(f.toString());
+        var lines = transformLines(srcFile, fileLines, startVarMark, endVarMark, transformations);
+        return lines;
     }
     TransformFile.transformFile = transformFile;
-    function _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines, doneCb) {
-        fs.readFile(srcFile, function (err, f) {
-            if (err) {
-                gutil.log("error reading file '" + srcFile + "': " + err + ", continuing");
-            }
-            var srcLines = splitFileLines(f.toString());
-            var resLines = transformLines(srcFile, srcLines, startVarMark, endVarMark, mapVarsToOps(matchOp, variablesNamesToLines));
-            doneCb(srcLines, resLines);
-        });
+    function _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines) {
+        var f = fs.readFileSync(srcFile);
+        //if (err) {
+        //    gutil.log("error reading file '" + srcFile + "': " + err + ", continuing");
+        //}
+        var srcLines = splitFileLines(f.toString());
+        var resLines = transformLines(srcFile, srcLines, startVarMark, endVarMark, mapVarsToOps(matchOp, variablesNamesToLines));
+        return {
+            srcLines: srcLines,
+            resLines: resLines
+        };
     }
     /** Transform a file's contents and return the resulting lines to a callback function
      */
-    function transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines, doneCb) {
-        _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines, function transformFileToLinesCallback(srcLines, resLines) {
-            doneCb(resLines);
-        });
+    function transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines) {
+        var res = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
+        return res.resLines;
     }
     TransformFile.transformFileToLines = transformFileToLines;
     /** Transform a file's contents and write it to a destination file
+     * @return a message about the text written to the file
      */
-    function transformFileToFile(matchOp, srcFile, dstFile, compileTypeScript, startVarMark, endVarMark, variablesNamesToLines, doneCb, errorCb, postFileWritten) {
-        _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines, function transformFileToFileCallback(srcLines, resLines) {
-            gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
-            writeSourceCodeFile(dstFile, resLines, doneCb, errorCb, postFileWritten);
-        });
+    function transformFileToFile(matchOp, srcFile, dstFile, compileTypeScript, startVarMark, endVarMark, variablesNamesToLines) {
+        var _a = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines), srcLines = _a.srcLines, resLines = _a.resLines;
+        gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
+        WriteFile.writeFileLines(dstFile, resLines);
+        return "'" + srcFile + "' " + srcLines.length + " lines";
     }
     TransformFile.transformFileToFile = transformFileToFile;
-    function writeSourceCodeFile(fileName, srcLines, doneCb, errorCb, postFileWritten) {
-        var text = srcLines.join("\n");
-        text = joinLinesForFile(text);
-        fs.writeFile(fileName, text, function (writeErr) {
-            if (writeErr) {
-                gutil.log("error writing generated '" + fileName + "': " + writeErr);
-                errorCb("error writing generated '" + fileName + "': " + writeErr);
-                return;
-            }
-            if (postFileWritten) {
-                postFileWritten(fileName, function () {
-                    doneCb("'" + fileName + "' " + srcLines.length + " lines");
-                }, function (compileErr) {
-                    doneCb("'" + fileName + "' " + srcLines.length + " lines");
-                    gutil.log("error writing file '" + fileName + "': " + compileErr);
-                });
-            }
-            else {
-                doneCb("'" + fileName + "' " + srcLines.length + " lines");
-            }
-        });
+    function transformFileToFileAsync(matchOp, srcFile, dstFile, compileTypeScript, startVarMark, endVarMark, variablesNamesToLines, doneCb, errorCb, postFileWritten) {
+        var _a = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines), srcLines = _a.srcLines, resLines = _a.resLines;
+        gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
+        WriteFile.writeFileLinesAsync(dstFile, resLines, doneCb, errorCb, postFileWritten);
     }
-    TransformFile.writeSourceCodeFile = writeSourceCodeFile;
+    TransformFile.transformFileToFileAsync = transformFileToFileAsync;
     /** Transform a file containing template variables
      * @param srcFile: the source file containing text to read
      * @param dstFile: the destination file to write the transformed text to
@@ -212,17 +197,26 @@ var TransformFile;
      * @param postFileWritten: a callback to call after writing the destination file
      * @param successMsg: a success message to pass to the resolved returned promise
      */
-    function convertTemplateFile(srcFile, dstFile, variablesNamesToLines, postFileWritten, successMsg, delimiterStart, delimiterEnd) {
+    function convertTemplateFile(srcFile, dstFile, variablesNamesToLines, successMsg, delimiterStart, delimiterEnd) {
         if (delimiterStart === void 0) { delimiterStart = "$"; }
         if (delimiterEnd === void 0) { delimiterEnd = "$"; }
         var dfd = Q.defer();
-        transformFileToFile(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, true, delimiterStart, delimiterEnd, variablesNamesToLines, function (msg) {
+        var msg = transformFileToFile(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, true, delimiterStart, delimiterEnd, variablesNamesToLines);
+        dfd.resolve((successMsg ? successMsg + ": " : "") + msg);
+        return dfd.promise;
+    }
+    TransformFile.convertTemplateFile = convertTemplateFile;
+    function convertTemplateFileAsync(srcFile, dstFile, variablesNamesToLines, postFileWritten, successMsg, delimiterStart, delimiterEnd) {
+        if (delimiterStart === void 0) { delimiterStart = "$"; }
+        if (delimiterEnd === void 0) { delimiterEnd = "$"; }
+        var dfd = Q.defer();
+        transformFileToFileAsync(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, true, delimiterStart, delimiterEnd, variablesNamesToLines, function (msg) {
             dfd.resolve((successMsg ? successMsg + ": " : "") + msg);
         }, function (err) {
             dfd.reject(err);
         }, postFileWritten);
         return dfd.promise;
     }
-    TransformFile.convertTemplateFile = convertTemplateFile;
+    TransformFile.convertTemplateFileAsync = convertTemplateFileAsync;
 })(TransformFile || (TransformFile = {}));
 module.exports = TransformFile;

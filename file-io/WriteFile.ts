@@ -22,6 +22,49 @@ module WriteFile {
         writeFile(filePath, allLines);
     }
 
+
+    /** Replace '\n' with '\r\n' and replace '\t' with four spaces '    '
+     * @param text
+     */
+    export function joinLinesForFile(text: string) {
+        var res = text.replace(/\n/g, "\r\n").replace(/\t/g, "    ");
+        return res;
+    }
+
+
+    export function writeFileLines(fileName: string, srcLines: string[]): void {
+        var text = srcLines.join("\n");
+        text = joinLinesForFile(text);
+
+        fs.writeFileSync(fileName, text);
+    }
+
+
+    export function writeFileLinesAsync(fileName: string, srcLines: string[], doneCb: (msg: string) => void, errorCb: (errMsg: string) => void,
+        postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void): void {
+        var text = srcLines.join("\n");
+        text = joinLinesForFile(text);
+
+        fs.writeFile(fileName, text, function (writeErr) {
+            if (writeErr) {
+                gutil.log("error writing generated '" + fileName + "': " + writeErr);
+                errorCb("error writing generated '" + fileName + "': " + writeErr);
+                return;
+            }
+
+            if (postFileWritten) {
+                postFileWritten(fileName, function () {
+                    doneCb("'" + fileName + "' " + srcLines.length + " lines");
+                }, function (compileErr) {
+                    errorCb("error writing file '" + fileName + "': " + compileErr);
+                });
+            }
+            else {
+                doneCb("'" + fileName + "' " + srcLines.length + " lines");
+            }
+        });
+    }
+
 }
 
 export = WriteFile;

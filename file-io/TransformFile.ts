@@ -2,6 +2,7 @@
 import Q = require("q");
 import fs = require("fs");
 import gutil = require("gulp-util");
+import WriteFile = require("./WriteFile");
 
 /**
  * @author TeamworkGuy2
@@ -158,82 +159,64 @@ module TransformFile {
     }
 
 
-    export function transformFile(srcFile: string, startVarMark: string, endVarMark: string,
-            transformations: { [id: string]: ReplaceVar }, doneCb: (lines: string[]) => void) {
-        fs.readFile(srcFile, function (err, f) {
-            if (err) {
-                gutil.log("error reading file '" + srcFile + "': " + err + "");
-                return;
-            }
-            var fileLines = splitFileLines(f.toString());
-            var lines = transformLines(srcFile, fileLines, startVarMark, endVarMark, transformations);
-            doneCb(lines);
-        });
+    export function transformFile(srcFile: string, startVarMark: string, endVarMark: string, transformations: { [id: string]: ReplaceVar }): string[] {
+        var f = fs.readFileSync(srcFile);
+        //if (err) {
+        //    gutil.log("error reading file '" + srcFile + "': " + err + "");
+        //    return;
+        //}
+        var fileLines = splitFileLines(f.toString());
+        var lines = transformLines(srcFile, fileLines, startVarMark, endVarMark, transformations);
+        return lines;
     }
 
 
     function _transformFileToLines(matchOp: MatchOperation, srcFile: string, startVarMark: string, endVarMark: string,
-            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }, doneCb: (srcLines: string[], resLines: string[]) => void) {
+            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }): { srcLines: string[]; resLines: string[]; } {
 
-        fs.readFile(srcFile, function (err, f) {
-            if (err) {
-                gutil.log("error reading file '" + srcFile + "': " + err + ", continuing");
-            }
-            var srcLines = splitFileLines(f.toString());
-            var resLines = transformLines(srcFile, srcLines, startVarMark, endVarMark, mapVarsToOps(matchOp, variablesNamesToLines));
-            doneCb(srcLines, resLines);
-        });
+        var f = fs.readFileSync(srcFile);
+        //if (err) {
+        //    gutil.log("error reading file '" + srcFile + "': " + err + ", continuing");
+        //}
+        var srcLines = splitFileLines(f.toString());
+        var resLines = transformLines(srcFile, srcLines, startVarMark, endVarMark, mapVarsToOps(matchOp, variablesNamesToLines));
+        return {
+            srcLines,
+            resLines
+        };
     }
 
 
     /** Transform a file's contents and return the resulting lines to a callback function
      */
     export function transformFileToLines(matchOp: MatchOperation, srcFile: string, startVarMark: string, endVarMark: string,
-            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }, doneCb: (lines: string[]) => void) {
+            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }): string[] {
 
-        _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines, function transformFileToLinesCallback(srcLines, resLines) {
-            doneCb(resLines);
-        });
+        var res = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
+        return res.resLines;
     }
 
 
     /** Transform a file's contents and write it to a destination file
+     * @return a message about the text written to the file
      */
     export function transformFileToFile(matchOp: MatchOperation, srcFile: string, dstFile: string, compileTypeScript: boolean, startVarMark: string, endVarMark: string,
-            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }, doneCb: (msg: string) => void, errorCb: (errMsg: string) => void,
-            postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void) {
+            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }) {
 
-        _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines, function transformFileToFileCallback(srcLines, resLines) {
-            gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
-            writeSourceCodeFile(dstFile, resLines, doneCb, errorCb, postFileWritten);
-        });
+        var { srcLines, resLines } = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
+        gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
+        WriteFile.writeFileLines(dstFile, resLines);
+        return "'" + srcFile + "' " + srcLines.length + " lines";
     }
 
 
-    export function writeSourceCodeFile(fileName: string, srcLines: string[], doneCb: (msg: string) => void, errorCb: (errMsg: string) => void,
-        postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void) {
-        var text = srcLines.join("\n");
-        text = joinLinesForFile(text);
+    export function transformFileToFileAsync(matchOp: MatchOperation, srcFile: string, dstFile: string, compileTypeScript: boolean, startVarMark: string, endVarMark: string,
+            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }, doneCb: (msg: string) => void, errorCb: (errMsg: string) => void,
+            postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void) {
 
-        fs.writeFile(fileName, text, function (writeErr) {
-            if (writeErr) {
-                gutil.log("error writing generated '" + fileName + "': " + writeErr);
-                errorCb("error writing generated '" + fileName + "': " + writeErr);
-                return;
-            }
-
-            if (postFileWritten) {
-                postFileWritten(fileName, function () {
-                    doneCb("'" + fileName + "' " + srcLines.length + " lines");
-                }, function (compileErr) {
-                    doneCb("'" + fileName + "' " + srcLines.length + " lines");
-                    gutil.log("error writing file '" + fileName + "': " + compileErr);
-                });
-            }
-            else {
-                doneCb("'" + fileName + "' " + srcLines.length + " lines");
-            }
-        });
+        var { srcLines, resLines } = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
+        gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
+        WriteFile.writeFileLinesAsync(dstFile, resLines, doneCb, errorCb, postFileWritten);
     }
 
 
@@ -245,10 +228,21 @@ module TransformFile {
      * @param successMsg: a success message to pass to the resolved returned promise
      */
     export function convertTemplateFile(srcFile: string, dstFile: string, variablesNamesToLines: { [id: string]: string | string[] },
+            successMsg?: string, delimiterStart: string = "$", delimiterEnd: string = "$") {
+        var dfd = Q.defer<string>();
+
+        var msg = transformFileToFile(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, true, delimiterStart, delimiterEnd, variablesNamesToLines);
+        dfd.resolve((successMsg ? successMsg + ": " : "") + msg);
+
+        return dfd.promise;
+    }
+
+
+    export function convertTemplateFileAsync(srcFile: string, dstFile: string, variablesNamesToLines: { [id: string]: string | string[] },
             postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void, successMsg?: string, delimiterStart: string = "$", delimiterEnd: string = "$") {
         var dfd = Q.defer<string>();
 
-        transformFileToFile(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, true, delimiterStart, delimiterEnd, variablesNamesToLines, function (msg) {
+        transformFileToFileAsync(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, true, delimiterStart, delimiterEnd, variablesNamesToLines, function (msg) {
             dfd.resolve((successMsg ? successMsg + ": " : "") + msg);
         }, function (err) {
             dfd.reject(err);
