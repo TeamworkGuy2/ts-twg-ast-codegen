@@ -15,35 +15,36 @@
  * @author TeamworkGuy2
  */
 var SimpleTemplateCompiler = (function () {
-    /** Create a template definition, ready to parse a template
-     * @param contextPropToVariableLinks: associates context data property names with 'variables' names
-     * @param variables: a string-to-string mapping of template variables to their definitions
-     * @param startDelimiter: the text that identifies the start of a template variable
-     * @param endDelimiter: the text that identifies the end of a template variable (may be the same as 'startDelimiter')
+    /** Create a template definition, ready to parse a template source string
+     * @param delimiterStart: the text that identifies the start of a template variable
+     * @param delimiterStop: the text that identifies the end of a template variable (may be the same as 'delimiterStart')
+     * @param templateDataToExpressionNames: associates template data property names with expression names
+     * @param templateExpressions: associates template expression names with their expansions (which are arbitrary expressions, possibly containing further expression names)
      */
-    function SimpleTemplateCompiler(startDelimiter, stopDelimiter, contextPropToVariableLinks, variables) {
-        this.variableStartDelimiter = startDelimiter;
-        this.variableEndDelimiter = stopDelimiter;
-        this.variables = variables;
-        this.contextPropToVariableNameLinks = contextPropToVariableLinks;
-        this.variableToContextPropNameLinks = {};
-        var linkNames = Object.keys(contextPropToVariableLinks);
-        for (var i = 0, size = linkNames.length; i < size; i++) {
-            var key = linkNames[i];
-            this.variableToContextPropNameLinks[contextPropToVariableLinks[key]] = key;
+    function SimpleTemplateCompiler(delimiterStart, delimiterStop, templateDataToExpressionNames, templateExpressions) {
+        this.delimiterStart = delimiterStart;
+        this.delimiterStop = delimiterStop;
+        this.templateExpressions = templateExpressions;
+        this.templateDataToExpressionNames = templateDataToExpressionNames;
+        this.templateExpressionToDataNames = {};
+        var keys = Object.keys(templateDataToExpressionNames);
+        for (var i = 0, size = keys.length; i < size; i++) {
+            var key = keys[i];
+            this.templateExpressionToDataNames[templateDataToExpressionNames[key]] = key;
         }
     }
-    /** Recursively replace template variables in a string with values.
-     * Recursive variable resolution continues until no 'startDelimiter' sequences remain in the rendered 'stringTemplate'
-     * @param stringTemplate: the template string to render
-     * @param contextValues: associates template context property names with values
-     * @return 'stringTemplate' with template variable names replaced with 'variables' passed to the constructor and values from 'values'
+    /** Recursively replace template variable names in a string with their values.
+     * Recursive variable resolution continues until no 'delimiterStart' sequences remain in the rendered 'src'.
+     * NOTE: if a variable's expansion contains itself or a cyclic reference, a stack overflow will occur
+     * @param src: the template string to render
+     * @param templateData: associates template context property names with values
+     * @return 'src' with template variable names replaced with 'variables' passed to the constructor and values from 'values'
      */
-    SimpleTemplateCompiler.prototype.render = function (stringTemplate, contextValues) {
+    SimpleTemplateCompiler.prototype.render = function (src, templateData) {
         var res = "";
-        var startSym = this.variableStartDelimiter;
-        var endSym = this.variableEndDelimiter;
-        var remaining = stringTemplate;
+        var startSym = this.delimiterStart;
+        var endSym = this.delimiterStop;
+        var remaining = src;
         var startI = -1;
         var endI = -1;
         while (remaining.length > 0 && (startI = remaining.indexOf(startSym)) > -1) {
@@ -53,17 +54,17 @@ var SimpleTemplateCompiler = (function () {
                 endI = remaining.length - endSym.length;
             }
             var tmpl = remaining.substring(startI, endI + endSym.length);
-            var tmplVar = null;
+            var dataVarName = null;
             var tmplResolved = null;
             // variables are resolved against context and if no matching context name-value exists, the 'variables' value is used
-            if (!!(tmplVar = this.variables[tmpl])) {
-                tmplResolved = contextValues[tmplVar];
+            if (!!(dataVarName = this.templateExpressions[tmpl])) {
+                tmplResolved = templateData[dataVarName];
                 if (tmplResolved === undefined) {
-                    tmplResolved = tmplVar;
+                    tmplResolved = dataVarName;
                 }
             }
-            else if (!!(tmplVar = this.variableToContextPropNameLinks[tmpl])) {
-                tmplResolved = contextValues[tmplVar];
+            else if (!!(dataVarName = this.templateExpressionToDataNames[tmpl])) {
+                tmplResolved = templateData[dataVarName];
             }
             res += remaining.substring(0, startI) + tmplResolved;
             remaining = remaining.substring(endI + endSym.length);
@@ -71,7 +72,11 @@ var SimpleTemplateCompiler = (function () {
         if (remaining.length > 0) {
             res += remaining;
         }
-        return res.indexOf(startSym) > -1 ? this.render(res, contextValues) : res;
+        return res.indexOf(startSym) > -1 ? this.render(res, templateData) : res;
+    };
+    SimpleTemplateCompiler.fromSimpleTemplate = function (simpleTemplate) {
+        var inst = new SimpleTemplateCompiler(simpleTemplate.delimiterStart, simpleTemplate.delimiterStop, simpleTemplate.templateData, simpleTemplate.templateExpressions);
+        return inst;
     };
     return SimpleTemplateCompiler;
 })();

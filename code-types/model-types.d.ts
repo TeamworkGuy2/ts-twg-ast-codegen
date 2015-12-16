@@ -17,43 +17,28 @@ interface TypeInfo {
 }
 
 
-interface PropInfo extends TypeInfo {
-    propName: string;
-    required?: boolean;
-    defaultValue?: any;
-}
-
-
-interface PropertyField extends PropInfo {
-    readOnly?: boolean;
-}
-
-
-interface TypeProperty extends TypeInfo {
-    /** the property's data type, used to fill in default 'value', 'toService', 'toLocal', etc. */
-    type: string;
-    /** default value of the property */
-    defaultValue?: any;
-    /** true if this property is a primary key for the model, false or absent if not */
-    primaryKey?: boolean;
+interface TypeMetaData {
     /** true if this property should be automatically generated (only applies to 'primaryKey: true' properties), false or absent if not */
     autoGenerate?: boolean;
+    /** true if this property is a primary key for the model, false or absent if not */
+    primaryKey?: boolean;
+    /** read-only */
+    readOnly?: boolean;
     /** true to require this property in model with optional properties, 'primaryKey' properties are implicitely required */
     required?: boolean;
-    /** read-only */
+}
+
+
+interface PropInfo extends TypeInfo {
+    propName: string;
+    defaultValue?: any;
     readOnly?: boolean;
 }
 
 
-interface ServiceProperty extends TypeProperty {
-    /** the service property name */
-    servicePropName?: string;
-    /** the service property's data type, defaults to the same value as 'type' */
-    servicePropType?: string; //PropertyType;
-    /** template code can be used to convert the property to a value that can be sent to a web service */
-    toService?: string;
-    /** template code can be used to get this property from another object and convert it to a valid value for this model */
-    toLocal?: string;
+interface TypeProperty extends TypeInfo, TypeMetaData {
+    /** default value of the property */
+    defaultValue?: any;
 }
 
 
@@ -63,22 +48,35 @@ interface NamedProperty extends TypeProperty {
 }
 
 
-interface NamedServiceProperty extends ServiceProperty {
+interface DtoProperty extends TypeMetaData, TypeProperty {
+    server: TypeProperty;
+}
+
+
+interface NamedDtoProperty extends DtoProperty {
     /** the name of the property */
     name: string;
 }
 
 
+interface DtoPropertyTemplate extends DtoProperty {
+    /** template code can be used to convert the property to a value that can be sent to a web service */
+    toService?: string;
+    /** template code can be used to get this property from another object and convert it to a valid value for this model */
+    toLocal?: string;
+}
+
+
 interface TypesDefinition {
-    /** the properties/fields this model has, see {@link ModelProperty} */
+    /** the properties/fields this model has, see {@link TypeProperty} */
     properties: { [id: string]: TypeProperty };
 }
 
 
-interface WebServiceModelDef {
-    toServiceNameConverter: (string) => string; // a function that takes a 'properties.propName' string and converts it to a different format for service calls
-    /** the properties/fields this model has, see {@link ModelProperty} */
-    properties: { [id: string]: ServiceProperty };
+interface DtoModelTemplate {
+    toServiceNameConverter: (name: string) => string; // a function that takes a 'properties.propName' string and converts it to a different format for service calls
+    /** the properties/fields this model has, see {@link ServiceProperty} */
+    properties: { [id: string]: DtoPropertyTemplate };
 }
 
 
@@ -113,5 +111,5 @@ interface MethodBlock extends ExecutableBlock {
 }
 
 
-interface PropertyMethodMeta extends AccessibleBlock, PropertyField {
+interface PropertyMethodMeta extends AccessibleBlock, PropInfo {
 }

@@ -8,7 +8,7 @@ var DefaultPrettyPrinter = require("./whitespace/DefaultPrettyPrinter");
 var DefaultGenTools = require("../generators/DefaultGenTools");
 var CsServicesModel = require("../generators/c-sharp/CsServiceModel");
 var CsToSource = require("../generators/c-sharp/CsToSource");
-var VsProjManipulator = require("../file-io/vsproj/VsProjManipulator");
+var VsProjManipulator = require("../parsers/vsproj/VsProjManipulator");
 /** The root of the app for both web apps (.html pages and node.js cli)
  */
 var App = (function () {

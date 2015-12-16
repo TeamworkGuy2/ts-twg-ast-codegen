@@ -10,7 +10,7 @@ import CsServicesModel = require("../generators/c-sharp/CsServiceModel");
 import CsToSource = require("../generators/c-sharp/CsToSource");
 import ReadFile = require("../file-io/ReadFile");
 import WriteFile = require("../file-io/WriteFile");
-import VsProjManipulator = require("../file-io/vsproj/VsProjManipulator");
+import VsProjManipulator = require("../parsers/vsproj/VsProjManipulator");
 
 /** The root of the app for both web apps (.html pages and node.js cli)
  */
