@@ -13,6 +13,7 @@ interface StringMap<T> {
 interface TypeInfo {
     /** the property's data type */
     type: string;
+    /** true to require this property in models with optional properties, 'primaryKey' properties are implicitely required */
     required?: boolean;
 }
 
@@ -22,16 +23,19 @@ interface TypeMetaData {
     autoGenerate?: boolean;
     /** true if this property is a primary key for the model, false or absent if not */
     primaryKey?: boolean;
-    /** read-only */
+    /** true if the property is const/final/readonly, default false */
     readOnly?: boolean;
-    /** true to require this property in model with optional properties, 'primaryKey' properties are implicitely required */
+    /** true to require this property in models with optional properties, 'primaryKey' properties are implicitely required */
     required?: boolean;
 }
 
 
 interface PropInfo extends TypeInfo {
+    /** the name of the property */
     propName: string;
+    /** the property's default value (e.g. null, 0, ""), defaults to data type default (i.e. null for objects, 0 for numeric types, false for boolean */
     defaultValue?: any;
+    /** true if the property is const/final/readonly, default false */
     readOnly?: boolean;
 }
 
@@ -49,7 +53,8 @@ interface NamedProperty extends TypeProperty {
 
 
 interface DtoProperty extends TypeMetaData, TypeProperty {
-    server: TypeProperty;
+    /** if not present, server property type data is copied from this DtoProperty */
+    server?: TypeProperty;
 }
 
 
