@@ -46,6 +46,12 @@ interface TypeProperty extends TypeInfo, TypeMetaData {
 }
 
 
+interface OptionalNamedProperty extends TypeProperty {
+    /** the name of the property */
+    name?: string;
+}
+
+
 interface NamedProperty extends TypeProperty {
     /** the name of the property */
     name: string;
@@ -54,13 +60,7 @@ interface NamedProperty extends TypeProperty {
 
 interface DtoProperty extends TypeMetaData, TypeProperty {
     /** if not present, server property type data is copied from this DtoProperty */
-    server?: TypeProperty;
-}
-
-
-interface NamedDtoProperty extends DtoProperty {
-    /** the name of the property */
-    name: string;
+    server?: OptionalNamedProperty;
 }
 
 
@@ -69,6 +69,12 @@ interface DtoPropertyTemplate extends DtoProperty {
     toService?: string;
     /** template code can be used to get this property from another object and convert it to a valid value for this model */
     toLocal?: string;
+}
+
+
+interface NamedDtoPropertyTemplate extends DtoPropertyTemplate {
+    /** the name of the property */
+    name: string;
 }
 
 
