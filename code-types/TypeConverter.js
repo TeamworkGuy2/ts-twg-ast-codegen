@@ -36,7 +36,7 @@ var TypeConverter;
                 dimensionCount: arrayCount,
             };
         };
-        TypeScript.parseCsOrJavaType = function (dataType) {
+        TypeScript.parseCsOrJavaType = function (dataType, returnUnknownTypes) {
             var optionalInfo = TypeScript.parseType(dataType);
             var arrayCount = optionalInfo.arrayDimensionCount;
             dataType = optionalInfo.dataType;
@@ -73,7 +73,12 @@ var TypeConverter;
                     tsType = "number";
                     break;
                 default:
-                    throw new Error("unknown type name for TypeScript code: '" + dataType + "'");
+                    if (returnUnknownTypes) {
+                        tsType = dataType;
+                    }
+                    else {
+                        throw new Error("unknown type name for TypeScript code: '" + dataType + "'");
+                    }
             }
             return tsType + (arrayCount > 0 ? new Array(arrayCount + 1).join("[]") : "");
         };
@@ -82,6 +87,7 @@ var TypeConverter;
             var arrayCount = optionalInfo.arrayDimensionCount;
             dataType = optionalInfo.dataType;
             switch (dataType) {
+                case "bool":
                 case "boolean":
                     if (arrayCount > 0) {
                         throw new Error("converting array of " + dataType + " to string not supported");
@@ -162,14 +168,16 @@ var TypeConverter;
         /** create a parameter type signature from a property name and {@link TypeInfo}.
          * For example, this could generate a string like {@code "userId: string"} or {@code "isActive?: boolean"}
          */
-        TypeScript.createParameterCode = function (name, prop) {
-            return name + (prop.required === false ? "?" : "") + ": " + TypeScript.parseCsOrJavaType(prop.type);
+        TypeScript.createParameterCode = function (name, prop, returnUnknownTypes) {
+            if (returnUnknownTypes === void 0) { returnUnknownTypes = true; }
+            return name + (prop.required === false ? "?" : "") + ": " + TypeScript.parseCsOrJavaType(prop.type, returnUnknownTypes);
         };
         /** convert a map of property names and {@link TypeInfo} values into an array of code strings that convert each property to a string
          */
-        TypeScript.createParametersCode = function (props) {
+        TypeScript.createParametersCode = function (props, returnUnknownTypes) {
+            if (returnUnknownTypes === void 0) { returnUnknownTypes = true; }
             var keys = Object.keys(props);
-            return keys.map(function (k) { return k + (props[k].required === false ? "?" : "") + ": " + TypeScript.parseCsOrJavaType(props[k].type); });
+            return keys.map(function (k) { return k + (props[k].required === false ? "?" : "") + ": " + TypeScript.parseCsOrJavaType(props[k].type, returnUnknownTypes); });
         };
         return TypeScript;
     })();

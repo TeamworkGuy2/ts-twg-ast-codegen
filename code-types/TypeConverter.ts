@@ -41,7 +41,7 @@ module TypeConverter {
         }
 
 
-        static parseCsOrJavaType(dataType: string): string {
+        static parseCsOrJavaType(dataType: string, returnUnknownTypes: boolean): string {
             var optionalInfo = TypeScript.parseType(dataType);
             var arrayCount = optionalInfo.arrayDimensionCount;
             dataType = optionalInfo.dataType;
@@ -80,7 +80,12 @@ module TypeConverter {
                     tsType = "number";
                     break;
                 default:
-                    throw new Error("unknown type name for TypeScript code: '" + dataType + "'");
+                    if (returnUnknownTypes) {
+                        tsType = dataType;
+                    }
+                    else {
+                        throw new Error("unknown type name for TypeScript code: '" + dataType + "'");
+                    }
             }
 
             return tsType + (arrayCount > 0 ? new Array(arrayCount + 1).join("[]") : "");
@@ -93,6 +98,7 @@ module TypeConverter {
             dataType = optionalInfo.dataType;
 
             switch (dataType) {
+                case "bool":
                 case "boolean":
                     if (arrayCount > 0) { throw new Error("converting array of " + dataType + " to string not supported"); }
                     return "(" + variableName + " ? \"true\" : \"false\")";
@@ -176,16 +182,16 @@ module TypeConverter {
         /** create a parameter type signature from a property name and {@link TypeInfo}.
          * For example, this could generate a string like {@code "userId: string"} or {@code "isActive?: boolean"}
          */
-        static createParameterCode(name: string, prop: TypeInfo): string {
-            return name + (prop.required === false ? "?" : "") + ": " + TypeScript.parseCsOrJavaType(prop.type);
+        static createParameterCode(name: string, prop: TypeInfo, returnUnknownTypes: boolean = true): string {
+            return name + (prop.required === false ? "?" : "") + ": " + TypeScript.parseCsOrJavaType(prop.type, returnUnknownTypes);
         }
 
 
         /** convert a map of property names and {@link TypeInfo} values into an array of code strings that convert each property to a string
          */
-        static createParametersCode(props: StringMap<TypeInfo>): string[] {
+        static createParametersCode(props: StringMap<TypeInfo>, returnUnknownTypes: boolean = true): string[] {
             var keys = Object.keys(props);
-            return keys.map(k => k + (props[k].required === false ? "?" : "") + ": " + TypeScript.parseCsOrJavaType(props[k].type));
+            return keys.map(k => k + (props[k].required === false ? "?" : "") + ": " + TypeScript.parseCsOrJavaType(props[k].type, returnUnknownTypes));
         }
 
     }
