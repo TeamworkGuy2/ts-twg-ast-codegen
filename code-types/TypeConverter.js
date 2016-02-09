@@ -82,6 +82,39 @@ var TypeConverter;
             }
             return tsType + (arrayCount > 0 ? new Array(arrayCount + 1).join("[]") : "");
         };
+        TypeScript.isPrimitiveOrBuiltInType = function (dataType, includeBuiltInTypes) {
+            dataType = dataType.toLowerCase();
+            switch (dataType) {
+                case "bool":
+                case "boolean":
+                case "byte":
+                case "sbyte":
+                case "short":
+                case "ushort":
+                case "int":
+                case "uint":
+                case "long":
+                case "ulong":
+                case "float":
+                case "double":
+                case "decimal":
+                case "real":
+                case "number":
+                    return true;
+                default:
+                    if (includeBuiltInTypes) {
+                        switch (dataType) {
+                            case "date":
+                            case "datetime":
+                            case "string":
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                    return false;
+            }
+        };
         TypeScript.createTypeToStringCode = function (dataType, variableName) {
             var optionalInfo = TypeScript.parseType(dataType);
             var arrayCount = optionalInfo.arrayDimensionCount;

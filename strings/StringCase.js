@@ -188,7 +188,7 @@ var StringCase;
             resStr = str;
         }
         else if (StringCase.isTitleCase(str)) {
-            resStr = str.charAt(0).toUpperCase() + str.substr(1);
+            resStr = str.charAt(0).toLowerCase() + str.substr(1);
         }
         else if (StringCase.isUnderscoreCase(str)) {
             var res = [str.charAt(0).toLowerCase()];

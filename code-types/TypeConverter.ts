@@ -92,6 +92,42 @@ module TypeConverter {
         }
 
 
+        static isPrimitiveOrBuiltInType(dataType: string, includeBuiltInTypes: boolean): boolean {
+            dataType = dataType.toLowerCase();
+
+            switch (dataType) {
+                case "bool":
+                case "boolean":
+                case "byte":
+                case "sbyte":
+                case "short":
+                case "ushort":
+                case "int":
+                case "uint":
+                case "long":
+                case "ulong":
+                case "float":
+                case "double":
+                case "decimal":
+                case "real":
+                case "number":
+                    return true;
+                default:
+                    if (includeBuiltInTypes) {
+                        switch (dataType) {
+                            case "date":
+                            case "datetime":
+                            case "string":
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                    return false;
+            }
+        }
+
+
         static createTypeToStringCode(dataType: string, variableName: string): string {
             var optionalInfo = TypeScript.parseType(dataType);
             var arrayCount = optionalInfo.arrayDimensionCount;
