@@ -228,21 +228,23 @@ module StringArray {
 
 
     /** Convert a single level object containing string or string[] properties to an array of strings
-     * @return the flattened object with {@code join} string[] inserted between each property
+     * @return the flattened string array with {@code join} string[] inserted between each property
      */
-    export function stringMapToArrayJoin(obj: { [id: string]: string[]| string }, join: string[], dst: string[] = []): string[] {
-        var props = Object.keys(obj);
-        for (var i = 0, size = props.length; i < size; i++) {
-            var prop = obj[props[i]];
-            if (Array.isArray(prop)) {
+    export function flattenMapJoin(obj: { [id: string]: string[] }, join: string[], keys: string[] = Object.keys(obj), dst: string[] = []): string[] {
+        if (join) {
+            for (var i = 0, count = keys.length - 1; i < count; i++) {
+                var prop = obj[keys[i]];
                 Array.prototype.push.apply(dst, prop);
-            }
-            else {
-                dst.push(<string>prop);
-            }
-
-            if (join && i < size - 1) {
                 Array.prototype.push.apply(dst, join);
+            }
+            if (count > 0) {
+                Array.prototype.push.apply(dst, obj[keys[count]]);
+            }
+        }
+        else {
+            for (var i = 0, size = keys.length; i < size; i++) {
+                var prop = obj[keys[i]];
+                Array.prototype.push.apply(dst, prop);
             }
         }
 

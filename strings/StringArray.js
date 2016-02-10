@@ -189,26 +189,30 @@ var StringArray;
     }
     StringArray.toStringFromObjectsDeep = toStringFromObjectsDeep;
     /** Convert a single level object containing string or string[] properties to an array of strings
-     * @return the flattened object with {@code join} string[] inserted between each property
+     * @return the flattened string array with {@code join} string[] inserted between each property
      */
-    function stringMapToArrayJoin(obj, join, dst) {
+    function flattenMapJoin(obj, join, keys, dst) {
+        if (keys === void 0) { keys = Object.keys(obj); }
         if (dst === void 0) { dst = []; }
-        var props = Object.keys(obj);
-        for (var i = 0, size = props.length; i < size; i++) {
-            var prop = obj[props[i]];
-            if (Array.isArray(prop)) {
+        if (join) {
+            for (var i = 0, count = keys.length - 1; i < count; i++) {
+                var prop = obj[keys[i]];
                 Array.prototype.push.apply(dst, prop);
-            }
-            else {
-                dst.push(prop);
-            }
-            if (join && i < size - 1) {
                 Array.prototype.push.apply(dst, join);
+            }
+            if (count > 0) {
+                Array.prototype.push.apply(dst, obj[keys[count]]);
+            }
+        }
+        else {
+            for (var i = 0, size = keys.length; i < size; i++) {
+                var prop = obj[keys[i]];
+                Array.prototype.push.apply(dst, prop);
             }
         }
         return dst;
     }
-    StringArray.stringMapToArrayJoin = stringMapToArrayJoin;
+    StringArray.flattenMapJoin = flattenMapJoin;
     function flatten(strsAry) {
         return StringArray.joinMulti(strsAry, null, []);
     }
