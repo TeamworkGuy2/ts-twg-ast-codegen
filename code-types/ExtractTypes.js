@@ -1,5 +1,8 @@
 "use strict";
 var TypeConverter = require("./TypeConverter");
+/** ExtractTypes - functions for traversing code file ASTs and extracting type information from method and field signatures
+ * @author TeamworkGuy2
+ */
 var ExtractTypes;
 (function (ExtractTypes) {
     /** Get a map of all none primitive (number, boolean, etc.) extended/implemented class and interface type names from the specified group of class definitions
@@ -81,3 +84,4 @@ var ExtractTypes;
     }
     ExtractTypes.extractGenericTypes = extractGenericTypes;
 })(ExtractTypes || (ExtractTypes = {}));
+module.exports = ExtractTypes;
