@@ -1,11 +1,11 @@
-TS Code Generator
+TS Code Generator Tools
 ==============
-
-Code generator functions, designed for type safe transformation of data structures to code. 
-See the /test directory for example usage of the functions in this project. 
 
 Dependencies:
 ts-mortar
+
+TypeScript code generator tools, designed for type safe transformation of data structures to code. 
+See the /test directory for example usage of the functions in this project. 
 
 
 ####strings/

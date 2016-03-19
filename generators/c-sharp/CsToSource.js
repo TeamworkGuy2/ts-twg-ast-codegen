@@ -1,7 +1,7 @@
 "use strict";
 var Arrays = require("../../lib/ts-mortar/utils/Arrays");
 var StringArray = require("../../strings/StringArray");
-var EmptyLine = require("../../tsMeta/whitespace/EmptyLine");
+var EmptyLine = require("../../strings/whitespace/EmptyLine");
 var CsServiceModel = require("./CsServiceModel");
 /** For generating the source code string array tree for a C# class from a class meta-data representation (e.g. {@link CsClassSource})
  * @since 2015-8-9

@@ -17,18 +17,18 @@ import Q = require("q");
 import execObj = require("child_process");
 import exorcist = require("exorcist");
 // testing...
-import App = require("./tsMeta/App");
+import App = require("./ts-meta/App");
 
 var exec = execObj.exec;
 
 /** File paths */
 var dstDir = "bin/";
-var rootFile = "./tsMeta/App.js";
-//var requireFiles = "./tsMeta/App.js";
+var rootFile = "./ts-meta/App.js";
+//var requireFiles = "./ts-meta/App.js";
 var watchifyOptions = {
     entries: [rootFile],
     extensions: [".js", ".jsx"],
-    paths: ["node_modules", "./tsMeta/stringManipulation", "./tsMeta/templates", "./tsMeta/templates/generators"]
+    paths: ["node_modules", "./code-types", "./file-io", "./generators", "./parsers", "./strings", "./ts-meta"]
 };
 
 
@@ -42,13 +42,15 @@ function compileScripts(debug: boolean) {
     var bundler = watchify(watchifyOptions);
     //bundler.require(requireFiles);
     //bundler.transform(reactify);
-    bundler.transform(es6ify.configure(/.jsx|tsMeta\\(?!.*\.ts)|tsMeta\/(?!.*\.ts)/));
+    bundler.transform(es6ify.configure(/.jsx|ts-meta\\(?!.*\.ts)|ts-meta\/(?!.*\.ts)/));
 
     var pathChecks = [
-        "tsMeta/",
-        "tsMeta/stringManipulation",
-        "tsMeta/templates",
-        "tsMeta/templates/generators"
+        "code-types",
+        "file-io",
+        "generators",
+        "parsers",
+        "strings",
+        "ts-meta"
     ];
 
     function rebundle() {
@@ -71,10 +73,12 @@ function compileScripts(debug: boolean) {
             startTime = Date.now();
             gutil.log("start building '" + dstFileName + "'...");
         }
+
         function doneCb() {
             endTime = Date.now();
             gutil.log("finished building '" + dstFileName + "', " + (endTime - startTime) + " ms");
         }
+
         function errorCb(err) {
             console.error("error building '" + dstFileName + "'", err);
         }

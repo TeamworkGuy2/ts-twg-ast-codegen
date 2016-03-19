@@ -9,16 +9,16 @@ var vinylSourceSource = require("vinyl-source-stream");
 var execObj = require("child_process");
 var exorcist = require("exorcist");
 // testing...
-var App = require("./tsMeta/App");
+var App = require("./ts-meta/App");
 var exec = execObj.exec;
 /** File paths */
 var dstDir = "bin/";
-var rootFile = "./tsMeta/App.js";
-//var requireFiles = "./tsMeta/App.js";
+var rootFile = "./ts-meta/App.js";
+//var requireFiles = "./ts-meta/App.js";
 var watchifyOptions = {
     entries: [rootFile],
     extensions: [".js", ".jsx"],
-    paths: ["node_modules", "./tsMeta/stringManipulation", "./tsMeta/templates", "./tsMeta/templates/generators"]
+    paths: ["node_modules", "./code-types", "./file-io", "./generators", "./parsers", "./strings", "./ts-meta"]
 };
 function noop() { }
 function compileScripts(debug) {
@@ -28,12 +28,14 @@ function compileScripts(debug) {
     var bundler = watchify(watchifyOptions);
     //bundler.require(requireFiles);
     //bundler.transform(reactify);
-    bundler.transform(es6ify.configure(/.jsx|tsMeta\\(?!.*\.ts)|tsMeta\/(?!.*\.ts)/));
+    bundler.transform(es6ify.configure(/.jsx|ts-meta\\(?!.*\.ts)|ts-meta\/(?!.*\.ts)/));
     var pathChecks = [
-        "tsMeta/",
-        "tsMeta/stringManipulation",
-        "tsMeta/templates",
-        "tsMeta/templates/generators"
+        "code-types",
+        "file-io",
+        "generators",
+        "parsers",
+        "strings",
+        "ts-meta"
     ];
     function rebundle() {
         var startTime;
