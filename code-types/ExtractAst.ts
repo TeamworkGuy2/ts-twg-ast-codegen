@@ -1,21 +1,23 @@
 ﻿"use strict";
 import TypeConverter = require("./TypeConverter");
 
-/** ExtractTypes - functions for traversing code file ASTs and extracting type information from method and field signatures
+/** ExtractAst - functions for traversing code file ASTs and extracting type information from method and field signatures
  * @author TeamworkGuy2
  */
-module ExtractTypes {
+module ExtractAst {
 
     /** Get a map of all none primitive (number, boolean, etc.) extended/implemented class and interface type names from the specified group of class definitions
-     * @param childTypes
-     * @param availableTypeDefs
+     * @param childTypes the list of 'allTypeDefs' names to extract from
+     * @param allTypeDefs a map of all type definition names and CodeAst classes
+     * @param transformTypeName an optional transformer for the returned type name map
+     * @return a map of type names used
      */
-    export function extractInheritedTypeNames(childTypes: string[], availableTypeDefs: StringMap<CodeAst.Class>, transformTypeName?: (type: string) => string): StringMap<boolean> {
+    export function extractInheritedTypeNames(childTypes: string[], allTypeDefs: StringMap<CodeAst.Class>, transformTypeName?: (type: string) => string): StringMap<boolean> {
         var typesUsed: StringMap<boolean> = {};
 
         // TODO doesn't recursively extract parents beyond the first inheritance level
         for (var p = 0, sizeP = childTypes.length; p < sizeP; p++) {
-            var classDef = availableTypeDefs[childTypes[p]];
+            var classDef = allTypeDefs[childTypes[p]];
             if (classDef != null && classDef.classSignature.extendClassName) {
                 var extendTypes = extractGenericTypes(classDef.classSignature.extendClassName);
 
@@ -91,6 +93,76 @@ module ExtractTypes {
         return dst;
     }
 
+
+    /** Given a list of CodeAst parameters and a list/map of parameter names, return maps of parameter names and types that exist and do not exist in the 'paramNames' map
+     * @param params the list of parameters to process
+     * @param paramNames the map of parameter names to check
+     */
+    export function claimParams(params: CodeAst.MethodParameter[], paramNames: StringMap<any> | string[]): { params: StringMap<CodeAst.GenericType>; unclaimedParams: StringMap<CodeAst.GenericType>; } {
+        var types: StringMap<CodeAst.GenericType> = {};
+        var unknownTypes: StringMap<CodeAst.GenericType> = {};
+
+        if (Array.isArray(paramNames)) {
+            for (var i = 0, size = params.length; i < size; i++) {
+                var param = params[i];
+                var name = param.name;
+
+                var idx: number;
+                if ((idx = paramNames.indexOf(name)) > -1) {
+                    types[paramNames[idx]] = param.type;
+                }
+                else {
+                    unknownTypes[name] = param.type;
+                }
+            }
+        }
+        else {
+            for (var i = 0, size = params.length; i < size; i++) {
+                var param = params[i];
+                var name = param.name;
+
+                if (paramNames[name]) {
+                    types[paramNames[name]] = param.type;
+                }
+                else {
+                    unknownTypes[name] = param.type;
+                }
+            }
+        }
+
+        return {
+            params: types,
+            unclaimedParams: unknownTypes,
+        };
+    }
+
+
+    /** Find an annotation containing a given property
+     * @param annotations the array of annotations to process
+     * @param getProp the property accessor used to check
+     * @param minCount the minimum number of expected matching annotations (if this many matches aren't found, throw an error)
+     * @param propName the optional name of the property to display in error messages
+     */
+    export function findOneAnnotationProp<T>(annotations: CodeAst.Annotation[], getProp: (ann: CodeAst.Annotation) => T, minCount: number = 0, propName?: string): T {
+        var prop: T = null;
+        var foundCount = 0;
+        for (var i = 0, size = annotations.length; i < size; i++) {
+            var annt = annotations[i];
+            var annProp = getProp(annt);
+            if (annProp) {
+                if (foundCount === 0) {
+                    prop = annProp;
+                }
+                foundCount++;
+            }
+        }
+
+        if (foundCount > 1) { throw new Error("annotations contained multiple '" + propName + "' props: " + JSON.stringify(annotations)); }
+        if (foundCount < minCount) { throw new Error("annotations contained no '" + propName + "' props: " + JSON.stringify(annotations)); }
+
+        return prop;
+    }
+
 }
 
-export = ExtractTypes;
+export = ExtractAst;
