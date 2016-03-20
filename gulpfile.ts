@@ -7,19 +7,17 @@ import sass = require("gulp-sass");
 import minifyCss = require("gulp-minify-css");
 import rename = require("gulp-rename");
 import uglify = require("gulp-uglify");
-import browserify = require("browserify");
 import watchify = require("watchify");
 import es6ify = require("es6ify");
 //import reactify = require("reactify");
 import vinylSourceSource = require("vinyl-source-stream");
-import to5 = require("gulp-6to5");
 import Q = require("q");
-import execObj = require("child_process");
+import child_process = require("child_process");
 import exorcist = require("exorcist");
 // testing...
 import App = require("./ts-meta/App");
 
-var exec = execObj.exec;
+var exec = child_process.exec;
 
 /** File paths */
 var dstDir = "bin/";
@@ -109,23 +107,19 @@ gulp.task("checkFileEncoding", function () {
     var fileArg = (<string>gutil.env["file"] || "").toString();
     var srcFile = fileArg.trim();
 
-    fs.readFile(srcFile, function (err, f) {
-        if (err) {
-            gutil.log("error reading file '" + srcFile + "': " + err + ", continuing");
-        }
+    var src = fs.readFileSync(srcFile);
 
-        gutil.log("checking '" + srcFile + "' file encoding");
+    gutil.log("checking '" + srcFile + "' file encoding");
 
-        var lines: string[] = f.toString().split("\n");
-        for (var i = 0, size = lines.length; i < size; i++) {
-            var ln = lines[i];
-            for (var k = 0, charCount = ln.length; k < charCount; k++) {
-                if (ln.charCodeAt(k) > 127) {
-                    gutil.log("(" + (i + 1) + "," + (k + 1) + ") '" + ln.charAt(k) + "': " + ln);
-                }
+    var lines = src.toString().split("\n");
+    for (var i = 0, size = lines.length; i < size; i++) {
+        var ln = lines[i];
+        for (var k = 0, charCount = ln.length; k < charCount; k++) {
+            if (ln.charCodeAt(k) > 127) {
+                gutil.log("(" + (i + 1) + "," + (k + 1) + ") '" + ln.charAt(k) + "': " + ln);
             }
         }
-    });
+    }
 });
 
 

@@ -8,26 +8,27 @@ module TypeConverter {
     export class TypeScript {
 
         // true if the type is optional, false if not
-        static parseType(dataType: string): { dataType: string; required: boolean; arrayDimensionCount: number } {
+        static parseType(dataType: string): TypeInfo {
             var optionalInfo = TypeScript.parseTypeOptionality(dataType);
-            var dimensionInfo = TypeScript.parseTypeArrayDimensions(optionalInfo.dataType);
+            var dimensionInfo = TypeScript.parseTypeArrayDimensions(optionalInfo.type);
             return {
                 arrayDimensionCount: dimensionInfo.dimensionCount,
-                dataType: dimensionInfo.dataType,
+                type: dimensionInfo.type,
                 required: optionalInfo.required
             };
         }
 
-        static parseTypeOptionality(dataType: string): { dataType: string; required: boolean } {
+
+        static parseTypeOptionality(dataType: string): { type: string; required: boolean } {
             var hasOptionalMark = dataType.charAt(dataType.length - 1) === "?";
             return {
-                dataType: hasOptionalMark ? dataType.substr(0, dataType.length - 1) : dataType,
+                type: hasOptionalMark ? dataType.substr(0, dataType.length - 1) : dataType,
                 required: !hasOptionalMark,
             };
         }
 
 
-        static parseTypeArrayDimensions(dataType: string): { dataType: string; dimensionCount: number } {
+        static parseTypeArrayDimensions(dataType: string): { type: string; dimensionCount: number } {
             var arrayCount = 0;
             var idx = -1;
             while ((idx = dataType.lastIndexOf("[]")) > -1 && idx === dataType.length - 2) {
@@ -35,7 +36,7 @@ module TypeConverter {
                 dataType = dataType.substring(0, idx);
             }
             return {
-                dataType: dataType,
+                type: dataType,
                 dimensionCount: arrayCount,
             };
         }
@@ -44,7 +45,7 @@ module TypeConverter {
         static parseCsOrJavaType(dataType: string, returnUnknownTypes: boolean): string {
             var optionalInfo = TypeScript.parseType(dataType);
             var arrayCount = optionalInfo.arrayDimensionCount;
-            dataType = optionalInfo.dataType;
+            dataType = optionalInfo.type;
 
             var tsType: string = null;
 
@@ -131,7 +132,7 @@ module TypeConverter {
         static createTypeToStringCode(dataType: string, variableName: string): string {
             var optionalInfo = TypeScript.parseType(dataType);
             var arrayCount = optionalInfo.arrayDimensionCount;
-            dataType = optionalInfo.dataType;
+            dataType = optionalInfo.type;
 
             switch (dataType) {
                 case "bool":
@@ -157,57 +158,6 @@ module TypeConverter {
         }
 
 
-        /** create code to convert an object's values from one format into another
-         */
-        static createConvertObjectCode(objVarName: string, objDef: StringMap<TypeInfo>,
-            dataConverter: (dataType: string, varName: string) => string, propNameConverter: (name: string) => string,
-            prettyPrint: boolean = false, initialIndentation: string = "", blockIndentation: string = "\t", indentFirstLine: boolean = false, dstLines?: string[]): string[] {
-
-            var keys = Object.keys(objDef);
-            // keep single property object declarations on one line
-            if (keys.length === 1) {
-                prettyPrint = false;
-            }
-
-            var propLines = keys.map(k => {
-                return (prettyPrint ? (initialIndentation) + (blockIndentation) : " ") +
-                    propNameConverter(k) + ": " + dataConverter(objDef[k].type, objVarName + "." + k) + ",";
-            });
-            var objStartStr = (indentFirstLine ? (initialIndentation) : "") + "{";
-            var objEndStr = (prettyPrint ? (initialIndentation) + "}" : " }");
-
-            // append multiple lines or one long line to both the 'lines' and 'dstLines' arrays based on {@code prettyPrint} flag
-            var lines: string[] = [];
-            if (prettyPrint) {
-                if (dstLines != null) {
-                    if (dstLines.length > 0) {
-                        dstLines[dstLines.length - 1] = dstLines[dstLines.length - 1] + objStartStr;
-                    }
-                    else {
-                        dstLines.push(objStartStr);
-                    }
-                    Array.prototype.push.apply(dstLines, propLines);
-                    dstLines.push(objEndStr);
-                }
-                lines.push(objStartStr);
-                Array.prototype.push.apply(lines, propLines);
-                lines.push(objEndStr);
-            }
-            else {
-                if (dstLines != null) {
-                    if (dstLines.length > 0) {
-                        dstLines[dstLines.length - 1] = dstLines[dstLines.length - 1] + objStartStr + propLines.join("") + objEndStr;
-                    }
-                    else {
-                        dstLines.push(objStartStr + propLines.join("") + objEndStr);
-                    }
-                }
-                lines.push(objStartStr + propLines.join("") + objEndStr);
-            }
-            return lines;
-        }
-
-
         /** convert a map of property names and {@link TypeInfo} values into an array of code strings that convert each property to a string */
         static createTypesToStringCode(props: StringMap<TypeInfo>): string[] {
             var keys = Object.keys(props);
@@ -215,19 +165,32 @@ module TypeConverter {
         }
 
 
-        /** create a parameter type signature from a property name and {@link TypeInfo}.
-         * For example, this could generate a string like {@code "userId: string"} or {@code "isActive?: boolean"}
-         */
-        static createParameterCode(name: string, prop: TypeInfo, returnUnknownTypes: boolean = true): string {
-            return name + (prop.required === false ? "?" : "") + ": " + TypeScript.parseCsOrJavaType(prop.type, returnUnknownTypes);
+        static typeToString(type: CodeAst.GenericType, typeConverter: (typeName: string) => string): string {
+            var dst: string[] = [];
+            TypeScript._genericTypeToString(type, typeConverter, dst);
+            return dst.join();
         }
 
 
-        /** convert a map of property names and {@link TypeInfo} values into an array of code strings that convert each property to a string
-         */
-        static createParametersCode(props: StringMap<TypeInfo>, returnUnknownTypes: boolean = true): string[] {
-            var keys = Object.keys(props);
-            return keys.map(k => k + (props[k].required === false ? "?" : "") + ": " + TypeScript.parseCsOrJavaType(props[k].type, returnUnknownTypes));
+        private static _genericTypeToString(type: CodeAst.GenericType, typeConverter: (typeName: string) => string, dst: string[]): void {
+            dst.push(typeConverter ? typeConverter(type.typeName) : type.typeName);
+
+            var childs = type.genericParameters;
+            if (childs && childs.length > 0) {
+                for (var i = 0, sizeM1 = childs.length - 1; i < sizeM1; i++) {
+                    TypeScript._genericTypeToString(childs[i], typeConverter, dst);
+                    dst.push(", ");
+                }
+                TypeScript._genericTypeToString(childs[sizeM1], typeConverter, dst);
+            }
+
+            if (type.arrayDimensions) {
+                dst.push(new Array(type.arrayDimensions + 1).join("[]"));
+            }
+
+            if (type.nullable) {
+                dst.push("?");
+            }
         }
 
     }

@@ -15,6 +15,8 @@ interface TypeInfo {
     type: string;
     /** true to require this property in models with optional properties, 'primaryKey' properties are implicitely required */
     required?: boolean;
+    /** the optional array dimensions of this type (i.e. int[][] has a dimension count of 2) */
+    arrayDimensionCount?: number;
 }
 
 
@@ -58,7 +60,7 @@ interface NamedProperty extends TypeProperty {
 }
 
 
-interface DtoProperty extends TypeMetaData, TypeProperty {
+interface DtoProperty extends TypeProperty {
     /** if not present, server property type data is copied from this DtoProperty */
     server?: OptionalNamedProperty;
 }

@@ -20,8 +20,8 @@ declare module CodeAst {
 
     export interface GenericType {
         typeName: string;
-        nullable: boolean;
-        arrayDimensions: number;
+        nullable?: boolean;
+        arrayDimensions?: number;
         genericParameters?: GenericType[];
     }
 
@@ -29,14 +29,18 @@ declare module CodeAst {
     export interface Field {
         name: string;
         type: GenericType;
+        accessModifiers: string[];
+        comments: string[];
     }
 
 
     export interface Method {
         name: string;
         parameters: MethodParameter[];
+        accessModifiers: string[];
         returnType: GenericType;
         annotations: Annotation[];
+        comments: string[];
     }
 
 

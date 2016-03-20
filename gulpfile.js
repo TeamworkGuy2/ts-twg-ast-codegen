@@ -6,11 +6,11 @@ var watchify = require("watchify");
 var es6ify = require("es6ify");
 //import reactify = require("reactify");
 var vinylSourceSource = require("vinyl-source-stream");
-var execObj = require("child_process");
+var child_process = require("child_process");
 var exorcist = require("exorcist");
 // testing...
 var App = require("./ts-meta/App");
-var exec = execObj.exec;
+var exec = child_process.exec;
 /** File paths */
 var dstDir = "bin/";
 var rootFile = "./ts-meta/App.js";
@@ -81,21 +81,17 @@ function compileScripts(debug) {
 gulp.task("checkFileEncoding", function () {
     var fileArg = (gutil.env["file"] || "").toString();
     var srcFile = fileArg.trim();
-    fs.readFile(srcFile, function (err, f) {
-        if (err) {
-            gutil.log("error reading file '" + srcFile + "': " + err + ", continuing");
-        }
-        gutil.log("checking '" + srcFile + "' file encoding");
-        var lines = f.toString().split("\n");
-        for (var i = 0, size = lines.length; i < size; i++) {
-            var ln = lines[i];
-            for (var k = 0, charCount = ln.length; k < charCount; k++) {
-                if (ln.charCodeAt(k) > 127) {
-                    gutil.log("(" + (i + 1) + "," + (k + 1) + ") '" + ln.charAt(k) + "': " + ln);
-                }
+    var src = fs.readFileSync(srcFile);
+    gutil.log("checking '" + srcFile + "' file encoding");
+    var lines = src.toString().split("\n");
+    for (var i = 0, size = lines.length; i < size; i++) {
+        var ln = lines[i];
+        for (var k = 0, charCount = ln.length; k < charCount; k++) {
+            if (ln.charCodeAt(k) > 127) {
+                gutil.log("(" + (i + 1) + "," + (k + 1) + ") '" + ln.charAt(k) + "': " + ln);
             }
         }
-    });
+    }
 });
 gulp.task("runTests", function () {
     //Tests.runAll(gutil.log);

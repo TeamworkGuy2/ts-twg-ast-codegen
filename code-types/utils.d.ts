@@ -23,6 +23,11 @@ interface PrettyPrinter {
 }
 
 
+interface CodeContext {
+    className: string;
+    namespace: string;
+}
+
 
 /** SimpleTemplate - a template configuration object with delimiter symbols, data, and expressions
  * @author TeamworkGuy2
