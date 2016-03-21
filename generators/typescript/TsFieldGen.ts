@@ -34,7 +34,7 @@ module FieldGen {
         }
         // default type converter maps Java and C# primitive types (and some common built in types) to typescript types
         if (converters.typeConverter == null) {
-            converters.typeConverter = (type) => TypeConverter.TypeScript.parseCsOrJavaType(type, false);
+            converters.typeConverter = (type) => TypeConverter.TypeScript.parseCsOrJavaType(type, true);
         }
         // default to-string function recursively builds a generic type (i.e. 'Map<String, List<int[]>')
         if (converters.fieldToStr == null) {
@@ -56,9 +56,28 @@ module FieldGen {
             var type = converters.preFieldToStr != null ? converters.preFieldToStr(fieldName, field.type) : field.type;
             var fieldType = converters.fieldToStr(fieldName, type, typeConverter);
             fieldType = converters.postFieldToStr != null ? converters.postFieldToStr(fieldName, fieldType) : fieldType;
-            res.push(converters.getAccessModifierStr(fieldName, field) + fieldName + ": " + fieldType + ";");
+            res.push(converters.getAccessModifierStr(fieldName, field) + fieldName + (type.nullable ? "?" : "") + ": " + fieldType + ";");
         }
         return res;
+    }
+
+
+    /** Create a CodeAst field with default access of 'public' from a given field name and 'TypeInfo'
+     * @param name the name of the field
+     * @param info the type info associated with the field
+     */
+    export function typInfoToField(name: string, info: TypeInfo): CodeAst.Field {
+        var typeInfo = TypeConverter.TypeScript.parseType(info.type);
+        return {
+            name: name,
+            type: {
+                arrayDimensions: info.arrayDimensionCount > 0 ? info.arrayDimensionCount : typeInfo.arrayDimensionCount,
+                nullable: info.required === false || info.required === true ? !info.required : typeInfo.required === false,
+                typeName: typeInfo.type
+            },
+            accessModifiers: ["public"],
+            comments: []
+        };
     }
 
 }

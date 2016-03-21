@@ -19,9 +19,13 @@ testRunner.setup({
 });
 testRunner.run({
     code: "./strings/StringArray",
-    tests: "./test/strings/StringArray.js"
+    tests: "./test/strings/StringArrayTest.js"
 }, callback);
 testRunner.run({
     code: "./generators/SimpleTemplateCompiler",
-    tests: "./test/generators/SimpleTemplateCompiler.js"
+    tests: "./test/generators/SimpleTemplateCompilerTest.js"
+}, callback);
+testRunner.run({
+    code: "./generators/typescript/TsFieldGen",
+    tests: "./test/generators/typescript/TsFieldGenTest.js"
 }, callback);

@@ -25,7 +25,7 @@ var FieldGen;
         }
         // default type converter maps Java and C# primitive types (and some common built in types) to typescript types
         if (converters.typeConverter == null) {
-            converters.typeConverter = function (type) { return TypeConverter.TypeScript.parseCsOrJavaType(type, false); };
+            converters.typeConverter = function (type) { return TypeConverter.TypeScript.parseCsOrJavaType(type, true); };
         }
         // default to-string function recursively builds a generic type (i.e. 'Map<String, List<int[]>')
         if (converters.fieldToStr == null) {
@@ -44,10 +44,28 @@ var FieldGen;
             var type = converters.preFieldToStr != null ? converters.preFieldToStr(fieldName, field.type) : field.type;
             var fieldType = converters.fieldToStr(fieldName, type, typeConverter);
             fieldType = converters.postFieldToStr != null ? converters.postFieldToStr(fieldName, fieldType) : fieldType;
-            res.push(converters.getAccessModifierStr(fieldName, field) + fieldName + ": " + fieldType + ";");
+            res.push(converters.getAccessModifierStr(fieldName, field) + fieldName + (type.nullable ? "?" : "") + ": " + fieldType + ";");
         }
         return res;
     }
     FieldGen.createFieldsSrcCode = createFieldsSrcCode;
+    /** Create a CodeAst field with default access of 'public' from a given field name and 'TypeInfo'
+     * @param name the name of the field
+     * @param info the type info associated with the field
+     */
+    function typInfoToField(name, info) {
+        var typeInfo = TypeConverter.TypeScript.parseType(info.type);
+        return {
+            name: name,
+            type: {
+                arrayDimensions: info.arrayDimensionCount > 0 ? info.arrayDimensionCount : typeInfo.arrayDimensionCount,
+                nullable: info.required === false || info.required === true ? !info.required : typeInfo.required === false,
+                typeName: typeInfo.type
+            },
+            accessModifiers: ["public"],
+            comments: []
+        };
+    }
+    FieldGen.typInfoToField = typInfoToField;
 })(FieldGen || (FieldGen = {}));
 module.exports = FieldGen;

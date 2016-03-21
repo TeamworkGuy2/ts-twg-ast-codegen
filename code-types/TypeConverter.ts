@@ -168,7 +168,7 @@ module TypeConverter {
         static typeToString(type: CodeAst.GenericType, typeConverter: (typeName: string) => string): string {
             var dst: string[] = [];
             TypeScript._genericTypeToString(type, typeConverter, dst);
-            return dst.join();
+            return dst.join("");
         }
 
 
@@ -186,10 +186,6 @@ module TypeConverter {
 
             if (type.arrayDimensions) {
                 dst.push(new Array(type.arrayDimensions + 1).join("[]"));
-            }
-
-            if (type.nullable) {
-                dst.push("?");
             }
         }
 

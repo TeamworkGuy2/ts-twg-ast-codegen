@@ -153,7 +153,7 @@ var TypeConverter;
         TypeScript.typeToString = function (type, typeConverter) {
             var dst = [];
             TypeScript._genericTypeToString(type, typeConverter, dst);
-            return dst.join();
+            return dst.join("");
         };
         TypeScript._genericTypeToString = function (type, typeConverter, dst) {
             dst.push(typeConverter ? typeConverter(type.typeName) : type.typeName);
@@ -167,9 +167,6 @@ var TypeConverter;
             }
             if (type.arrayDimensions) {
                 dst.push(new Array(type.arrayDimensions + 1).join("[]"));
-            }
-            if (type.nullable) {
-                dst.push("?");
             }
         };
         return TypeScript;
