@@ -20,43 +20,46 @@ module FieldGen {
      * - 'postTypeConverter': post-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string
      */
     export function createFieldsSrcCode(fields: CodeAst.Field[], context: CodeContext, converters: {
-            getAccessModifierStr?: (fieldName: string, field: CodeAst.Field) => string;
-            preFieldToStr?: (fieldName: string, fieldType: CodeAst.GenericType) => CodeAst.GenericType;
-            fieldToStr?: (fieldName: string, fieldType: CodeAst.GenericType, typeConverter: (dataType: string) => string) => string;
-            postFieldToStr?: (fieldName: string, typeStr: string) => string;
-            preTypeConverter?: (dataType: string) => string;
-            typeConverter?: (dataType: string) => string;
-            postTypeConverter?: (dataType: string) => string;
-    }): string[] {
+            getAccessModifierStr?: (fieldName: string, field: CodeAst.Field, context: CodeContext) => string;
+            preFieldToStr?: (fieldName: string, fieldType: CodeAst.GenericType, context: CodeContext) => CodeAst.GenericType;
+            fieldToStr?: (fieldName: string, fieldType: CodeAst.GenericType, typeConverter: (fieldName: string, dataType: string, context: CodeContext) => string, context: CodeContext) => string;
+            postFieldToStr?: (fieldName: string, typeStr: string, context: CodeContext) => string;
+            preTypeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
+            typeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
+            postTypeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
+    } = {}): string[] {
         // default access modifier joins access modifiers with spaces
         if (converters.getAccessModifierStr == null) {
-            converters.getAccessModifierStr = (name, field) => field.accessModifiers.join(" ") + " ";
+            converters.getAccessModifierStr = (name, field, ctx) => field.accessModifiers.join(" ") + " ";
         }
         // default type converter maps Java and C# primitive types (and some common built in types) to typescript types
         if (converters.typeConverter == null) {
-            converters.typeConverter = (type) => TypeConverter.TypeScript.parseCsOrJavaType(type, true);
+            converters.typeConverter = (name, type, ctx) => TypeConverter.TypeScript.parseCsOrJavaType(type, true);
         }
         // default to-string function recursively builds a generic type (i.e. 'Map<String, List<int[]>')
         if (converters.fieldToStr == null) {
-            converters.fieldToStr = (name, type, typeConverter) => TypeConverter.TypeScript.typeToString(type, typeConverter);
+            converters.fieldToStr = (name, type, typeConverter, ctx) => TypeConverter.TypeScript.typeToString(type, (t) => typeConverter(name, t, ctx));
         }
 
-        var typeConverter = (converters.preTypeConverter || converters.postTypeConverter) ? (type) => {
-            type = converters.preTypeConverter != null ? converters.preTypeConverter(type) : type;
-            type = converters.typeConverter(type);
-            type = converters.postTypeConverter != null ? converters.postTypeConverter(type) : type;
-            return type;
-        } : converters.typeConverter;
+        var typeConverter = converters.typeConverter;
+        if (converters.preTypeConverter || converters.postTypeConverter) {
+            typeConverter = (name, type, ctx) => {
+                type = converters.preTypeConverter != null ? converters.preTypeConverter(name, type, ctx) : type;
+                type = converters.typeConverter(name, type, ctx);
+                type = converters.postTypeConverter != null ? converters.postTypeConverter(name, type, ctx) : type;
+                return type;
+            };
+        }
 
         var res: string[] = [];
 
         for (var i = 0, size = fields.length; i < size; i++) {
             var field = fields[i];
             var fieldName = field.name;
-            var type = converters.preFieldToStr != null ? converters.preFieldToStr(fieldName, field.type) : field.type;
-            var fieldType = converters.fieldToStr(fieldName, type, typeConverter);
-            fieldType = converters.postFieldToStr != null ? converters.postFieldToStr(fieldName, fieldType) : fieldType;
-            res.push(converters.getAccessModifierStr(fieldName, field) + fieldName + (type.nullable ? "?" : "") + ": " + fieldType + ";");
+            var type = converters.preFieldToStr != null ? converters.preFieldToStr(fieldName, field.type, context) : field.type;
+            var fieldType = converters.fieldToStr(fieldName, type, typeConverter, context);
+            fieldType = converters.postFieldToStr != null ? converters.postFieldToStr(fieldName, fieldType, context) : fieldType;
+            res.push(converters.getAccessModifierStr(fieldName, field, context) + fieldName + (type.nullable ? "?" : "") + ": " + fieldType + ";");
         }
         return res;
     }

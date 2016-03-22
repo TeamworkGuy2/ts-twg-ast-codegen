@@ -19,32 +19,36 @@ var FieldGen;
      * - 'postTypeConverter': post-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string
      */
     function createFieldsSrcCode(fields, context, converters) {
+        if (converters === void 0) { converters = {}; }
         // default access modifier joins access modifiers with spaces
         if (converters.getAccessModifierStr == null) {
-            converters.getAccessModifierStr = function (name, field) { return field.accessModifiers.join(" ") + " "; };
+            converters.getAccessModifierStr = function (name, field, ctx) { return field.accessModifiers.join(" ") + " "; };
         }
         // default type converter maps Java and C# primitive types (and some common built in types) to typescript types
         if (converters.typeConverter == null) {
-            converters.typeConverter = function (type) { return TypeConverter.TypeScript.parseCsOrJavaType(type, true); };
+            converters.typeConverter = function (name, type, ctx) { return TypeConverter.TypeScript.parseCsOrJavaType(type, true); };
         }
         // default to-string function recursively builds a generic type (i.e. 'Map<String, List<int[]>')
         if (converters.fieldToStr == null) {
-            converters.fieldToStr = function (name, type, typeConverter) { return TypeConverter.TypeScript.typeToString(type, typeConverter); };
+            converters.fieldToStr = function (name, type, typeConverter, ctx) { return TypeConverter.TypeScript.typeToString(type, function (t) { return typeConverter(name, t, ctx); }); };
         }
-        var typeConverter = (converters.preTypeConverter || converters.postTypeConverter) ? function (type) {
-            type = converters.preTypeConverter != null ? converters.preTypeConverter(type) : type;
-            type = converters.typeConverter(type);
-            type = converters.postTypeConverter != null ? converters.postTypeConverter(type) : type;
-            return type;
-        } : converters.typeConverter;
+        var typeConverter = converters.typeConverter;
+        if (converters.preTypeConverter || converters.postTypeConverter) {
+            typeConverter = function (name, type, ctx) {
+                type = converters.preTypeConverter != null ? converters.preTypeConverter(name, type, ctx) : type;
+                type = converters.typeConverter(name, type, ctx);
+                type = converters.postTypeConverter != null ? converters.postTypeConverter(name, type, ctx) : type;
+                return type;
+            };
+        }
         var res = [];
         for (var i = 0, size = fields.length; i < size; i++) {
             var field = fields[i];
             var fieldName = field.name;
-            var type = converters.preFieldToStr != null ? converters.preFieldToStr(fieldName, field.type) : field.type;
-            var fieldType = converters.fieldToStr(fieldName, type, typeConverter);
-            fieldType = converters.postFieldToStr != null ? converters.postFieldToStr(fieldName, fieldType) : fieldType;
-            res.push(converters.getAccessModifierStr(fieldName, field) + fieldName + (type.nullable ? "?" : "") + ": " + fieldType + ";");
+            var type = converters.preFieldToStr != null ? converters.preFieldToStr(fieldName, field.type, context) : field.type;
+            var fieldType = converters.fieldToStr(fieldName, type, typeConverter, context);
+            fieldType = converters.postFieldToStr != null ? converters.postFieldToStr(fieldName, fieldType, context) : fieldType;
+            res.push(converters.getAccessModifierStr(fieldName, field, context) + fieldName + (type.nullable ? "?" : "") + ": " + fieldType + ";");
         }
         return res;
     }
