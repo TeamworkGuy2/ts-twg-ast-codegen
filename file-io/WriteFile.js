@@ -1,5 +1,5 @@
 "use strict";
-var Arrays = require("../lib/ts-mortar/utils/Arrays");
+var Arrays = require("../../ts-mortar/utils/Arrays");
 var fs = require("fs");
 /**
  * @since 2015-8-10

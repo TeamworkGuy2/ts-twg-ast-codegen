@@ -1,4 +1,5 @@
 "use string";
+"use strict";
 var Access;
 (function (Access) {
     Access[Access["DEFAULT"] = 0] = "DEFAULT";

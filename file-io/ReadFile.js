@@ -1,5 +1,5 @@
 "use strict";
-var Strings = require("../lib/ts-mortar/utils/Strings");
+var Strings = require("../../ts-mortar/utils/Strings");
 var fs = require("fs");
 /**
  * @since 2015-8-10

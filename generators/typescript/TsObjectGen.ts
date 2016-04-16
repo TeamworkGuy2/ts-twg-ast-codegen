@@ -6,9 +6,9 @@ module TsObjectGen {
 
     /** create code to convert an object's values from one format into another
      */
-    export function createConvertObjectCode(objVarName: string, objDef: StringMap < TypeInfo >,
+    export function createConvertObjectCode(objVarName: string, objDef: StringMap<TypeInfo>,
             dataConverter: (dataType: string, varName: string) => string, propNameConverter: (name: string) => string,
-            prettyPrint: boolean = false, initialIndentation: string = "", blockIndentation: string = "\t", indentFirstLine: boolean = false, dstLines ?: string[]): string[] {
+            prettyPrint: boolean = false, initialIndentation: string = "", blockIndentation: string = "\t", indentFirstLine: boolean = false, dstLines?: string[]): string[] {
 
         var keys = Object.keys(objDef);
         // keep single property object declarations on one line

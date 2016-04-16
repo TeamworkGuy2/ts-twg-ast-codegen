@@ -47,5 +47,5 @@ var DefaultGenTools = (function () {
         return this.indentNonEmpty(strs, dst);
     };
     return DefaultGenTools;
-})();
+}());
 module.exports = DefaultGenTools;

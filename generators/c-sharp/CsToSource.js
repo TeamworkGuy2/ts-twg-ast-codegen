@@ -1,5 +1,5 @@
 "use strict";
-var Arrays = require("../../lib/ts-mortar/utils/Arrays");
+var Arrays = require("../../../ts-mortar/utils/Arrays");
 var StringArray = require("../../strings/StringArray");
 var EmptyLine = require("../../strings/whitespace/EmptyLine");
 var CsServiceModel = require("./CsServiceModel");
@@ -186,5 +186,5 @@ var CsToSource = (function () {
         return (genericParameters && genericParameters.length > 0 ? "<" + genericParameters.join(", ") + ">" : "");
     };
     return CsToSource;
-})();
+}());
 module.exports = CsToSource;

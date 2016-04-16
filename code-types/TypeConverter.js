@@ -170,7 +170,7 @@ var TypeConverter;
             }
         };
         return TypeScript;
-    })();
+    }());
     TypeConverter.TypeScript = TypeScript;
 })(TypeConverter || (TypeConverter = {}));
 module.exports = TypeConverter;

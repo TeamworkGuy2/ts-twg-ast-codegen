@@ -5,6 +5,28 @@
  */
 module FieldGen {
 
+    /** optional conversion functions for field ASTs and data types with basic default functions
+     */
+    interface FieldGenConverters {
+        /** get the access modifier string for a field declaration (i.e. 'public', 'private'), if null, defaults to {@code field.accessModifiers.join(" ") + " "} */
+        getAccessModifierStr?: (fieldName: string, field: CodeAst.Field, context: CodeContext) => string;
+        /** pre-processor for the field AST, it accepts the field name, the field's type, returns a field type */
+        preFieldToStr?: (fieldName: string, fieldType: CodeAst.GenericType, context: CodeContext) => CodeAst.GenericType;
+        /** the main function which converts a field AST to a string, it accepts the field's name, the field's type, and type converter for individual type strings, returns a string,
+         * if null, defaults to 'TypeConverter.TypeScript.typeToString' */
+        fieldToStr?: (fieldName: string, fieldType: CodeAst.GenericType, typeConverter: (fieldName: string, dataType: string, context: CodeContext) => string, context: CodeContext) => string;
+        /** post-processor for the resulting field AST string, it accepts the field's name, the field's type string representation, returns a string */
+        postFieldToStr?: (fieldName: string, typeStr: string, context: CodeContext) => string;
+        /** pre-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string */
+        preTypeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
+        /** convert a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string,
+          * if null, defaults to 'TypeConverter.TypeScript.parseCsOrJavaType' */
+        typeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
+        /** post-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string */
+        postTypeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
+    }
+
+
     /** Convert field ASTs to typescript field declarations (i.e. 'private myId: number;' or 'public isReal?: boolean;')
      * @param fields the fields to convert to TypeScript field declaration source code
      * @param context the class/namespace/package context of the list of fields
@@ -19,15 +41,7 @@ module FieldGen {
      * - 'preTypeConverter': pre-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string
      * - 'postTypeConverter': post-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string
      */
-    export function createFieldsSrcCode(fields: CodeAst.Field[], context: CodeContext, converters: {
-            getAccessModifierStr?: (fieldName: string, field: CodeAst.Field, context: CodeContext) => string;
-            preFieldToStr?: (fieldName: string, fieldType: CodeAst.GenericType, context: CodeContext) => CodeAst.GenericType;
-            fieldToStr?: (fieldName: string, fieldType: CodeAst.GenericType, typeConverter: (fieldName: string, dataType: string, context: CodeContext) => string, context: CodeContext) => string;
-            postFieldToStr?: (fieldName: string, typeStr: string, context: CodeContext) => string;
-            preTypeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
-            typeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
-            postTypeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
-    } = {}): string[] {
+    export function createFieldsSrcCode(fields: CodeAst.Field[], context: CodeContext, converters: FieldGenConverters = {}): string[] {
         // default access modifier joins access modifiers with spaces
         if (converters.getAccessModifierStr == null) {
             converters.getAccessModifierStr = (name, field, ctx) => field.accessModifiers.join(" ") + " ";

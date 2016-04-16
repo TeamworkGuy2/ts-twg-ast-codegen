@@ -1,3 +1,4 @@
+"use strict";
 /** StringCase - functions for checking if a string conforms to a programming naming convention
  * such as TitleCase, camelCase, Under_Score_Case, etc.
  */

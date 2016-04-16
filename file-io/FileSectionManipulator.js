@@ -26,5 +26,5 @@ var FileSectionManipulator = (function () {
         WriteFile.writeFileSections(filePath, this.fileSections);
     };
     return FileSectionManipulator;
-})();
+}());
 module.exports = FileSectionManipulator;

@@ -1,5 +1,5 @@
 "use strict";
-var Strings = require("../../lib/ts-mortar/utils/Strings");
+var Strings = require("../../../ts-mortar/utils/Strings");
 var FileSectionManipulator = require("../../file-io/FileSectionManipulator");
 /**
  * @author TeamworkGuy2
@@ -44,5 +44,5 @@ var VsProjManipulator = (function () {
         this.vsProjFileManipulator.saveFile(vsProjFilePath);
     };
     return VsProjManipulator;
-})();
+}());
 module.exports = VsProjManipulator;

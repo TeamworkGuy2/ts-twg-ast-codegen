@@ -1,5 +1,5 @@
 "use strict";
-var Arrays = require("../../lib/ts-mortar/utils/Arrays");
+var Arrays = require("../../../ts-mortar/utils/Arrays");
 var EmptyLine;
 (function (EmptyLine) {
     function preAppendIfAny(strs, preToAddIfAny, preToAddIfNone, prevLines, postToAddIfAny, postToAddIfNone, nextLines, dst) {

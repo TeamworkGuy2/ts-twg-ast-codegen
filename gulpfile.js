@@ -1,15 +1,21 @@
+"use strict";
 var fs = require("fs");
 var gulp = require("gulp");
 var gutil = require("gulp-util");
 var rename = require("gulp-rename");
 var watchify = require("watchify");
 var es6ify = require("es6ify");
-//import reactify = require("reactify");
 var vinylSourceSource = require("vinyl-source-stream");
 var child_process = require("child_process");
 var exorcist = require("exorcist");
 // testing...
-var App = require("./ts-meta/App");
+var UiRunner = require("./ui-assistant/UiRunner");
+/*
+"babelify": "~7.2.0",
+"babel-preset-es2015": "~6.6.0",
+"babel-preset-react": "~6.5.0",
+"browserify": "~13.0.0",
+*/
 var exec = child_process.exec;
 /** File paths */
 var dstDir = "bin/";
@@ -97,7 +103,7 @@ gulp.task("runTests", function () {
     //Tests.runAll(gutil.log);
 });
 gulp.task("testReadFileSections", function () {
-    App.main(null, gutil);
+    UiRunner.main(null, gutil);
 });
 // "--debug true/false" (default true) whether to include extra debug info in compiled files like source maps
 gulp.task("default", function () {

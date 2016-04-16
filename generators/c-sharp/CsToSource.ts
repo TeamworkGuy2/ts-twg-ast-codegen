@@ -1,5 +1,5 @@
 ﻿"use strict";
-import Arrays = require("../../lib/ts-mortar/utils/Arrays");
+import Arrays = require("../../../ts-mortar/utils/Arrays");
 import StringArray = require("../../strings/StringArray");
 import EmptyLine = require("../../strings/whitespace/EmptyLine");
 import CsServiceModel = require("./CsServiceModel");
@@ -31,7 +31,7 @@ class CsToSource {
     }
 
 
-    public static namespaceClassToLinesWithWhitespace(genTools: GenTools, namespaceName: string, csNsClasses: CsNamespaceSource, dst: string[]): string[]{
+    public static namespaceClassToLinesWithWhitespace(genTools: GenTools, namespaceName: string, csNsClasses: CsNamespaceSource, dst: string[]): string[] {
         var classesObj = {
             classImports: csNsClasses.classImports,
             ciToNsSWs: [""],
@@ -176,7 +176,7 @@ class CsToSource {
     }
 
 
-    public static methodToSrc(genTools: GenTools, method: CsMethodSource | CsConstructorSource, dst: string[]): string[]{
+    public static methodToSrc(genTools: GenTools, method: CsMethodSource | CsConstructorSource, dst: string[]): string[] {
         var paramStrs = (method.parameters ? method.parameters.map((prop) => {
             var propStr = prop.type + " " + prop.propName + (prop.required === false ? (prop.defaultValue ? " = " + prop.defaultValue : "?") : "");
             return propStr;
@@ -195,12 +195,12 @@ class CsToSource {
     }
 
 
-    public static createPropertyMethodToSrcMapper(genTools: GenTools): (prop: PropertyMethodMeta) => string[]{
+    public static createPropertyMethodToSrcMapper(genTools: GenTools): (prop: PropertyMethodMeta) => string[] {
         return (prop: PropertyMethodMeta) => CsToSource.propertyMethodToSrc(genTools, prop, []);
     }
 
 
-    public static propertyMethodToSrc(genTools: GenTools, prop: PropertyMethodMeta, dst: string[]): string[]{
+    public static propertyMethodToSrc(genTools: GenTools, prop: PropertyMethodMeta, dst: string[]): string[] {
         genTools.addIndentsToNonEmpty(dst, prop.comments);
         genTools.addIndentsToNonEmpty(dst, prop.annotations);
 

@@ -1,3 +1,4 @@
+"use strict";
 /** A very simple template compiler for simple tasks like function signature and data type templating/generating.
  * Template resolution has two stages, variables can be mapped to literal values or other variables using the 'variables' string map passed to the constructor.
  * Or context properties can be mapped to variables using the 'contextPropToVariableLinks' map and then values can be supplied dynamically to '.render(...)'.
@@ -79,5 +80,5 @@ var SimpleTemplateCompiler = (function () {
         return inst;
     };
     return SimpleTemplateCompiler;
-})();
+}());
 module.exports = SimpleTemplateCompiler;

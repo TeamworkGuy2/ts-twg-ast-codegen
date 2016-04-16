@@ -2,20 +2,21 @@
 import vm = require("vm");
 import gulp = require("gulp");
 import gutil = require("gulp-util");
-import concat = require("gulp-concat");
-import sass = require("gulp-sass");
-import minifyCss = require("gulp-minify-css");
 import rename = require("gulp-rename");
-import uglify = require("gulp-uglify");
 import watchify = require("watchify");
 import es6ify = require("es6ify");
-//import reactify = require("reactify");
 import vinylSourceSource = require("vinyl-source-stream");
 import Q = require("q");
 import child_process = require("child_process");
 import exorcist = require("exorcist");
 // testing...
-import App = require("./ts-meta/App");
+import UiRunner = require("./ui-assistant/UiRunner");
+/*
+"babelify": "~7.2.0",
+"babel-preset-es2015": "~6.6.0",
+"babel-preset-react": "~6.5.0",
+"browserify": "~13.0.0",
+*/
 
 var exec = child_process.exec;
 
@@ -129,7 +130,7 @@ gulp.task("runTests", function () {
 
 
 gulp.task("testReadFileSections", function () {
-    App.main(null, gutil);
+    UiRunner.main(null, gutil);
 });
 
 

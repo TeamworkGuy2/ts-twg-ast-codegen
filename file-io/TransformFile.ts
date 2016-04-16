@@ -172,7 +172,7 @@ module TransformFile {
 
 
     function _transformFileToLines(matchOp: MatchOperation, srcFile: string, startVarMark: string, endVarMark: string,
-            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }): { srcLines: string[]; resLines: string[]; } {
+        variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }): { srcLines: string[]; resLines: string[]; } {
 
         var f = fs.readFileSync(srcFile);
         //if (err) {
@@ -190,7 +190,7 @@ module TransformFile {
     /** Transform a file's contents and return the resulting lines to a callback function
      */
     export function transformFileToLines(matchOp: MatchOperation, srcFile: string, startVarMark: string, endVarMark: string,
-            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }): string[] {
+        variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }): string[] {
 
         var res = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
         return res.resLines;
@@ -201,7 +201,7 @@ module TransformFile {
      * @return a message about the text written to the file
      */
     export function transformFileToFile(matchOp: MatchOperation, srcFile: string, dstFile: string, startVarMark: string, endVarMark: string,
-            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }) {
+        variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }) {
 
         var { srcLines, resLines } = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
         gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
@@ -211,8 +211,8 @@ module TransformFile {
 
 
     export function transformFileToFileAsync(matchOp: MatchOperation, srcFile: string, dstFile: string, startVarMark: string, endVarMark: string,
-            variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }, doneCb: (msg: string) => void, errorCb: (errMsg: string) => void,
-            postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void) {
+        variablesNamesToLines: { [id: string]: string | string[] | ReplaceVar }, doneCb: (msg: string) => void, errorCb: (errMsg: string) => void,
+        postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void) {
 
         var { srcLines, resLines } = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
         gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
@@ -234,7 +234,7 @@ module TransformFile {
 
 
     export function convertTemplateFileAsync(srcFile: string, dstFile: string, variablesNamesToLines: { [id: string]: string | string[] },
-            postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void, successMsg?: string, delimiterStart: string = "$", delimiterEnd: string = "$") {
+        postFileWritten?: (fileName: string, successCb: () => void, errorCb: (err) => void) => void, successMsg?: string, delimiterStart: string = "$", delimiterEnd: string = "$") {
         var dfd = Q.defer<string>();
 
         transformFileToFileAsync(MatchOperation.REPLACE_MATCHING_PORTION, srcFile, dstFile, delimiterStart, delimiterEnd, variablesNamesToLines, function (msg) {

@@ -1,3 +1,4 @@
+"use strict";
 var TypeConverter = require("../../code-types/TypeConverter");
 /**
  * @since 2016-3-20

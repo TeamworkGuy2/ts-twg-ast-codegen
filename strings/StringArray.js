@@ -1,5 +1,5 @@
 "use strict";
-var Arrays = require("../lib/ts-mortar/utils/Arrays");
+var Arrays = require("../../ts-mortar/utils/Arrays");
 var StringArray = (function () {
     function StringArray() {
         this.strs = [];
@@ -131,7 +131,7 @@ var StringArray = (function () {
         return inst;
     };
     return StringArray;
-})();
+}());
 var StringArray;
 (function (StringArray) {
     /** Alias for {@link #toStringFromObjectsDeep()}

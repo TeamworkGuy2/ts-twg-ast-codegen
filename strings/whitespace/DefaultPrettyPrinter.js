@@ -33,5 +33,5 @@ var DefaultPrettyPrinter = (function () {
         return pp;
     };
     return DefaultPrettyPrinter;
-})();
+}());
 module.exports = DefaultPrettyPrinter;
