@@ -8,7 +8,7 @@ var CsClass = require("./CsClass");
 var CsServiceModel;
 (function (CsServiceModel) {
     function getDefaultServiceClassImports(genTools) {
-        return genTools.indent([
+        return genTools.indent([], [
             "using System.Runtime.Serialization;",
             "using System;"
         ]);

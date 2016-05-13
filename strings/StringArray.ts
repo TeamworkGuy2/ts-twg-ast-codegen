@@ -234,17 +234,17 @@ module StringArray {
         if (join) {
             for (var i = 0, count = keys.length - 1; i < count; i++) {
                 var prop = obj[keys[i]];
-                Array.prototype.push.apply(dst, prop);
-                Array.prototype.push.apply(dst, join);
+                Arrays.addAll(dst, prop);
+                Arrays.addAll(dst, join);
             }
             if (count > 0) {
-                Array.prototype.push.apply(dst, obj[keys[count]]);
+                Arrays.addAll(dst, obj[keys[count]]);
             }
         }
         else {
             for (var i = 0, size = keys.length; i < size; i++) {
                 var prop = obj[keys[i]];
-                Array.prototype.push.apply(dst, prop);
+                Arrays.addAll(dst, prop);
             }
         }
 
@@ -265,12 +265,12 @@ module StringArray {
         if (sizeN1 > 0) {
             for (var i = 0; i < sizeN1; i++) {
                 var strs = strArys[i];
-                Array.prototype.push.apply(dst, strs);
+                Arrays.addAll(dst, strs);
                 if (join) {
-                    Array.prototype.push.apply(dst, join);
+                    Arrays.addAll(dst, join);
                 }
             }
-            Array.prototype.push.apply(dst, strArys[sizeN1 - 1]);
+            Arrays.addAll(dst, strArys[sizeN1 - 1]);
         }
 
         return dst;

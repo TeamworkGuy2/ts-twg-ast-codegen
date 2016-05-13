@@ -1,4 +1,5 @@
 "use strict";
+var Arrays = require("../../../ts-mortar/utils/Arrays");
 /**
  * @since 2016-3-20
  */
@@ -32,11 +33,11 @@ var TsObjectGen;
                 else {
                     dstLines.push(objStartStr);
                 }
-                Array.prototype.push.apply(dstLines, propLines);
+                Arrays.addAll(dstLines, propLines);
                 dstLines.push(objEndStr);
             }
             lines.push(objStartStr);
-            Array.prototype.push.apply(lines, propLines);
+            Arrays.addAll(lines, propLines);
             lines.push(objEndStr);
         }
         else {

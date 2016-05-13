@@ -1,10 +1,11 @@
 {
   "name": "ts-code-gen-tools",
-  "version": "0.11.3",
+  "version": "0.13.0",
   "description": "TypeScript code generator utilities for C#, Java, TypeScript, etc. and reading/writing files in node.js",
   "author": "TeamworkGuy2",
   "license": "MIT",
   "dependencies": {
+    "ts-mortar": "^0.3.0",
     "q": "~1.4.1"
   },
   "devDependencies": {

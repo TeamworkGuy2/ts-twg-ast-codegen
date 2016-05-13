@@ -1,4 +1,5 @@
 ﻿"use strict";
+import Arrays = require("../../ts-mortar/utils/Arrays");
 import ReadFile = require("./ReadFile");
 import WriteFile = require("./WriteFile");
 
@@ -19,7 +20,7 @@ class FileSectionManipulator {
         if (section == null) {
             throw new Error("file '" + this.filePath + "' does not contain section named '" + sectionName + "'");
         }
-        Array.prototype.push.apply(section, lines);
+        Arrays.addAll(section, lines);
     }
 
 

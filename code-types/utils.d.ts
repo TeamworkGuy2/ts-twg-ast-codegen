@@ -1,13 +1,9 @@
 ﻿
 interface GenTools {
 
-    indent(lines: string[], dst?: string[]): string[];
+    indent(dst: string[], lines: string | string[]): string[];
 
-    indentNonEmpty(strs: string[], dst?: string[]): string[];
-
-    addIndent(dst: string[], str: string): string[];
-
-    addIndentsToNonEmpty(dst: string[], strs: string[]): string[];
+    indentNonEmpty(dst: string[], strs: string | string[]): string[];
 
     printer: PrettyPrinter;
 }
@@ -19,7 +15,7 @@ interface PrettyPrinter {
 
     indent(levels?: number): void;
 
-    deindent(levels?: number): void;
+    dedent(levels?: number): void;
 }
 
 

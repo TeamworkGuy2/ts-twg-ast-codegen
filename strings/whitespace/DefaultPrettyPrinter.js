@@ -14,7 +14,7 @@ var DefaultPrettyPrinter = (function () {
         this.currentIndent = indentStr;
         this.currentLevel += levels;
     };
-    DefaultPrettyPrinter.prototype.deindent = function (levels) {
+    DefaultPrettyPrinter.prototype.dedent = function (levels) {
         if (levels === void 0) { levels = 1; }
         if (this.currentLevel - levels < 0) {
             throw new Error("cannot reduce indentation by " + levels + ", current level is " + this.currentLevel);

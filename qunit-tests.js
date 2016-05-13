@@ -29,3 +29,7 @@ testRunner.run({
     code: "./generators/typescript/TsFieldGen",
     tests: "./test/generators/typescript/TsFieldGenTest.js"
 }, callback);
+testRunner.run({
+    code: "./generators/DefaultGenTools",
+    tests: "./test/generators/GenToolsTest.js"
+}, callback);

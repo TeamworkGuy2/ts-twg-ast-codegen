@@ -1,54 +1,60 @@
-﻿
-interface CsConstructorSource extends ConstructorBlock {
-}
+﻿/** C# source code AST types
+ * @since 2016-05-13
+ */
+declare module CsSource {
+
+    export interface Constructor extends CodeBlock.Constructor {
+    }
 
 
-interface CsMethodSource extends MethodBlock {
-    returnType: string;
-}
+    export interface Method extends CodeBlock.Method {
+        returnType: string;
+    }
 
 
-interface CsPropertySource extends PropertyMethodMeta {
-}
+    export interface Property extends CodeBlock.PropertyMethodMeta {
+    }
 
 
-interface CsClassHeader extends ClassHeader {
-}
+    export interface ClassHeader extends CodeBlock.ClassHeader {
+    }
 
 
-interface CsClassMeta {
-    classStart: CsClassHeader;
-    fields: PropInfo[];
-    classConstructors: CsConstructorSource[]
-    properties: PropertyMethodMeta[];
-    instanceMethods: CsMethodSource[];
-    staticMethods: CsMethodSource[];
-}
+    export interface ClassMeta {
+        classStart: ClassHeader;
+        fields: PropInfo[];
+        classConstructors: Constructor[]
+        properties: CodeBlock.PropertyMethodMeta[];
+        instanceMethods: Method[];
+        staticMethods: Method[];
+    }
 
 
-interface CsClassWithImportExportSource extends CsClassMeta {
-    classImports: string[];
-    classExport?: string[];
-}
+    export interface ClassWithImportExport extends ClassMeta {
+        classImports: string[];
+        classExport?: string[];
+    }
 
 
-interface CsNamespaceSource {
-    classImports: string[];
-    namespaceStart: string[];
-    classes: CsClassMeta[];
-    namespaceEnd: string[];
-}
+    export interface Namespace {
+        classImports: string[];
+        namespaceStart: string[];
+        classes: ClassMeta[];
+        namespaceEnd: string[];
+    }
 
 
-// ==== lines ====
-interface CsClassSourceLines {
-    classComments: string[];
-    annotations: string[];
-    classStart: string[];
-    fields: string[];
-    classConstructors: string[];
-    properties: string[];
-    instanceMethods: string[];
-    staticMethods: string[];
-    classEnd: string[];
+    // ==== lines ====
+    export interface ClassSourceLines {
+        classComments: string[];
+        annotations: string[];
+        classStart: string[];
+        fields: string[];
+        classConstructors: string[];
+        properties: string[];
+        instanceMethods: string[];
+        staticMethods: string[];
+        classEnd: string[];
+    }
+
 }

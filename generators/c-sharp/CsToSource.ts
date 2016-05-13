@@ -9,7 +9,7 @@ import CsServiceModel = require("./CsServiceModel");
  */
 class CsToSource {
 
-    public static namespaceClassToLines(genTools: GenTools, namespaceName: string, csNsClasses: CsNamespaceSource, includeWhitespace: boolean, dst: string[]): string[] {
+    public static namespaceClassToLines(genTools: GenTools, namespaceName: string, csNsClasses: CsSource.Namespace, includeWhitespace: boolean, dst: string[]): string[] {
         if (includeWhitespace) {
             CsToSource.namespaceClassToLinesWithWhitespace(genTools, namespaceName, csNsClasses, dst);
             return;
@@ -24,14 +24,14 @@ class CsToSource {
 
         genTools.printer.indent();
         classesObj.classes = CsToSource.classesToSrc(genTools, csNsClasses.classes, []);
-        genTools.printer.deindent();
+        genTools.printer.dedent();
 
         StringArray.toStringFromObjectsDeep(classesObj, dst);
         return dst;
     }
 
 
-    public static namespaceClassToLinesWithWhitespace(genTools: GenTools, namespaceName: string, csNsClasses: CsNamespaceSource, dst: string[]): string[] {
+    public static namespaceClassToLinesWithWhitespace(genTools: GenTools, namespaceName: string, csNsClasses: CsSource.Namespace, dst: string[]): string[] {
         var classesObj = {
             classImports: csNsClasses.classImports,
             ciToNsSWs: [""],
@@ -45,7 +45,7 @@ class CsToSource {
 
         genTools.printer.indent();
         CsToSource.classesToSrc(genTools, csNsClasses.classes, classesObj.classes);
-        genTools.printer.deindent();
+        genTools.printer.dedent();
 
         StringArray.toStringFromObjectsDeep(classesObj, dst);
         return dst;
@@ -53,7 +53,7 @@ class CsToSource {
 
 
 
-    public static classToLines(genTools: GenTools, namespaceName: string, csClasses: CsClassWithImportExportSource[], includeWhitespace: boolean, dst: string[]): string[] {
+    public static classToLines(genTools: GenTools, namespaceName: string, csClasses: CsSource.ClassWithImportExport[], includeWhitespace: boolean, dst: string[]): string[] {
         if (includeWhitespace) {
             CsToSource.classToLinesWithWhitespace(genTools, namespaceName, csClasses, dst);
             return;
@@ -87,7 +87,7 @@ class CsToSource {
     }
 
 
-    public static classToLinesWithWhitespace(genTools: GenTools, namespaceName: string, csClasses: CsClassWithImportExportSource[], dst: string[]): string[] {
+    public static classToLinesWithWhitespace(genTools: GenTools, namespaceName: string, csClasses: CsSource.ClassWithImportExport[], dst: string[]): string[] {
         var classesObj = {
             classImports: [],
             ciToNsSWs: [""],
@@ -106,14 +106,14 @@ class CsToSource {
 
         genTools.printer.indent();
         CsToSource.classesToSrc(genTools, csClasses, classesObj.classes);
-        genTools.printer.deindent();
+        genTools.printer.dedent();
 
         StringArray.toStringFromObjectsDeep(classesObj, dst);
         return dst;
     }
 
 
-    private static classesToSrc(genTools: GenTools, csClasses: CsClassMeta[], dstClasses: CsClassSourceLines[] = []): CsClassSourceLines[] {
+    private static classesToSrc(genTools: GenTools, csClasses: CsSource.ClassMeta[], dstClasses: CsSource.ClassSourceLines[] = []): CsSource.ClassSourceLines[] {
         var methodToSourceFunc = CsToSource.createMethodToSrcMapper(genTools);
         var propToSourceFunc = CsToSource.createPropertyMethodToSrcMapper(genTools);
 
@@ -144,11 +144,11 @@ class CsToSource {
     }
 
 
-    public static classHeaderToMetaSrc(genTools: GenTools, classHeader: CsClassHeader): { comments: string[]; annotations: string[]; classStart: string[] } {
+    public static classHeaderToMetaSrc(genTools: GenTools, classHeader: CsSource.ClassHeader): { comments: string[]; annotations: string[]; classStart: string[] } {
         return {
-            comments: genTools.indentNonEmpty(classHeader.comments),
-            annotations: genTools.indentNonEmpty(classHeader.annotations),
-            classStart: genTools.indentNonEmpty([
+            comments: genTools.indentNonEmpty([], classHeader.comments),
+            annotations: genTools.indentNonEmpty([], classHeader.annotations),
+            classStart: genTools.indentNonEmpty([], [
                 classHeader.accessModifiers.join(" ") + " " + classHeader.className + CsToSource.genericParametersToSrc(genTools, classHeader.genericParameters),
                 "{"
             ]),
@@ -156,65 +156,65 @@ class CsToSource {
     }
 
 
-    public static classHeaderToSrc(genTools: GenTools, classHeader: CsClassHeader, dst: string[]): string[] {
-        genTools.addIndentsToNonEmpty(dst, classHeader.comments);
-        genTools.addIndentsToNonEmpty(dst, classHeader.annotations);
-        genTools.addIndent(dst, classHeader.accessModifiers.join(" ") + " " + classHeader.className + CsToSource.genericParametersToSrc(genTools, classHeader.genericParameters));
-        genTools.addIndent(dst, "{");
+    public static classHeaderToSrc(genTools: GenTools, classHeader: CsSource.ClassHeader, dst: string[]): string[] {
+        genTools.indentNonEmpty(dst, classHeader.comments);
+        genTools.indentNonEmpty(dst, classHeader.annotations);
+        genTools.indent(dst, classHeader.accessModifiers.join(" ") + " " + classHeader.className + CsToSource.genericParametersToSrc(genTools, classHeader.genericParameters));
+        genTools.indent(dst, "{");
         return dst;
     }
 
 
-    public static classFooterSrc(genTools: GenTools, classHeader: CsClassHeader, dst: string[] = []): string[] {
-        genTools.addIndent(dst, "}");
+    public static classFooterSrc(genTools: GenTools, classHeader: CsSource.ClassHeader, dst: string[] = []): string[] {
+        genTools.indent(dst, "}");
         return dst;
     }
 
 
-    public static createMethodToSrcMapper(genTools: GenTools): (method: CsMethodSource) => string[] {
-        return (method: CsMethodSource) => CsToSource.methodToSrc(genTools, method, []);
+    public static createMethodToSrcMapper(genTools: GenTools): (method: CsSource.Method) => string[] {
+        return (method: CsSource.Method) => CsToSource.methodToSrc(genTools, method, []);
     }
 
 
-    public static methodToSrc(genTools: GenTools, method: CsMethodSource | CsConstructorSource, dst: string[]): string[] {
+    public static methodToSrc(genTools: GenTools, method: CsSource.Method | CsSource.Constructor, dst: string[]): string[] {
         var paramStrs = (method.parameters ? method.parameters.map((prop) => {
             var propStr = prop.type + " " + prop.propName + (prop.required === false ? (prop.defaultValue ? " = " + prop.defaultValue : "?") : "");
             return propStr;
         }) : []);
         var signature = method.accessModifiers.join(" ") + " " + (method["returnType"] ? method["returnType"] + " " : "") + method.name + "(" + paramStrs.join(", ") + ")";
 
-        genTools.addIndent(dst, signature);
+        genTools.indent(dst, signature);
 
-        genTools.addIndent(dst, "{");
+        genTools.indent(dst, "{");
         genTools.printer.indent();
-        genTools.addIndentsToNonEmpty(dst, method.code.slice());
-        genTools.printer.deindent();
-        genTools.addIndent(dst, "}");
+        genTools.indentNonEmpty(dst, method.code.slice());
+        genTools.printer.dedent();
+        genTools.indent(dst, "}");
 
         return dst;
     }
 
 
-    public static createPropertyMethodToSrcMapper(genTools: GenTools): (prop: PropertyMethodMeta) => string[] {
-        return (prop: PropertyMethodMeta) => CsToSource.propertyMethodToSrc(genTools, prop, []);
+    public static createPropertyMethodToSrcMapper(genTools: GenTools): (prop: CodeBlock.PropertyMethodMeta) => string[] {
+        return (prop: CodeBlock.PropertyMethodMeta) => CsToSource.propertyMethodToSrc(genTools, prop, []);
     }
 
 
-    public static propertyMethodToSrc(genTools: GenTools, prop: PropertyMethodMeta, dst: string[]): string[] {
-        genTools.addIndentsToNonEmpty(dst, prop.comments);
-        genTools.addIndentsToNonEmpty(dst, prop.annotations);
+    public static propertyMethodToSrc(genTools: GenTools, prop: CodeBlock.PropertyMethodMeta, dst: string[]): string[] {
+        genTools.indentNonEmpty(dst, prop.comments);
+        genTools.indentNonEmpty(dst, prop.annotations);
 
-        genTools.addIndent(dst, prop.accessModifiers.join(" ") + " " + prop.type + (prop.required === false ? "?" : "") + " " + prop.propName);
-        genTools.addIndent(dst, "{");
+        genTools.indent(dst, prop.accessModifiers.join(" ") + " " + prop.type + (prop.required === false ? "?" : "") + " " + prop.propName);
+        genTools.indent(dst, "{");
         genTools.printer.indent();
 
-        genTools.addIndent(dst, "get;");
+        genTools.indent(dst, "get;");
         if (prop.readOnly !== true) {
-            genTools.addIndent(dst, "set;");
+            genTools.indent(dst, "set;");
         }
 
-        genTools.printer.deindent();
-        genTools.addIndent(dst, "}");
+        genTools.printer.dedent();
+        genTools.indent(dst, "}");
 
         return dst;
     }
@@ -223,7 +223,7 @@ class CsToSource {
     public static fieldsToSrc(genTools: GenTools, fields: PropInfo[], dst: string[] = []): string[] {
         for (var i = 0, size = fields.length; i < size; i++) {
             var field = fields[i];
-            genTools.addIndent(dst, field.type + (field.required === false ? "?" : "") + " " + field.propName + (field["defaultValue"] ? " = " + field.defaultValue : "") + ";");
+            genTools.indent(dst, field.type + (field.required === false ? "?" : "") + " " + field.propName + (field["defaultValue"] ? " = " + field.defaultValue : "") + ";");
         }
         return dst;
     }

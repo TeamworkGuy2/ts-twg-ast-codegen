@@ -2,7 +2,7 @@
 
 module CsClass {
 
-    export function copyShallow(csClass: CsClassWithImportExportSource): CsClassMeta {
+    export function copyShallow(csClass: CsSource.ClassWithImportExport): CsSource.ClassMeta {
         return {
             classStart: csClass.classStart,
             fields: csClass.fields,

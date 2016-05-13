@@ -4,7 +4,29 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.12.0](N/A) - 2016-4-16
+### [0.13.0](N/A) - 2016-5-13
+#### Added
+  * DtoModelTemplateNamed to model-types.d.ts
+  * Unit test for DefaultGenTools and DefaultPrettyPrinter
+
+#### Changed
+* cs-types.d.ts - all the interfaces exported by this file are now nested inside a module named CsSource
+* model-types.d.ts:
+  * renamed NamedDtoPropertyTemplate -> DtoPropertyTemplateNamed
+  * moved *Block and other interfaces from the bottom of this file to new code-types.d.ts file and nested them inside a module named CodeBlock
+* utils.d.ts - renamed GenTools deindent() -> dedent()
+
+#### Fixed
+* DefaultGenTools bugs:
+  * indent() - wasn't appending lines to the 'dst' array, instead it was overwritting starting at index 0
+  * indentNonEmpty() - wasn't appending empty lines, it was skipping them, it now appends empty lines as-is with no indent
+
+#### Removed
+* removed interface methods GenTools addIndent() and addIndentsToNonEmpty()
+
+
+--------
+### [0.12.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/c2c63681d200f4e03a2f1b3106fc4619614b859b) - 2016-4-16
 #### Added
 * A CHANGELOG.md covering all previous releases after being reminded about the need for change logs from http://keepachangelog.com/
 

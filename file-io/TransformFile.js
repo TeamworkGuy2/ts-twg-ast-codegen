@@ -1,6 +1,7 @@
 "use strict";
 var Q = require("q");
 var fs = require("fs");
+var Arrays = require("../../ts-mortar/utils/Arrays");
 var gutil = require("gulp-util");
 var WriteFile = require("./WriteFile");
 /**
@@ -98,7 +99,7 @@ var TransformFile;
                             break;
                         case MatchOperation.REPLACE_LINES:
                             if (opParamIsAry) {
-                                Array.prototype.push.apply(newLines, opParam);
+                                Arrays.addAll(newLines, opParam);
                             }
                             else {
                                 newLines.push(opParam);
@@ -113,7 +114,7 @@ var TransformFile;
                                 var resLine = lines[i].replace(varFullName, opParam[0]);
                                 newLines.push(resLine);
                                 if (opParam.length > 1) {
-                                    Array.prototype.push.apply(newLines, opParam.slice(1));
+                                    Arrays.addAll(newLines, opParam.slice(1));
                                 }
                             }
                             else {

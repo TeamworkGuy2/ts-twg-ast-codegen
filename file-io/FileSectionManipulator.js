@@ -1,4 +1,5 @@
 "use strict";
+var Arrays = require("../../ts-mortar/utils/Arrays");
 var ReadFile = require("./ReadFile");
 var WriteFile = require("./WriteFile");
 /** A manipulator for a file sections map created by {@link ReadFile#readLinesSections()) or similar function
@@ -12,7 +13,7 @@ var FileSectionManipulator = (function () {
         if (section == null) {
             throw new Error("file '" + this.filePath + "' does not contain section named '" + sectionName + "'");
         }
-        Array.prototype.push.apply(section, lines);
+        Arrays.addAll(section, lines);
     };
     FileSectionManipulator.prototype.getSections = function () {
         return this.fileSections;

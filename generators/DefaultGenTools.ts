@@ -19,38 +19,38 @@ class DefaultGenTools implements GenTools {
     }
 
 
-    public indent(lines: string[], dst: string[] = []): string[] {
+    public indent(dst: string[], lines: string | string[]): string[] {
         if (lines == null) {
             return dst;
         }
+
         var indent = this._printer.getIndent();
+
+        if (typeof lines === "string") {
+            dst.push(indent + lines);
+            return dst;
+        }
+
         for (var i = 0, size = lines.length; i < size; i++) {
-            dst[i] = indent + lines[i];
+            dst.push(indent + lines[i]);
         }
         return dst;
     }
 
 
-    public indentNonEmpty(strs: string[], dst: string[] = []): string[] {
+    public indentNonEmpty(dst: string[], strs: string | string[]): string[] {
         var indent = this._printer.getIndent();
+
+        if (typeof strs === "string") {
+            dst.push(indent + strs);
+            return dst;
+        }
+
         for (var i = 0, size = strs.length; i < size; i++) {
             var str = strs[i];
-            if (str && str.length > 0) {
-                dst.push(indent + str);
-            }
+            dst.push((str && str.length > 0) ? (indent + str) : str);
         }
         return dst;
-    }
-
-
-    public addIndent(dst: string[], str: string): string[] {
-        dst.push(this._printer.getIndent() + str);
-        return dst;
-    }
-
-
-    public addIndentsToNonEmpty(dst: string[], strs: string[]): string[] {
-        return this.indentNonEmpty(strs, dst);
     }
 
 }

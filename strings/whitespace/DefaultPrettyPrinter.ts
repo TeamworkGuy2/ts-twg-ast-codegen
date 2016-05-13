@@ -21,7 +21,7 @@ class DefaultPrettyPrinter implements PrettyPrinter {
     }
 
 
-    public deindent(levels: number = 1): void {
+    public dedent(levels: number = 1): void {
         if (this.currentLevel - levels < 0) {
             throw new Error("cannot reduce indentation by " + levels + ", current level is " + this.currentLevel);
         }

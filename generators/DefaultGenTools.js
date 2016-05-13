@@ -17,34 +17,31 @@ var DefaultGenTools = (function () {
         genTools._printer = printer;
         return genTools;
     };
-    DefaultGenTools.prototype.indent = function (lines, dst) {
-        if (dst === void 0) { dst = []; }
+    DefaultGenTools.prototype.indent = function (dst, lines) {
         if (lines == null) {
             return dst;
         }
         var indent = this._printer.getIndent();
+        if (typeof lines === "string") {
+            dst.push(indent + lines);
+            return dst;
+        }
         for (var i = 0, size = lines.length; i < size; i++) {
-            dst[i] = indent + lines[i];
+            dst.push(indent + lines[i]);
         }
         return dst;
     };
-    DefaultGenTools.prototype.indentNonEmpty = function (strs, dst) {
-        if (dst === void 0) { dst = []; }
+    DefaultGenTools.prototype.indentNonEmpty = function (dst, strs) {
         var indent = this._printer.getIndent();
+        if (typeof strs === "string") {
+            dst.push(indent + strs);
+            return dst;
+        }
         for (var i = 0, size = strs.length; i < size; i++) {
             var str = strs[i];
-            if (str && str.length > 0) {
-                dst.push(indent + str);
-            }
+            dst.push((str && str.length > 0) ? (indent + str) : str);
         }
         return dst;
-    };
-    DefaultGenTools.prototype.addIndent = function (dst, str) {
-        dst.push(this._printer.getIndent() + str);
-        return dst;
-    };
-    DefaultGenTools.prototype.addIndentsToNonEmpty = function (dst, strs) {
-        return this.indentNonEmpty(strs, dst);
     };
     return DefaultGenTools;
 }());

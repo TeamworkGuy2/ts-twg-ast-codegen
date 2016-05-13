@@ -9,7 +9,7 @@ import CsClass = require("./CsClass");
 module CsServiceModel {
 
     export function getDefaultServiceClassImports(genTools: GenTools): string[] {
-        return genTools.indent([
+        return genTools.indent([], [
             "using System.Runtime.Serialization;",
             "using System;"
         ]);
@@ -29,7 +29,7 @@ module CsServiceModel {
     }
 
 
-    export function generateServiceClass(genTools: GenTools, className: string, props: NamedProperty[], copyrightLines?: string[], authorName?: string): CsClassWithImportExportSource {
+    export function generateServiceClass(genTools: GenTools, className: string, props: NamedProperty[], copyrightLines?: string[], authorName?: string): CsSource.ClassWithImportExport {
 
         var classComments = [
             "/// <summary>",
@@ -55,13 +55,13 @@ module CsServiceModel {
             }
         }
 
-        var classStart: CsClassHeader = {
+        var classStart: CsSource.ClassHeader = {
             accessModifiers: Modifier.publicClass(),
             annotations: ["[DataContract]"],
             className: className,
         };
 
-        var classConstructors: CsConstructorSource[] = [{
+        var classConstructors: CsSource.Constructor[] = [{
             comments: [
                 "/// <summary>",
                 "/// <para>",
@@ -74,10 +74,10 @@ module CsServiceModel {
             code: []
         }];
 
-        var properties: PropertyMethodMeta[] = [];
+        var properties: CodeBlock.PropertyMethodMeta[] = [];
         for (var i = 0, size = props.length; i < size; i++) {
             var prop = props[i];
-            var propLines: PropertyMethodMeta = {
+            var propLines: CodeBlock.PropertyMethodMeta = {
                 readOnly: prop.readOnly,
                 required: prop.required,
                 accessModifiers: ["public"],
@@ -99,7 +99,7 @@ module CsServiceModel {
     }
 
 
-    export function generateServiceNamespaceSrc(genTools: GenTools, namespaceName: string, className: string, props: NamedProperty[], copyrightLines?: string[], authorName?: string): CsNamespaceSource {
+    export function generateServiceNamespaceSrc(genTools: GenTools, namespaceName: string, className: string, props: NamedProperty[], copyrightLines?: string[], authorName?: string): CsSource.Namespace {
         var classObj = generateServiceClass(genTools, className, props, copyrightLines, authorName);
         var importStrs: string[] = classObj.classImports;
 

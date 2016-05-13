@@ -48,15 +48,21 @@ interface TypeProperty extends TypeInfo, TypeMetaData {
 }
 
 
-interface OptionalNamedProperty extends TypeProperty {
-    /** the name of the property */
-    name?: string;
+interface TypesDefinition {
+    /** the properties/fields this model has, see {@link TypeProperty} */
+    properties: { [id: string]: TypeProperty };
 }
 
 
 interface NamedProperty extends TypeProperty {
     /** the name of the property */
     name: string;
+}
+
+
+interface OptionalNamedProperty extends TypeProperty {
+    /** the name of the property */
+    name?: string;
 }
 
 
@@ -74,15 +80,9 @@ interface DtoPropertyTemplate extends DtoProperty {
 }
 
 
-interface NamedDtoPropertyTemplate extends DtoPropertyTemplate {
+interface DtoPropertyTemplateNamed extends DtoPropertyTemplate {
     /** the name of the property */
     name: string;
-}
-
-
-interface TypesDefinition {
-    /** the properties/fields this model has, see {@link TypeProperty} */
-    properties: { [id: string]: TypeProperty };
 }
 
 
@@ -93,36 +93,7 @@ interface DtoModelTemplate {
 }
 
 
-// ==== methods ====
-
-interface AccessibleBlock {
-    comments?: string[];
-    accessModifiers: string[];
-    annotations?: string[];
-}
-
-
-interface ExecutableBlock extends AccessibleBlock {
+interface DtoModelTemplateNamed extends DtoModelTemplate {
+    /** the name of the data model */
     name: string;
-    parameters?: PropInfo[];
-    code: string[];
-}
-
-
-interface ClassHeader extends AccessibleBlock {
-    genericParameters?: string[];
-    className: string;
-}
-
-
-interface ConstructorBlock extends ExecutableBlock {
-}
-
-
-interface MethodBlock extends ExecutableBlock {
-    returnType: string;
-}
-
-
-interface PropertyMethodMeta extends AccessibleBlock, PropInfo {
 }

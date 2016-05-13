@@ -22,7 +22,7 @@ var CsToSource = (function () {
         };
         genTools.printer.indent();
         classesObj.classes = CsToSource.classesToSrc(genTools, csNsClasses.classes, []);
-        genTools.printer.deindent();
+        genTools.printer.dedent();
         StringArray.toStringFromObjectsDeep(classesObj, dst);
         return dst;
     };
@@ -39,7 +39,7 @@ var CsToSource = (function () {
         };
         genTools.printer.indent();
         CsToSource.classesToSrc(genTools, csNsClasses.classes, classesObj.classes);
-        genTools.printer.deindent();
+        genTools.printer.dedent();
         StringArray.toStringFromObjectsDeep(classesObj, dst);
         return dst;
     };
@@ -86,7 +86,7 @@ var CsToSource = (function () {
         }
         genTools.printer.indent();
         CsToSource.classesToSrc(genTools, csClasses, classesObj.classes);
-        genTools.printer.deindent();
+        genTools.printer.dedent();
         StringArray.toStringFromObjectsDeep(classesObj, dst);
         return dst;
     };
@@ -119,24 +119,24 @@ var CsToSource = (function () {
     };
     CsToSource.classHeaderToMetaSrc = function (genTools, classHeader) {
         return {
-            comments: genTools.indentNonEmpty(classHeader.comments),
-            annotations: genTools.indentNonEmpty(classHeader.annotations),
-            classStart: genTools.indentNonEmpty([
+            comments: genTools.indentNonEmpty([], classHeader.comments),
+            annotations: genTools.indentNonEmpty([], classHeader.annotations),
+            classStart: genTools.indentNonEmpty([], [
                 classHeader.accessModifiers.join(" ") + " " + classHeader.className + CsToSource.genericParametersToSrc(genTools, classHeader.genericParameters),
                 "{"
             ]),
         };
     };
     CsToSource.classHeaderToSrc = function (genTools, classHeader, dst) {
-        genTools.addIndentsToNonEmpty(dst, classHeader.comments);
-        genTools.addIndentsToNonEmpty(dst, classHeader.annotations);
-        genTools.addIndent(dst, classHeader.accessModifiers.join(" ") + " " + classHeader.className + CsToSource.genericParametersToSrc(genTools, classHeader.genericParameters));
-        genTools.addIndent(dst, "{");
+        genTools.indentNonEmpty(dst, classHeader.comments);
+        genTools.indentNonEmpty(dst, classHeader.annotations);
+        genTools.indent(dst, classHeader.accessModifiers.join(" ") + " " + classHeader.className + CsToSource.genericParametersToSrc(genTools, classHeader.genericParameters));
+        genTools.indent(dst, "{");
         return dst;
     };
     CsToSource.classFooterSrc = function (genTools, classHeader, dst) {
         if (dst === void 0) { dst = []; }
-        genTools.addIndent(dst, "}");
+        genTools.indent(dst, "}");
         return dst;
     };
     CsToSource.createMethodToSrcMapper = function (genTools) {
@@ -148,36 +148,36 @@ var CsToSource = (function () {
             return propStr;
         }) : []);
         var signature = method.accessModifiers.join(" ") + " " + (method["returnType"] ? method["returnType"] + " " : "") + method.name + "(" + paramStrs.join(", ") + ")";
-        genTools.addIndent(dst, signature);
-        genTools.addIndent(dst, "{");
+        genTools.indent(dst, signature);
+        genTools.indent(dst, "{");
         genTools.printer.indent();
-        genTools.addIndentsToNonEmpty(dst, method.code.slice());
-        genTools.printer.deindent();
-        genTools.addIndent(dst, "}");
+        genTools.indentNonEmpty(dst, method.code.slice());
+        genTools.printer.dedent();
+        genTools.indent(dst, "}");
         return dst;
     };
     CsToSource.createPropertyMethodToSrcMapper = function (genTools) {
         return function (prop) { return CsToSource.propertyMethodToSrc(genTools, prop, []); };
     };
     CsToSource.propertyMethodToSrc = function (genTools, prop, dst) {
-        genTools.addIndentsToNonEmpty(dst, prop.comments);
-        genTools.addIndentsToNonEmpty(dst, prop.annotations);
-        genTools.addIndent(dst, prop.accessModifiers.join(" ") + " " + prop.type + (prop.required === false ? "?" : "") + " " + prop.propName);
-        genTools.addIndent(dst, "{");
+        genTools.indentNonEmpty(dst, prop.comments);
+        genTools.indentNonEmpty(dst, prop.annotations);
+        genTools.indent(dst, prop.accessModifiers.join(" ") + " " + prop.type + (prop.required === false ? "?" : "") + " " + prop.propName);
+        genTools.indent(dst, "{");
         genTools.printer.indent();
-        genTools.addIndent(dst, "get;");
+        genTools.indent(dst, "get;");
         if (prop.readOnly !== true) {
-            genTools.addIndent(dst, "set;");
+            genTools.indent(dst, "set;");
         }
-        genTools.printer.deindent();
-        genTools.addIndent(dst, "}");
+        genTools.printer.dedent();
+        genTools.indent(dst, "}");
         return dst;
     };
     CsToSource.fieldsToSrc = function (genTools, fields, dst) {
         if (dst === void 0) { dst = []; }
         for (var i = 0, size = fields.length; i < size; i++) {
             var field = fields[i];
-            genTools.addIndent(dst, field.type + (field.required === false ? "?" : "") + " " + field.propName + (field["defaultValue"] ? " = " + field.defaultValue : "") + ";");
+            genTools.indent(dst, field.type + (field.required === false ? "?" : "") + " " + field.propName + (field["defaultValue"] ? " = " + field.defaultValue : "") + ";");
         }
         return dst;
     };
