@@ -2,6 +2,7 @@
 import Arrays = require("../../../ts-mortar/utils/Arrays");
 import StringArray = require("../../strings/StringArray");
 import EmptyLine = require("../../strings/whitespace/EmptyLine");
+import TypeConverter = require("../../code-types/TypeConverter");
 import CsServiceModel = require("./CsServiceModel");
 
 /** For generating the source code string array tree for a C# class from a class meta-data representation (e.g. {@link CsClassSource})
@@ -177,11 +178,11 @@ class CsToSource {
 
 
     public static methodToSrc(genTools: GenTools, method: CsSource.Method | CsSource.Constructor, dst: string[]): string[] {
-        var paramStrs = (method.parameters ? method.parameters.map((prop) => {
-            var propStr = prop.type + " " + prop.propName + (prop.required === false ? (prop.defaultValue ? " = " + prop.defaultValue : "?") : "");
+        var paramStrs = (method.parameters ? method.parameters.map((param) => {
+            var propStr = TypeConverter.typeToString(param.type) + " " + param.paramName + (param.required === false ? (param.defaultValue ? " = " + param.defaultValue : "?") : "");
             return propStr;
         }) : []);
-        var signature = method.accessModifiers.join(" ") + " " + (method["returnType"] ? method["returnType"] + " " : "") + method.name + "(" + paramStrs.join(", ") + ")";
+        var signature = method.accessModifiers.join(" ") + " " + ((<CsSource.Method>method).returnType ? TypeConverter.typeToString((<CsSource.Method>method).returnType) + " " : "") + method.name + "(" + paramStrs.join(", ") + ")";
 
         genTools.indent(dst, signature);
 
@@ -204,7 +205,7 @@ class CsToSource {
         genTools.indentNonEmpty(dst, prop.comments);
         genTools.indentNonEmpty(dst, prop.annotations);
 
-        genTools.indent(dst, prop.accessModifiers.join(" ") + " " + prop.type + (prop.required === false ? "?" : "") + " " + prop.propName);
+        genTools.indent(dst, prop.accessModifiers.join(" ") + " " + TypeConverter.typeToString(prop.type) + " " + prop.propName);
         genTools.indent(dst, "{");
         genTools.printer.indent();
 
@@ -223,15 +224,15 @@ class CsToSource {
     public static fieldsToSrc(genTools: GenTools, fields: PropInfo[], dst: string[] = []): string[] {
         for (var i = 0, size = fields.length; i < size; i++) {
             var field = fields[i];
-            genTools.indent(dst, field.type + (field.required === false ? "?" : "") + " " + field.propName + (field["defaultValue"] ? " = " + field.defaultValue : "") + ";");
+            genTools.indent(dst, TypeConverter.typeToString(field.type) + " " + field.propName + (field.defaultValue != null ? " = " + field.defaultValue : "") + ";");
         }
         return dst;
     }
 
 
     // return in format '<A, B, C>'
-    public static genericParametersToSrc(genTools: GenTools, genericParameters: string[]): string {
-        return (genericParameters && genericParameters.length > 0 ? "<" + genericParameters.join(", ") + ">" : "");
+    public static genericParametersToSrc(genTools: GenTools, genericParameters: CodeAst.Type[]): string {
+        return (genericParameters && genericParameters.length > 0 ? "<" + genericParameters.map((t) => TypeConverter.typeToString(t)).join(", ") + ">" : "");
     }
 
 }

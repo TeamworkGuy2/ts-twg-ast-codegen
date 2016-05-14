@@ -2,6 +2,7 @@
 var Arrays = require("../../../ts-mortar/utils/Arrays");
 var StringArray = require("../../strings/StringArray");
 var EmptyLine = require("../../strings/whitespace/EmptyLine");
+var TypeConverter = require("../../code-types/TypeConverter");
 var CsServiceModel = require("./CsServiceModel");
 /** For generating the source code string array tree for a C# class from a class meta-data representation (e.g. {@link CsClassSource})
  * @since 2015-8-9
@@ -143,11 +144,11 @@ var CsToSource = (function () {
         return function (method) { return CsToSource.methodToSrc(genTools, method, []); };
     };
     CsToSource.methodToSrc = function (genTools, method, dst) {
-        var paramStrs = (method.parameters ? method.parameters.map(function (prop) {
-            var propStr = prop.type + " " + prop.propName + (prop.required === false ? (prop.defaultValue ? " = " + prop.defaultValue : "?") : "");
+        var paramStrs = (method.parameters ? method.parameters.map(function (param) {
+            var propStr = TypeConverter.typeToString(param.type) + " " + param.paramName + (param.required === false ? (param.defaultValue ? " = " + param.defaultValue : "?") : "");
             return propStr;
         }) : []);
-        var signature = method.accessModifiers.join(" ") + " " + (method["returnType"] ? method["returnType"] + " " : "") + method.name + "(" + paramStrs.join(", ") + ")";
+        var signature = method.accessModifiers.join(" ") + " " + (method.returnType ? TypeConverter.typeToString(method.returnType) + " " : "") + method.name + "(" + paramStrs.join(", ") + ")";
         genTools.indent(dst, signature);
         genTools.indent(dst, "{");
         genTools.printer.indent();
@@ -162,7 +163,7 @@ var CsToSource = (function () {
     CsToSource.propertyMethodToSrc = function (genTools, prop, dst) {
         genTools.indentNonEmpty(dst, prop.comments);
         genTools.indentNonEmpty(dst, prop.annotations);
-        genTools.indent(dst, prop.accessModifiers.join(" ") + " " + prop.type + (prop.required === false ? "?" : "") + " " + prop.propName);
+        genTools.indent(dst, prop.accessModifiers.join(" ") + " " + TypeConverter.typeToString(prop.type) + " " + prop.propName);
         genTools.indent(dst, "{");
         genTools.printer.indent();
         genTools.indent(dst, "get;");
@@ -177,13 +178,13 @@ var CsToSource = (function () {
         if (dst === void 0) { dst = []; }
         for (var i = 0, size = fields.length; i < size; i++) {
             var field = fields[i];
-            genTools.indent(dst, field.type + (field.required === false ? "?" : "") + " " + field.propName + (field["defaultValue"] ? " = " + field.defaultValue : "") + ";");
+            genTools.indent(dst, TypeConverter.typeToString(field.type) + " " + field.propName + (field.defaultValue != null ? " = " + field.defaultValue : "") + ";");
         }
         return dst;
     };
     // return in format '<A, B, C>'
     CsToSource.genericParametersToSrc = function (genTools, genericParameters) {
-        return (genericParameters && genericParameters.length > 0 ? "<" + genericParameters.join(", ") + ">" : "");
+        return (genericParameters && genericParameters.length > 0 ? "<" + genericParameters.map(function (t) { return TypeConverter.typeToString(t); }).join(", ") + ">" : "");
     };
     return CsToSource;
 }());

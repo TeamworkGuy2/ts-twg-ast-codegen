@@ -8,9 +8,9 @@ declare module CodeAst {
             access: string;
             name: string;
             declarationType: string;
-            genericParameters: GenericType[];
-            extendClassName?: GenericType;
-            implementClassNames?: GenericType[];
+            genericParameters: Type[];
+            extendClassName?: Type;
+            implementClassNames?: Type[];
         };
         using: string[];
         fields: Field[];
@@ -18,17 +18,18 @@ declare module CodeAst {
     }
 
 
-    export interface GenericType {
+    export interface Type {
         typeName: string;
         nullable?: boolean;
         arrayDimensions?: number;
-        genericParameters?: GenericType[];
+        genericParameters?: Type[];
     }
 
 
     export interface Field {
         name: string;
-        type: GenericType;
+        type: Type;
+        required?: boolean;
         accessModifiers: string[];
         comments: string[];
     }
@@ -38,7 +39,7 @@ declare module CodeAst {
         name: string;
         parameters: MethodParameter[];
         accessModifiers: string[];
-        returnType: GenericType;
+        returnType: Type;
         annotations: Annotation[];
         comments: string[];
     }
@@ -46,7 +47,7 @@ declare module CodeAst {
 
     export interface MethodParameter {
         name: string;
-        type: GenericType;
+        type: Type;
         optional?: boolean;
         defaultValue?: string;
     }

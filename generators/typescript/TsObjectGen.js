@@ -17,12 +17,10 @@ var TsObjectGen;
         if (keys.length === 1) {
             prettyPrint = false;
         }
-        var propLines = keys.map(function (k) {
-            return (prettyPrint ? (initialIndentation) + (blockIndentation) : " ") +
-                propNameConverter(k) + ": " + dataConverter(objDef[k].type, objVarName + "." + k) + ",";
-        });
-        var objStartStr = (indentFirstLine ? (initialIndentation) : "") + "{";
-        var objEndStr = (prettyPrint ? (initialIndentation) + "}" : " }");
+        var propLines = keys.map(function (k) { return (prettyPrint ? initialIndentation + blockIndentation : " ") +
+            propNameConverter(k) + ": " + dataConverter(objDef[k].type, objVarName + "." + k) + ","; });
+        var objStartStr = (indentFirstLine ? initialIndentation : "") + "{";
+        var objEndStr = (prettyPrint ? initialIndentation + "}" : " }");
         // append multiple lines or one long line to both the 'lines' and 'dstLines' arrays based on {@code prettyPrint} flag
         var lines = [];
         if (prettyPrint) {

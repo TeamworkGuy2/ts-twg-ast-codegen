@@ -11,10 +11,10 @@ module FieldGen {
         /** get the access modifier string for a field declaration (i.e. 'public', 'private'), if null, defaults to {@code field.accessModifiers.join(" ") + " "} */
         getAccessModifierStr?: (fieldName: string, field: CodeAst.Field, context: CodeContext) => string;
         /** pre-processor for the field AST, it accepts the field name, the field's type, returns a field type */
-        preFieldToStr?: (fieldName: string, fieldType: CodeAst.GenericType, context: CodeContext) => CodeAst.GenericType;
+        preFieldToStr?: (fieldName: string, fieldType: CodeAst.Type, context: CodeContext) => CodeAst.Type;
         /** the main function which converts a field AST to a string, it accepts the field's name, the field's type, and type converter for individual type strings, returns a string,
          * if null, defaults to 'TypeConverter.TypeScript.typeToString' */
-        fieldToStr?: (fieldName: string, fieldType: CodeAst.GenericType, typeConverter: (fieldName: string, dataType: string, context: CodeContext) => string, context: CodeContext) => string;
+        fieldToStr?: (fieldName: string, fieldType: CodeAst.Type, typeConverter: (fieldName: string, dataType: string, context: CodeContext) => string, context: CodeContext) => string;
         /** post-processor for the resulting field AST string, it accepts the field's name, the field's type string representation, returns a string */
         postFieldToStr?: (fieldName: string, typeStr: string, context: CodeContext) => string;
         /** pre-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string */
@@ -48,11 +48,11 @@ module FieldGen {
         }
         // default type converter maps Java and C# primitive types (and some common built in types) to typescript types
         if (converters.typeConverter == null) {
-            converters.typeConverter = (name, type, ctx) => TypeConverter.TypeScript.parseCsOrJavaType(type, true);
+            converters.typeConverter = (name, type, ctx) => TypeConverter.TypeScript.parseAndConvertTypeTemplateString(type, true);
         }
         // default to-string function recursively builds a generic type (i.e. 'Map<String, List<int[]>')
         if (converters.fieldToStr == null) {
-            converters.fieldToStr = (name, type, typeConverter, ctx) => TypeConverter.TypeScript.typeToString(type, (t) => typeConverter(name, t, ctx));
+            converters.fieldToStr = (name, type, typeConverter, ctx) => TypeConverter.typeToString(type, (t) => typeConverter(name, t, ctx));
         }
 
         var typeConverter = converters.typeConverter;
@@ -73,7 +73,7 @@ module FieldGen {
             var type = converters.preFieldToStr != null ? converters.preFieldToStr(fieldName, field.type, context) : field.type;
             var fieldType = converters.fieldToStr(fieldName, type, typeConverter, context);
             fieldType = converters.postFieldToStr != null ? converters.postFieldToStr(fieldName, fieldType, context) : fieldType;
-            res.push(converters.getAccessModifierStr(fieldName, field, context) + fieldName + (type.nullable ? "?" : "") + ": " + fieldType + ";");
+            res.push(converters.getAccessModifierStr(fieldName, field, context) + fieldName + (field.required === false ? "?" : "") + ": " + fieldType + ";");
         }
         return res;
     }
@@ -83,15 +83,12 @@ module FieldGen {
      * @param name the name of the field
      * @param info the type info associated with the field
      */
-    export function typInfoToField(name: string, info: TypeInfo): CodeAst.Field {
-        var typeInfo = TypeConverter.TypeScript.parseType(info.type);
+    export function typeTemplateToField(name: string, info: TypeTemplate, returnUnknownTypes?: boolean): CodeAst.Field {
+        var typeInfo = TypeConverter.TypeScript.parseTypeTemplate(info.type, returnUnknownTypes);
         return {
             name: name,
-            type: {
-                arrayDimensions: info.arrayDimensionCount > 0 ? info.arrayDimensionCount : typeInfo.arrayDimensionCount,
-                nullable: info.required === false || info.required === true ? !info.required : typeInfo.required === false,
-                typeName: typeInfo.type
-            },
+            type: typeInfo,
+            required: info.required,
             accessModifiers: ["public"],
             comments: []
         };

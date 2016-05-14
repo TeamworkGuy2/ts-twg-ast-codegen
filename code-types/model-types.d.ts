@@ -10,16 +10,20 @@ interface StringMap<T> {
 }
 
 
-interface TypeInfo {
-    /** the property's data type */
-    type: string;
+/** A simple type template, the type string contains an easy to parse type */
+interface TypeTemplate {
+    /** the property's data type.
+     * If this is a string, the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
+     */
+    type: string | CodeAst.Type;
     /** true to require this property in models with optional properties, 'primaryKey' properties are implicitely required */
     required?: boolean;
-    /** the optional array dimensions of this type (i.e. int[][] has a dimension count of 2) */
-    arrayDimensionCount?: number;
+    /** default value of the property */
+    defaultValue?: any;
 }
 
 
+/** Database column like attributes */
 interface TypeMetaData {
     /** true if this property should be automatically generated (only applies to 'primaryKey: true' properties), false or absent if not */
     autoGenerate?: boolean;
@@ -32,7 +36,10 @@ interface TypeMetaData {
 }
 
 
-interface PropInfo extends TypeInfo {
+/** Type information about a model property */
+interface PropInfo {
+    /** the property's data type */
+    type: CodeAst.Type;
     /** the name of the property */
     propName: string;
     /** the property's default value (e.g. null, 0, ""), defaults to data type default (i.e. null for objects, 0 for numeric types, false for boolean */
@@ -42,7 +49,24 @@ interface PropInfo extends TypeInfo {
 }
 
 
-interface TypeProperty extends TypeInfo, TypeMetaData {
+/** Type information about a method parameter */
+interface ParameterInfo {
+    /** the parameter's data type */
+    type: CodeAst.Type;
+    /** the name of the parameter */
+    paramName: string;
+    /** the parameter's default value (e.g. null, 0, ""), defaults to data type default (i.e. null for objects, 0 for numeric types, false for boolean */
+    defaultValue?: any;
+    /** true if the parameter is const/final/readonly, default false */
+    readOnly?: boolean;
+    /** true to require this parameter in models with optional properties, 'primaryKey' properties are implicitely required */
+    required?: boolean;
+}
+
+
+interface TypeProperty extends TypeMetaData {
+    /** the property's data type */
+    type: CodeAst.Type;
     /** default value of the property */
     defaultValue?: any;
 }

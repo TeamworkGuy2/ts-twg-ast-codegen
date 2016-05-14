@@ -12,13 +12,13 @@ declare module CodeBlock {
 
     export interface Executable extends Accessible {
         name: string;
-        parameters?: PropInfo[];
+        parameters?: ParameterInfo[];
         code: string[];
     }
 
 
     export interface ClassHeader extends Accessible {
-        genericParameters?: string[];
+        genericParameters?: CodeAst.Type[];
         className: string;
     }
 
@@ -28,7 +28,7 @@ declare module CodeBlock {
 
 
     export interface Method extends Executable {
-        returnType: string;
+        returnType: CodeAst.Type;
     }
 
 

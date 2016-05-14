@@ -8,7 +8,7 @@ declare module CsSource {
 
 
     export interface Method extends CodeBlock.Method {
-        returnType: string;
+        returnType: CodeAst.Type;
     }
 
 

@@ -77,14 +77,12 @@ module CsServiceModel {
         var properties: CodeBlock.PropertyMethodMeta[] = [];
         for (var i = 0, size = props.length; i < size; i++) {
             var prop = props[i];
-            var propLines: CodeBlock.PropertyMethodMeta = {
+            properties.push({
                 readOnly: prop.readOnly,
-                required: prop.required,
                 accessModifiers: ["public"],
                 propName: prop.name,
                 type: prop.type
-            };
-            properties.push(propLines);
+            });
         }
 
         return {

@@ -4,7 +4,35 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.13.0](N/A) - 2016-5-13
+### [0.14.0](N/A) - 2016-5-13
+#### Added
+* CodAst.Field.required field to interface
+* model-types.d.ts added:
+  * ParameterInfo - similar to PropInfo with 'required' flag
+  * TypeTemplate - similar to TypeInfo without 'arrayDimensionCount' (used for loading user data before using TypeConverter function to convert it to CodeAst.Type)
+* TypeConverter additions to use CodeAst as common type whenever possible:
+  * TypeScript.parseTypeTemplate() - to parse and convert a type template string to a CodeAst.Type with TypeScript types
+  * TypeScript.parseAndConvertTypeTemplate() - to parse and convert a type template string to a CodeAst.Type with TypeScript types, and return the typeToString() version of it
+
+#### Changed
+Changes designed to use CodeAst interfaces as common type wherever possible
+* Renamed interfaces:
+  * CodeAst.GenericType -> CodeAst.Type
+* CodeBlock.Executable.paramaters type changed PropInfo[] -> new ParameterInfo[]
+* Renamed TsFieldGen typInfoToField() -> typeTemplateToField() and no longer supports overrides from the TypeTemplate, the parsed type template string is used for all type properties
+* TypeConverter:
+  * TypeScript.typeToString() hoisted to top level typeToString()
+  * TypeScript.parseType() hoisted and renamed parseTypeTemplate()
+  * TypeScript.createTypeToStringCode() renamed and modified TypeScript.createTypeTemplateToStringCode()
+  * TypeScript.createTypesToStringCode() renamed and modified TypeScript.createTypeTemplatesToStringCode()
+
+#### Removed
+* TypeInfo interface in favor of the new ParameterInfo or TypeTemplate interfaces or the modified PropInfo or TypeProperty interfaces
+* TypeConverter TypeScript.parseCsOrJavaType() in favor of TypeScript.parseAndConvertTypeTemplateString() or TypeScript.convertSimpleType()
+
+
+--------
+### [0.13.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/c6063c79d003b5e52e5d03ce9fe9c22a957818bc) - 2016-5-13
 #### Added
   * DtoModelTemplateNamed to model-types.d.ts
   * Unit test for DefaultGenTools and DefaultPrettyPrinter

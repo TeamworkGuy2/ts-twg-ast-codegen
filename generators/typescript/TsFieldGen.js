@@ -27,11 +27,11 @@ var FieldGen;
         }
         // default type converter maps Java and C# primitive types (and some common built in types) to typescript types
         if (converters.typeConverter == null) {
-            converters.typeConverter = function (name, type, ctx) { return TypeConverter.TypeScript.parseCsOrJavaType(type, true); };
+            converters.typeConverter = function (name, type, ctx) { return TypeConverter.TypeScript.parseAndConvertTypeTemplateString(type, true); };
         }
         // default to-string function recursively builds a generic type (i.e. 'Map<String, List<int[]>')
         if (converters.fieldToStr == null) {
-            converters.fieldToStr = function (name, type, typeConverter, ctx) { return TypeConverter.TypeScript.typeToString(type, function (t) { return typeConverter(name, t, ctx); }); };
+            converters.fieldToStr = function (name, type, typeConverter, ctx) { return TypeConverter.typeToString(type, function (t) { return typeConverter(name, t, ctx); }); };
         }
         var typeConverter = converters.typeConverter;
         if (converters.preTypeConverter || converters.postTypeConverter) {
@@ -49,7 +49,7 @@ var FieldGen;
             var type = converters.preFieldToStr != null ? converters.preFieldToStr(fieldName, field.type, context) : field.type;
             var fieldType = converters.fieldToStr(fieldName, type, typeConverter, context);
             fieldType = converters.postFieldToStr != null ? converters.postFieldToStr(fieldName, fieldType, context) : fieldType;
-            res.push(converters.getAccessModifierStr(fieldName, field, context) + fieldName + (type.nullable ? "?" : "") + ": " + fieldType + ";");
+            res.push(converters.getAccessModifierStr(fieldName, field, context) + fieldName + (field.required === false ? "?" : "") + ": " + fieldType + ";");
         }
         return res;
     }
@@ -58,19 +58,16 @@ var FieldGen;
      * @param name the name of the field
      * @param info the type info associated with the field
      */
-    function typInfoToField(name, info) {
-        var typeInfo = TypeConverter.TypeScript.parseType(info.type);
+    function typeTemplateToField(name, info, returnUnknownTypes) {
+        var typeInfo = TypeConverter.TypeScript.parseTypeTemplate(info.type, returnUnknownTypes);
         return {
             name: name,
-            type: {
-                arrayDimensions: info.arrayDimensionCount > 0 ? info.arrayDimensionCount : typeInfo.arrayDimensionCount,
-                nullable: info.required === false || info.required === true ? !info.required : typeInfo.required === false,
-                typeName: typeInfo.type
-            },
+            type: typeInfo,
+            required: info.required,
             accessModifiers: ["public"],
             comments: []
         };
     }
-    FieldGen.typInfoToField = typInfoToField;
+    FieldGen.typeTemplateToField = typeTemplateToField;
 })(FieldGen || (FieldGen = {}));
 module.exports = FieldGen;

@@ -66,14 +66,12 @@ var CsServiceModel;
         var properties = [];
         for (var i = 0, size = props.length; i < size; i++) {
             var prop = props[i];
-            var propLines = {
+            properties.push({
                 readOnly: prop.readOnly,
-                required: prop.required,
                 accessModifiers: ["public"],
                 propName: prop.name,
                 type: prop.type
-            };
-            properties.push(propLines);
+            });
         }
         return {
             classImports: getDefaultServiceClassImports(genTools),

@@ -82,7 +82,7 @@ module ExtractAst {
      * @param type
      * @param dst
      */
-    export function extractGenericTypes(type: CodeAst.GenericType, dst: string[] = []): string[] {
+    export function extractGenericTypes(type: CodeAst.Type, dst: string[] = []): string[] {
         dst.push(type.typeName);
 
         if (type.genericParameters) {
@@ -98,9 +98,9 @@ module ExtractAst {
      * @param params the list of parameters to process
      * @param paramNames the map of parameter names to check
      */
-    export function claimParams(params: CodeAst.MethodParameter[], paramNames: StringMap<any> | string[]): { params: StringMap<CodeAst.GenericType>; unclaimedParams: StringMap<CodeAst.GenericType>; } {
-        var types: StringMap<CodeAst.GenericType> = {};
-        var unknownTypes: StringMap<CodeAst.GenericType> = {};
+    export function claimParams(params: CodeAst.MethodParameter[], paramNames: StringMap<any> | string[]): { params: StringMap<CodeAst.Type>; unclaimedParams: StringMap<CodeAst.Type>; } {
+        var types: StringMap<CodeAst.Type> = {};
+        var unknownTypes: StringMap<CodeAst.Type> = {};
 
         if (Array.isArray(paramNames)) {
             for (var i = 0, size = params.length; i < size; i++) {
