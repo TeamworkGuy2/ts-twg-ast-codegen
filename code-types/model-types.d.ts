@@ -23,7 +23,7 @@ interface TypeTemplate {
 }
 
 
-/** Database column like attributes */
+/** Database column meta-data */
 interface TypeMetaData {
     /** true if this property should be automatically generated (only applies to 'primaryKey: true' properties), false or absent if not */
     autoGenerate?: boolean;
@@ -64,17 +64,12 @@ interface ParameterInfo {
 }
 
 
+/** Database column definition with meta-data */
 interface TypeProperty extends TypeMetaData {
     /** the property's data type */
     type: CodeAst.Type;
     /** default value of the property */
     defaultValue?: any;
-}
-
-
-interface TypesDefinition {
-    /** the properties/fields this model has, see {@link TypeProperty} */
-    properties: { [id: string]: TypeProperty };
 }
 
 
@@ -84,19 +79,21 @@ interface NamedProperty extends TypeProperty {
 }
 
 
-interface OptionalNamedProperty extends TypeProperty {
-    /** the name of the property */
-    name?: string;
-}
-
-
+/** A database column definition with meta-data paired with a 'server' database column definition with meta-data */
 interface DtoProperty extends TypeProperty {
     /** if not present, server property type data is copied from this DtoProperty */
-    server?: OptionalNamedProperty;
+    server?: TypeProperty & { name?: string };
 }
 
 
-interface DtoPropertyTemplate extends DtoProperty {
+/** A type template and database column meta-data paired with a 'server' type template with database column meta-data and property name */
+interface DtoPropertyTemplate extends TypeTemplate, TypeMetaData {
+    /** if not present, server property type data is copied from this DtoProperty */
+    server?: TypeTemplate & TypeMetaData & { name?: string };
+}
+
+
+interface PropertyConversionTemplate {
     /** template code can be used to convert the property to a value that can be sent to a web service */
     toService?: string;
     /** template code can be used to get this property from another object and convert it to a valid value for this model */
@@ -104,16 +101,37 @@ interface DtoPropertyTemplate extends DtoProperty {
 }
 
 
-interface DtoPropertyTemplateNamed extends DtoPropertyTemplate {
+interface DtoPropertyTemplateNamed extends DtoPropertyTemplate, PropertyConversionTemplate {
     /** the name of the property */
     name: string;
 }
 
 
+    /** the properties/fields this model has, see {@link DtoProperty} */
+interface DtoPropertyMap {
+    [id: string]: (DtoProperty & PropertyConversionTemplate);
+}
+
+
+/** the properties/fields this model has, see {@link DtoPropertyTemplate} */
+interface DtoPropertyTemplateMap {
+    [id: string]: (DtoPropertyTemplate & PropertyConversionTemplate);
+}
+
+
+interface DtoModel {
+    properties: DtoPropertyMap;
+}
+
+
 interface DtoModelTemplate {
-    toServiceNameConverter: (name: string) => string; // a function that takes a 'properties.propName' string and converts it to a different format for service calls
-    /** the properties/fields this model has, see {@link ServiceProperty} */
-    properties: { [id: string]: DtoPropertyTemplate };
+    properties: DtoPropertyTemplateMap;
+}
+
+
+interface DtoModelNamed extends DtoModel {
+    /** the name of the data model */
+    name: string;
 }
 
 

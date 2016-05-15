@@ -4,7 +4,27 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.14.0](N/A) - 2016-5-13
+### [0.14.1](N/A) - 2016-5-14
+Integrate with [lokijs-collections](https://github.com/TeamworkGuy2/lokijs-collections) ModelDefinitions and DataCollection/DtoCollection Models
+
+#### Added
+* DtoModelConverter - for converting DtoPropertyTemplate to DtoProperty
+* interfaces: DtoPropertyMap, DtoPropertyTemplateMap, DtoModel, and DtoModelTemplate, and DtoModelNamed
+
+#### Changed
+* Renamed/Changed interfaces
+  * DtoModelTemplate renamed DtoModel containing a map of DtoProperty, no longer contains toServiceNameConverter, since this can just be conversion step in your own code
+  * DtoModelTemplate now contains a map of DtoPropertyTemplate
+  * DtoProperty modified to mirror DtoPropertyTemplate
+  * DtoPropertyTemplate now extends TypeTemplate and TypeMetaData (to mirror DtoProperty), properties moved to new PropertyConversionTemplate which doesn't extend DtoProperty
+
+#### Removed
+* TypesDefinition interface (unused)
+* OptionalNamedProperty (unused)
+
+
+--------
+### [0.14.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/6e6f33ce252270d07b50a28d0a940de721801d94) - 2016-5-14
 #### Added
 * CodAst.Field.required field to interface
 * model-types.d.ts added:

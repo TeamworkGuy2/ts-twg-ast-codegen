@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-/** TypeConverter - functions for converting source code data types between different languages
+/** Helper functions for converting source code data types between different languages
  * @author TeamworkGuy2
  */
 module TypeConverter {
