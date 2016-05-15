@@ -9,6 +9,7 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 * DtoModelConverter renamed DtoPropertyConverter and modified parameters to accept DtoPropertyTemplate and TypeTemplateParser parameters
 * Finished documenting TypeConverter functions
 * TypeConverter methods:
+  * typeToString(), TypeScript.parseAndConvertTypeTemplate(), and TypeScript.parseAndConvertTypeTemplateString() now support optional 'includeNullability' parameter
   * Added isPrimitive(), isCore(), and isGeneric()
   * Removed TypeScript.isPrimitiveOrBuiltInType() (use isPrimitive() and isCore() instead)
 

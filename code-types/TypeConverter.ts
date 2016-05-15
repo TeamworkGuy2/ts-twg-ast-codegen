@@ -9,29 +9,30 @@ module TypeConverter {
     /** Convert a CodeAst.Type to a string in the format 'TypeName<GenericParams, ...>[][]...'
      * @param type the type to stringify
      * @param [typeConverter] an optional converter for the type names in the type
+     * @param [includeNullability=true] whether to include type nullability (i.e. the '?' part of 'int?[]')
      */
-    export function typeToString(type: CodeAst.Type, typeConverter?: (typeName: string) => string): string {
+    export function typeToString(type: CodeAst.Type, typeConverter?: (typeName: string) => string, includeNullability: boolean = true): string {
         var dst: string[] = [];
-        _typeToString(type, dst, typeConverter);
+        _typeToString(type, dst, typeConverter, includeNullability);
         return dst.join("");
     }
 
 
-    function _typeToString(type: CodeAst.Type, dst: string[], typeConverter?: (typeName: string) => string): void {
+    function _typeToString(type: CodeAst.Type, dst: string[], typeConverter: (typeName: string) => string, includeNullability: boolean): void {
         dst.push(typeConverter ? typeConverter(type.typeName) : type.typeName);
 
         var childs = type.genericParameters;
         if (childs && childs.length > 0) {
             dst.push("<");
             for (var i = 0, sizeM1 = childs.length - 1; i < sizeM1; i++) {
-                _typeToString(childs[i], dst, typeConverter);
+                _typeToString(childs[i], dst, typeConverter, includeNullability);
                 dst.push(", ");
             }
-            _typeToString(childs[sizeM1], dst, typeConverter);
+            _typeToString(childs[sizeM1], dst, typeConverter, includeNullability);
             dst.push(">");
         }
 
-        if (type.nullable) {
+        if (type.nullable && includeNullability) {
             dst.push("?");
         }
 
@@ -203,11 +204,12 @@ module TypeConverter {
          * If given a Type, convert the types to TypeScript and convert to a string (see typeToString()).
          * @param typeTemplate a Type, or string where the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param returnUnknownTypes
+         * @param [includeNullability=false]
          */
-        static parseAndConvertTypeTemplate(typeTemplate: string | CodeAst.Type, returnUnknownTypes: boolean): string {
+        static parseAndConvertTypeTemplate(typeTemplate: string | CodeAst.Type, returnUnknownTypes: boolean, includeNullability: boolean = false): string {
             return (typeof typeTemplate === "string"
-                ? TypeScript.parseAndConvertTypeTemplateString(typeTemplate, returnUnknownTypes)
-                : typeToString(typeTemplate, (t) => TypeScript.convertSimpleType(t, returnUnknownTypes)));
+                ? TypeScript.parseAndConvertTypeTemplateString(typeTemplate, returnUnknownTypes, includeNullability)
+                : typeToString(typeTemplate, (t) => TypeScript.convertSimpleType(t, returnUnknownTypes), includeNullability));
         }
 
 
@@ -215,14 +217,15 @@ module TypeConverter {
          * The format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param typeName the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param returnUnknownTypes
+         * @param [includeNullability=false]
          */
-        static parseAndConvertTypeTemplateString(typeTemplate: string, returnUnknownTypes: boolean): string {
+        static parseAndConvertTypeTemplateString(typeTemplate: string, returnUnknownTypes: boolean, includeNullability?: boolean): string {
             var typeInfo = TypeConverter.parseTypeTemplate(typeTemplate);
             var arrayCount = typeInfo.arrayDimensions;
 
             var tsType = TypeScript.convertSimpleType(typeInfo.typeName, returnUnknownTypes);
 
-            return tsType + (typeInfo.nullable ? "?" : "") + (arrayCount > 0 ? new Array(arrayCount + 1).join("[]") : "");
+            return tsType + (typeInfo.nullable && includeNullability ? "?" : "") + (arrayCount > 0 ? new Array(arrayCount + 1).join("[]") : "");
         }
 
 
