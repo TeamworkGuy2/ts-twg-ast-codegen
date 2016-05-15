@@ -3,15 +3,20 @@ All notable changes to this project will be documented in this file.
 This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
-#### [Unreleased]
+--------
+### [0.15.0](N/A) - 2016-5-15
+#### Added
+* TypeConverter functions: isPrimitive(), isCore(), and isGeneric()
+
+#### Changes
 * DtoProperty and DtoPropertyTemplate now extend PropertyConversionTemplate directly
 * DtoProperty now requires 'toLocal', 'toService', 'server', and 'server.name' properties (previously these were optional)
-* DtoModelConverter renamed DtoPropertyConverter and modified parameters to accept DtoPropertyTemplate and TypeTemplateParser parameters
+* DtoModelConverter renamed DtoPropertyConverter and modified parameters to accept DtoPropertyTemplate and TypeTemplateParser types
 * Finished documenting TypeConverter functions
-* TypeConverter methods:
-  * typeToString(), TypeScript.parseAndConvertTypeTemplate(), and TypeScript.parseAndConvertTypeTemplateString() now support optional 'includeNullability' parameter
-  * Added isPrimitive(), isCore(), and isGeneric()
-  * Removed TypeScript.isPrimitiveOrBuiltInType() (use isPrimitive() and isCore() instead)
+* TypeConverter signature changes: typeToString(), TypeScript.parseAndConvertTypeTemplate(), and TypeScript.parseAndConvertTypeTemplateString() now support optional 'includeNullability' parameter
+
+#### Removed
+* TypeConverter.TypeScript.isPrimitiveOrBuiltInType() - use isPrimitive() and isCore() instead
 
 
 --------
