@@ -1,25 +1,29 @@
 "use strict";
-/** Helper functions for converting source code data types between different languages
+/** Helper functions for converting source code data types to and from common CodeAst.Type and between different languages
  * @author TeamworkGuy2
  */
 var TypeConverter;
 (function (TypeConverter) {
+    /** Convert a CodeAst.Type to a string in the format 'TypeName<GenericParams, ...>[][]...'
+     * @param type the type to stringify
+     * @param [typeConverter] an optional converter for the type names in the type
+     */
     function typeToString(type, typeConverter) {
         var dst = [];
-        _genericTypeToString(type, dst, typeConverter);
+        _typeToString(type, dst, typeConverter);
         return dst.join("");
     }
     TypeConverter.typeToString = typeToString;
-    function _genericTypeToString(type, dst, typeConverter) {
+    function _typeToString(type, dst, typeConverter) {
         dst.push(typeConverter ? typeConverter(type.typeName) : type.typeName);
         var childs = type.genericParameters;
         if (childs && childs.length > 0) {
             dst.push("<");
             for (var i = 0, sizeM1 = childs.length - 1; i < sizeM1; i++) {
-                _genericTypeToString(childs[i], dst, typeConverter);
+                _typeToString(childs[i], dst, typeConverter);
                 dst.push(", ");
             }
-            _genericTypeToString(childs[sizeM1], dst, typeConverter);
+            _typeToString(childs[sizeM1], dst, typeConverter);
             dst.push(">");
         }
         if (type.nullable) {
@@ -61,6 +65,62 @@ var TypeConverter;
             required: !hasOptionalMark,
         };
     }
+    /** Check if a type is a primitive C#, Java, or TypeScript data type.
+     * (i.e. TypeScript's primitives are boolean and number).
+     * @param typeName the simple data type name (i.e. 'number' or 'byte')
+     */
+    function isPrimitive(typeName) {
+        typeName = typeName.toLowerCase();
+        switch (typeName) {
+            case "bool":
+            case "boolean":
+            case "byte":
+            case "sbyte":
+            case "char":
+            case "short":
+            case "ushort":
+            case "int":
+            case "uint":
+            case "long":
+            case "ulong":
+            case "float":
+            case "double":
+            case "decimal":
+            case "real":
+            case "number":
+                return true;
+            default:
+                return false;
+        }
+    }
+    TypeConverter.isPrimitive = isPrimitive;
+    /** Check if a type is a core built-in C#, Java, or TypeScript data type.
+     * A core type is a widely support type that is core to the language - (i.e. C# has string and DateTime)
+     * @param typeName the simple data type name (i.e. 'number' or 'byte')
+     */
+    function isCore(typeName) {
+        typeName = typeName.toLowerCase();
+        switch (typeName) {
+            case "date":
+            case "datetime":
+            case "string":
+                return true;
+            default:
+                return false;
+        }
+    }
+    TypeConverter.isCore = isCore;
+    /** Check if a Type contains generic parameters or not
+     * @param dataType the CodeAst.Type toe check
+     */
+    function isGeneric(dataType) {
+        return dataType && dataType.genericParameters != null && dataType.genericParameters.length > 0;
+    }
+    TypeConverter.isGeneric = isGeneric;
+    /** Create a deep copy of a CodeAst.Type
+     * @see mapType()
+     * @param type
+     */
     function cloneType(type) {
         return mapType(type);
     }
@@ -91,6 +151,8 @@ var TypeConverter;
         return res;
     }
     TypeConverter.mapType = mapType;
+    /** Functions for transforming and manipulating type information into TypesScript types (i.e. number, boolean, string)
+     */
     var TypeScript = (function () {
         function TypeScript() {
         }
@@ -154,6 +216,7 @@ var TypeConverter;
                     return "string";
                 case "byte":
                 case "sbyte":
+                case "char":
                 case "short":
                 case "ushort":
                 case "int":
@@ -174,43 +237,10 @@ var TypeConverter;
                     }
             }
         };
-        /** Check if a type is a simple C#, Java, or TypeScript data type
-         * @param dataType the simple data type name (i.e. 'List' or 'int')
-         * @param includeBuiltInTypes
+        /** Create a TypeScript source code string that transforms a specific data type into a string (i.e. stringifies the type)
+         * @param typeTemplate
+         * @param variableName
          */
-        TypeScript.isPrimitiveOrBuiltInType = function (dataType, includeBuiltInTypes) {
-            dataType = dataType.toLowerCase();
-            switch (dataType) {
-                case "bool":
-                case "boolean":
-                case "byte":
-                case "sbyte":
-                case "short":
-                case "ushort":
-                case "int":
-                case "uint":
-                case "long":
-                case "ulong":
-                case "float":
-                case "double":
-                case "decimal":
-                case "real":
-                case "number":
-                    return true;
-                default:
-                    if (includeBuiltInTypes) {
-                        switch (dataType) {
-                            case "date":
-                            case "datetime":
-                            case "string":
-                                return true;
-                            default:
-                                return false;
-                        }
-                    }
-                    return false;
-            }
-        };
         TypeScript.createTypeTemplateToStringCode = function (typeTemplate, variableName) {
             var typeInfo = typeof typeTemplate === "string" ? TypeConverter.parseTypeTemplate(typeTemplate) : typeTemplate;
             if (typeInfo.genericParameters != null && typeInfo.genericParameters.length > 0) {
@@ -225,12 +255,9 @@ var TypeConverter;
                         throw new Error("converting array of " + typeName + " to string not supported");
                     }
                     return "(" + variableName + " ? \"true\" : \"false\")";
-                case "date":
-                case "DateTime":
-                case "any":
-                case "number":
                 case "byte":
                 case "sbyte":
+                case "char":
                 case "short":
                 case "ushort":
                 case "int":
@@ -241,6 +268,10 @@ var TypeConverter;
                 case "double":
                 case "decimal":
                 case "real":
+                case "number":
+                case "date":
+                case "DateTime":
+                case "any":
                     if (arrayCount > 0) {
                         throw new Error("converting array of " + typeName + " to strings not supported");
                     }
@@ -251,7 +282,7 @@ var TypeConverter;
                     throw new Error("unknown type name for TypeScript code: " + typeName);
             }
         };
-        /** convert a map of property names and {@link TypeInfo} values into an array of code strings that convert each property to a string */
+        /** Convert a map of property names and type template strings into an array of TypeScript source code strings that convert each property to a string */
         TypeScript.createTypeTemplatesToStringCode = function (props) {
             var keys = Object.keys(props);
             return keys.map(function (k) { return TypeScript.createTypeTemplateToStringCode(props[k], k); });

@@ -64,7 +64,7 @@ module ExtractAst {
                     for (var m = 0, sizeM = fieldTypes.length; m < sizeM; m++) {
                         var typeName = transformTypeName ? transformTypeName(fieldTypes[m]) : fieldTypes[m]; // returns null for types not starting with upper-case letter (which automatically excludes most primitives)
                         if (typeName) {
-                            var isPrimitive = TypeConverter.TypeScript.isPrimitiveOrBuiltInType(typeName, true);
+                            var isPrimitive = TypeConverter.isPrimitive(typeName) || TypeConverter.isCore(typeName);
                             if (includePrimitiveTypes || !isPrimitive) {
                                 typesUsed[typeName] = true;
                             }

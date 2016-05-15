@@ -14,10 +14,10 @@ var FieldGen;
      *     if null, defaults to 'TypeConverter.TypeScript.typeToString'
      * - 'preFieldToStr': pre-processor for the field AST, it accepts the field name, the field's type, returns a field type
      * - 'postFieldToStr': post-processor for the resulting field AST string, it accepts the field's name, the field's type string representation, returns a string
-     * - 'typeConverter': convert a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string,
+     * - 'typeConverter': convert a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string,
            if null, defaults to 'TypeConverter.TypeScript.parseCsOrJavaType'
-     * - 'preTypeConverter': pre-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string
-     * - 'postTypeConverter': post-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string
+     * - 'preTypeConverter': pre-process a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string
+     * - 'postTypeConverter': post-process a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string
      */
     function createFieldsSrcCode(fields, context, converters) {
         if (converters === void 0) { converters = {}; }

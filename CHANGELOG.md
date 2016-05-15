@@ -5,6 +5,10 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 #### [Unreleased]
 * DtoProperty and DtoPropertyTemplate now extend PropertyConversionTemplate directly
+* Finished documenting TypeConverter functions
+* TypeConverter methods:
+  * Added isPrimitive(), isCore(), and isGeneric()
+  * Removed TypeScript.isPrimitiveOrBuiltInType() (use isPrimitive() and isCore() instead)
 
 
 --------

@@ -17,12 +17,12 @@ module FieldGen {
         fieldToStr?: (fieldName: string, fieldType: CodeAst.Type, typeConverter: (fieldName: string, dataType: string, context: CodeContext) => string, context: CodeContext) => string;
         /** post-processor for the resulting field AST string, it accepts the field's name, the field's type string representation, returns a string */
         postFieldToStr?: (fieldName: string, typeStr: string, context: CodeContext) => string;
-        /** pre-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string */
+        /** pre-process a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string */
         preTypeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
-        /** convert a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string,
+        /** convert a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string,
           * if null, defaults to 'TypeConverter.TypeScript.parseCsOrJavaType' */
         typeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
-        /** post-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string */
+        /** post-process a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string */
         postTypeConverter?: (fieldName: string, dataType: string, context: CodeContext) => string;
     }
 
@@ -36,10 +36,10 @@ module FieldGen {
      *     if null, defaults to 'TypeConverter.TypeScript.typeToString'
      * - 'preFieldToStr': pre-processor for the field AST, it accepts the field name, the field's type, returns a field type
      * - 'postFieldToStr': post-processor for the resulting field AST string, it accepts the field's name, the field's type string representation, returns a string
-     * - 'typeConverter': convert a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string,
+     * - 'typeConverter': convert a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string,
            if null, defaults to 'TypeConverter.TypeScript.parseCsOrJavaType'
-     * - 'preTypeConverter': pre-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string
-     * - 'postTypeConverter': post-process a 'CodeAst.GenericType' data type string to a string, accepts a data type string, returns a string
+     * - 'preTypeConverter': pre-process a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string
+     * - 'postTypeConverter': post-process a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string
      */
     export function createFieldsSrcCode(fields: CodeAst.Field[], context: CodeContext, converters: FieldGenConverters = {}): string[] {
         // default access modifier joins access modifiers with spaces
