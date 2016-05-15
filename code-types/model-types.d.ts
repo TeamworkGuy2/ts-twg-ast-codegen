@@ -80,17 +80,19 @@ interface NamedProperty extends TypeProperty {
 
 
 interface PropertyConversionTemplate {
-    /** template code can be used to convert the property to a value that can be sent to a web service */
-    toService?: string;
     /** template code can be used to get this property from another object and convert it to a valid value for this model */
     toLocal?: string;
+    /** template code can be used to convert the property to a value that can be sent to a web service */
+    toService?: string;
 }
 
 
 /** A database column definition with meta-data paired with a 'server' database column definition with meta-data */
 interface DtoProperty extends TypeProperty, PropertyConversionTemplate {
     /** if not present, server property type data is copied from this DtoProperty */
-    server?: TypeProperty & { name?: string };
+    server: TypeProperty & { name: string };
+    toLocal: string;
+    toService: string;
 }
 
 

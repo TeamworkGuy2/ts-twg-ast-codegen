@@ -33,6 +33,8 @@ var DtoPropertyConverter;
                     : (srcServer.type != null ? srcServer.type : typeof src.type === "string" ? serverTypeConverter(src.type) : src.type),
             },
             type: srcType,
+            toLocal: src.toLocal,
+            toService: src.toService,
         };
         if (propModifier != null) {
             propModifier(resProp);

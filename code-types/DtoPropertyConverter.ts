@@ -36,6 +36,8 @@ module DtoPropertyConverter {
                     : (srcServer.type != null ? <CodeAst.Type>srcServer.type : typeof src.type === "string" ? serverTypeConverter(<string>src.type) : <CodeAst.Type>src.type),
             },
             type: srcType,
+            toLocal: src.toLocal,
+            toService: src.toService,
         }
 
         if (propModifier != null) {
