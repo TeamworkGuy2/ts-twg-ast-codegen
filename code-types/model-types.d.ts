@@ -79,20 +79,6 @@ interface NamedProperty extends TypeProperty {
 }
 
 
-/** A database column definition with meta-data paired with a 'server' database column definition with meta-data */
-interface DtoProperty extends TypeProperty {
-    /** if not present, server property type data is copied from this DtoProperty */
-    server?: TypeProperty & { name?: string };
-}
-
-
-/** A type template and database column meta-data paired with a 'server' type template with database column meta-data and property name */
-interface DtoPropertyTemplate extends TypeTemplate, TypeMetaData {
-    /** if not present, server property type data is copied from this DtoProperty */
-    server?: TypeTemplate & TypeMetaData & { name?: string };
-}
-
-
 interface PropertyConversionTemplate {
     /** template code can be used to convert the property to a value that can be sent to a web service */
     toService?: string;
@@ -101,7 +87,27 @@ interface PropertyConversionTemplate {
 }
 
 
-interface DtoPropertyTemplateNamed extends DtoPropertyTemplate, PropertyConversionTemplate {
+/** A database column definition with meta-data paired with a 'server' database column definition with meta-data */
+interface DtoProperty extends TypeProperty, PropertyConversionTemplate {
+    /** if not present, server property type data is copied from this DtoProperty */
+    server?: TypeProperty & { name?: string };
+}
+
+
+interface DtoPropertyNamed extends DtoProperty {
+    /** the name of the property */
+    name: string;
+}
+
+
+/** A type template and database column meta-data paired with a 'server' type template with database column meta-data and property name */
+interface DtoPropertyTemplate extends TypeTemplate, TypeMetaData, PropertyConversionTemplate {
+    /** if not present, server property type data is copied from this DtoProperty */
+    server?: TypeTemplate & TypeMetaData & { name?: string };
+}
+
+
+interface DtoPropertyTemplateNamed extends DtoPropertyTemplate {
     /** the name of the property */
     name: string;
 }
@@ -109,13 +115,13 @@ interface DtoPropertyTemplateNamed extends DtoPropertyTemplate, PropertyConversi
 
     /** the properties/fields this model has, see {@link DtoProperty} */
 interface DtoPropertyMap {
-    [id: string]: (DtoProperty & PropertyConversionTemplate);
+    [id: string]: DtoProperty;
 }
 
 
 /** the properties/fields this model has, see {@link DtoPropertyTemplate} */
 interface DtoPropertyTemplateMap {
-    [id: string]: (DtoPropertyTemplate & PropertyConversionTemplate);
+    [id: string]: DtoPropertyTemplate;
 }
 
 

@@ -3,8 +3,12 @@ All notable changes to this project will be documented in this file.
 This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
+#### [Unreleased]
+* DtoProperty and DtoPropertyTemplate now extend PropertyConversionTemplate directly
+
+
 --------
-### [0.14.1](N/A) - 2016-5-14
+### [0.14.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/364a2db87aac9ff2db20d5de51e52fd1cbca337c) - 2016-5-14
 Integrate with [lokijs-collections](https://github.com/TeamworkGuy2/lokijs-collections) ModelDefinitions and DataCollection/DtoCollection Models
 
 #### Added
