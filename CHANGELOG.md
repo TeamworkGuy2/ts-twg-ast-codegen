@@ -5,6 +5,7 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 #### [Unreleased]
 * DtoProperty and DtoPropertyTemplate now extend PropertyConversionTemplate directly
+* DtoModelConverter renamed DtoPropertyConverter and modified parameters to accept DtoPropertyTemplate and TypeTemplateParser parameters
 * Finished documenting TypeConverter functions
 * TypeConverter methods:
   * Added isPrimitive(), isCore(), and isGeneric()

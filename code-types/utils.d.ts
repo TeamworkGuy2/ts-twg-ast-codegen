@@ -25,6 +25,11 @@ interface CodeContext {
 }
 
 
+interface TypeTemplateParser {
+    (typeTemplate: string | CodeAst.Type): CodeAst.Type;
+}
+
+
 /** SimpleTemplate - a template configuration object with delimiter symbols, data, and expressions
  * @author TeamworkGuy2
  */
@@ -45,5 +50,3 @@ interface SimpleTemplate<L> {
      */
     templateExpressions: { [name: string]: string };
 }
-
-
