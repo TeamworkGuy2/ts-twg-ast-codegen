@@ -213,12 +213,5 @@ var StringCase;
         return resStr;
     }
     StringCase.toCamelCase = toCamelCase;
-    function testStringCase() {
-        ["At_Bat_Cat", "ABC", "atBatCat", "CharAt"].forEach(function (str) {
-            console.log(str + ": CamelCase: " + StringCase.toCamelCase(str) +
-                ", titleCase: " + StringCase.toTitleCase(str) +
-                ", toUnderscoreCase: " + StringCase.toUnderscoreCase(str));
-        });
-    }
 })(StringCase || (StringCase = {}));
 module.exports = StringCase;

@@ -4,7 +4,21 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.15.0](N/A) - 2016-5-15
+### [0.16.0](N/A) - 2016-08-23
+#### Changed
+* Changed some TransformFile functions
+  * Changed return/callback types to { srcLines: string[]; transformedLines: string[] }
+  * Renamed/replaced TransformFile._transformFileToLines() -> TransformFile.transformFileToLines()
+  * Removed gutil.log() messages from TransformFile functions
+* Added simple StringCase test case
+* Updated some definition file paths to match DefinitelyTyped
+
+#### Removed
+* original TransformFile.transformFileToLines() function
+
+
+--------
+### [0.15.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/a6b52ff3c4b61f2e61df9a5977027473bda3dbe3) - 2016-5-15
 #### Added
 * TypeConverter functions: isPrimitive(), isCore(), and isGeneric()
 

@@ -228,15 +228,6 @@ module StringCase {
         return resStr;
     }
 
-
-    function testStringCase(): void {
-        ["At_Bat_Cat", "ABC", "atBatCat", "CharAt"].forEach(function (str) {
-            console.log(str + ": CamelCase: " + StringCase.toCamelCase(str) +
-                ", titleCase: " + StringCase.toTitleCase(str) +
-                ", toUnderscoreCase: " + StringCase.toUnderscoreCase(str));
-        });
-    }
-
 }
 
 export = StringCase;

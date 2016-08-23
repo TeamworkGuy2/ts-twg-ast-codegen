@@ -147,48 +147,36 @@ var TransformFile;
     TransformFile.transformLines = transformLines;
     function transformFile(srcFile, startVarMark, endVarMark, transformations) {
         var fileSrc = fs.readFileSync(srcFile);
-        //if (err) {
-        //    gutil.log("error reading file '" + srcFile + "': " + err + "");
-        //    return;
-        //}
         var fileLines = splitFileLines(fileSrc.toString());
         var lines = transformLines(srcFile, fileLines, startVarMark, endVarMark, transformations);
         return lines;
     }
     TransformFile.transformFile = transformFile;
-    function _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines) {
-        var f = fs.readFileSync(srcFile);
-        //if (err) {
-        //    gutil.log("error reading file '" + srcFile + "': " + err + ", continuing");
-        //}
-        var srcLines = splitFileLines(f.toString());
-        var resLines = transformLines(srcFile, srcLines, startVarMark, endVarMark, mapVarsToOps(matchOp, variablesNamesToLines));
-        return {
-            srcLines: srcLines,
-            resLines: resLines
-        };
-    }
-    /** Transform a file's contents and return the resulting lines to a callback function
+    /** Transform a file's contents and return the original and resulting lines to a callback function
      */
     function transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines) {
-        var res = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
-        return res.resLines;
+        var buf = fs.readFileSync(srcFile);
+        var srcLines = splitFileLines(buf.toString());
+        var transformedLines = transformLines(srcFile, srcLines, startVarMark, endVarMark, mapVarsToOps(matchOp, variablesNamesToLines));
+        return {
+            srcLines: srcLines,
+            transformedLines: transformedLines
+        };
     }
-    TransformFile.transformFileToLines = transformFileToLines;
     /** Transform a file's contents and write it to a destination file
      * @return a message about the text written to the file
      */
     function transformFileToFile(matchOp, srcFile, dstFile, startVarMark, endVarMark, variablesNamesToLines) {
-        var _a = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines), srcLines = _a.srcLines, resLines = _a.resLines;
-        gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
-        WriteFile.writeFileLines(dstFile, resLines);
-        return "'" + srcFile + "' " + srcLines.length + " lines";
+        var res = transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
+        WriteFile.writeFileLines(dstFile, res.transformedLines);
+        return res;
     }
     TransformFile.transformFileToFile = transformFileToFile;
     function transformFileToFileAsync(matchOp, srcFile, dstFile, startVarMark, endVarMark, variablesNamesToLines, doneCb, errorCb, postFileWritten) {
-        var _a = _transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines), srcLines = _a.srcLines, resLines = _a.resLines;
-        gutil.log("transforming template '" + srcFile + "' (" + srcLines.length + " src lines, " + resLines.length + " res lines)");
-        WriteFile.writeFileLinesAsync(dstFile, resLines, doneCb, errorCb, postFileWritten);
+        var resLns = transformFileToLines(matchOp, srcFile, startVarMark, endVarMark, variablesNamesToLines);
+        WriteFile.writeFileLinesAsync(dstFile, resLns.transformedLines, function (res) {
+            doneCb(resLns);
+        }, errorCb, postFileWritten);
     }
     TransformFile.transformFileToFileAsync = transformFileToFileAsync;
     /** Transform a file containing template variables

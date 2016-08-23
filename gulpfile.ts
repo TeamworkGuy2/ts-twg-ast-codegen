@@ -38,7 +38,7 @@ function compileScripts(debug: boolean) {
     var dstFileName = "code-generator.js";
     var srcMapFile = dstDir + dstFileName + ".map";
     es6ify.traceurOverrides = { experimental: true };
-    var bundler = watchify(watchifyOptions);
+    var bundler = watchify(<any>watchifyOptions);
     //bundler.require(requireFiles);
     //bundler.transform(reactify);
     bundler.transform(es6ify.configure(/.jsx|ts-meta\\(?!.*\.ts)|ts-meta\/(?!.*\.ts)/));
