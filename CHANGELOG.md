@@ -4,7 +4,14 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.16.0](N/A) - 2016-08-23
+### [0.16.1](N/A) - 2016-08-24
+#### Fixed
+Fixed DtoPropertyConverter.parseAndConvertTemplate() to handle defaultValue correctly
+Converted tests from qunit to mocha and chai
+
+
+--------
+### [0.16.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/0251c088bc27be13b133e31a96454aa2140cb413) - 2016-08-23
 #### Changed
 * Changed some TransformFile functions
   * Changed return/callback types to { srcLines: string[]; transformedLines: string[] }

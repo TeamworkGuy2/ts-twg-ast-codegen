@@ -17,13 +17,13 @@ var DtoPropertyConverter;
         var srcServer = src.server || {};
         var resProp = {
             autoGenerate: srcAutoGen,
-            defaultValue: src.defaultValue,
+            //defaultValue: src.defaultValue,
             primaryKey: srcPrimaryKey,
             readOnly: srcReadOnly,
             required: srcRequired,
             server: {
                 autoGenerate: srcServer.autoGenerate != null ? srcServer.autoGenerate : srcAutoGen,
-                defaultValue: srcServer.defaultValue !== undefined ? srcServer.defaultValue : src.defaultValue,
+                //defaultValue: srcServer.defaultValue !== undefined ? srcServer.defaultValue : src.defaultValue,
                 name: srcServer.name != null ? srcServer.name : (serverPropNamer != null ? serverPropNamer(propName, src) : propName),
                 primaryKey: srcServer.primaryKey != null ? srcServer.primaryKey : srcPrimaryKey,
                 readOnly: srcServer.readOnly != null ? srcServer.readOnly : srcReadOnly,
@@ -36,6 +36,15 @@ var DtoPropertyConverter;
             toLocal: src.toLocal,
             toService: src.toService,
         };
+        if (Object.prototype.hasOwnProperty.call(src, "defaultValue")) {
+            resProp.defaultValue = src.defaultValue;
+        }
+        if (Object.prototype.hasOwnProperty.call(srcServer, "defaultValue")) {
+            resProp.server.defaultValue = srcServer.defaultValue;
+        }
+        else if (Object.prototype.hasOwnProperty.call(src, "defaultValue")) {
+            resProp.server.defaultValue = src.defaultValue;
+        }
         if (propModifier != null) {
             propModifier(resProp);
         }

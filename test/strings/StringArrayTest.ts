@@ -1,23 +1,27 @@
 ﻿"use strict";
+import chai = require("chai");
 import StringArray = require("../../strings/StringArray");
 
-QUnit.module("StringArray", {
-});
+var asr = chai.assert;
 
-QUnit.test("new StringArray", function StringArrayInstTest(sr) {
-    var inst = new StringArray();
-    var res = StringArray.of("a")
-        .addAll(["", "b", 123])
-        .prefixAll("-")
-        .addPrefixNonEmpty(["{", "", "}"], '\t')
-        .join('\n');
+suite("StringArray", function StringArrayTest() {
 
-    sr.equal(res,
-        "-a\n" +
-        "-\n" +
-        "-b\n" +
-        "-123\n" +
-        "\t{\n" +
-        "\n" +
-        "\t}");
+    test("new StringArray", function StringArrayInstTest() {
+        var inst = new StringArray();
+        var res = StringArray.of("a")
+            .addAll(["", "b", 123])
+            .prefixAll("-")
+            .addPrefixNonEmpty(["{", "", "}"], '\t')
+            .join('\n');
+
+        asr.equal(res,
+            "-a\n" +
+            "-\n" +
+            "-b\n" +
+            "-123\n" +
+            "\t{\n" +
+            "\n" +
+            "\t}");
+    });
+
 });
