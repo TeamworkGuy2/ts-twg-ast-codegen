@@ -1,5 +1,5 @@
 ﻿
-/** Types exported to JSON definition files by 'jparser-tools' (https://github.com/TeamworkGuy2/JParserTools)
+/** Types exported to JSON definition files by 'jparse-code' (https://github.com/TeamworkGuy2/JParserCode)
  */
 declare module CodeAst {
 

@@ -1,5 +1,4 @@
-﻿"use string";
-
+﻿
 enum Access {
     DEFAULT,
     INTERNAL,

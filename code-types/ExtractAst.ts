@@ -1,5 +1,4 @@
-﻿"use strict";
-import TypeConverter = require("./TypeConverter");
+﻿import TypeConverter = require("./TypeConverter");
 
 /** ExtractAst - functions for traversing code file ASTs and extracting type information from method and field signatures
  * @author TeamworkGuy2

@@ -1,6 +1,5 @@
-﻿"use strict";
+﻿import fs = require("fs");
 import Q = require("q");
-import fs = require("fs");
 import Arrays = require("../../ts-mortar/utils/Arrays");
 import gutil = require("gulp-util");
 import WriteFile = require("./WriteFile");

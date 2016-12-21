@@ -1,5 +1,4 @@
-﻿"use strict";
-import Arrays = require("../../ts-mortar/utils/Arrays");
+﻿import Arrays = require("../../ts-mortar/utils/Arrays");
 import ReadFile = require("./ReadFile");
 import WriteFile = require("./WriteFile");
 

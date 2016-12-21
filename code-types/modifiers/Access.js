@@ -1,4 +1,3 @@
-"use string";
 "use strict";
 var Access;
 (function (Access) {

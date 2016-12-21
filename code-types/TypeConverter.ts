@@ -1,5 +1,4 @@
-﻿"use strict";
-
+﻿
 /** Helper functions for converting source code data types to and from common CodeAst.Type and between different languages
  * @author TeamworkGuy2
  */

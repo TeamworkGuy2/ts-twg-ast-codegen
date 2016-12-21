@@ -1,5 +1,4 @@
-﻿"use strict";
-
+﻿
 module CsClass {
 
     export function copyShallow(csClass: CsSource.ClassWithImportExport): CsSource.ClassMeta {

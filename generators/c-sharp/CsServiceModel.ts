@@ -1,5 +1,4 @@
-﻿"use strict";
-import StringArray = require("../../strings/StringArray");
+﻿import StringArray = require("../../strings/StringArray");
 import Modifier = require("../../code-types/modifiers/Modifier");
 import CsClass = require("./CsClass");
 

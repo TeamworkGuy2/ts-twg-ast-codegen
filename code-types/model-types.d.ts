@@ -1,4 +1,5 @@
-﻿// Type definitions for code generators
+﻿/// <reference path="../../definitions/gulp-util/gulp-util.d.ts" />
+// Type definitions for code generators
 
 interface IndexMap<T> {
     [id: number]: T;

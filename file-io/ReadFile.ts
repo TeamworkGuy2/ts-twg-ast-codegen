@@ -1,6 +1,5 @@
-﻿"use strict";
+﻿import fs = require("fs");
 import Strings = require("../../ts-mortar/utils/Strings");
-import fs = require("fs");
 
 /**
  * @since 2015-8-10

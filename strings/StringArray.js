@@ -132,7 +132,6 @@ var StringArray = (function () {
     };
     return StringArray;
 }());
-var StringArray;
 (function (StringArray) {
     /** Alias for {@link #toStringFromObjectsDeep()}
      */

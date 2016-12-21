@@ -10,7 +10,6 @@ var Modifier;
     Modifier[Modifier["SYNCHRONIZED"] = 6] = "SYNCHRONIZED";
     Modifier[Modifier["VOLATILE"] = 7] = "VOLATILE";
 })(Modifier || (Modifier = {}));
-var Modifier;
 (function (Modifier) {
     function publicClass() {
         return ["public", "class"];

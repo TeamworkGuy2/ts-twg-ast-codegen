@@ -1,5 +1,4 @@
-﻿"use strict";
-import Arrays = require("../../../ts-mortar/utils/Arrays");
+﻿import Arrays = require("../../../ts-mortar/utils/Arrays");
 import StringArray = require("../../strings/StringArray");
 import EmptyLine = require("../../strings/whitespace/EmptyLine");
 import TypeConverter = require("../../code-types/TypeConverter");

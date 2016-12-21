@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.16.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/6b0af5fb550ff96d6ea95ecb37ff33fc5c0d9745) - 2016-08-24
+### [0.16.2](N/A) - 2016-12-21
+#### Changed
+* Removed "use strict" and tested compatibility with TypeScript 2.0
+
+
+--------
+### [0.16.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/def1365ebb9030eabbe67814bce0a027b24f740a) - 2016-08-24
 #### Fixed
 Fixed DtoPropertyConverter.parseAndConvertTemplate() to handle defaultValue correctly
 Converted tests from qunit to mocha and chai

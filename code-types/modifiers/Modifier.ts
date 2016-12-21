@@ -1,5 +1,4 @@
-﻿"use strict";
-
+﻿
 enum Modifier {
     ABSTRACT,
     FINAL,

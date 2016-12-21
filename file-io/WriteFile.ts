@@ -1,6 +1,5 @@
-﻿"use strict";
+﻿import fs = require("fs");
 import Arrays = require("../../ts-mortar/utils/Arrays");
-import fs = require("fs");
 
 /**
  * @since 2015-8-10
