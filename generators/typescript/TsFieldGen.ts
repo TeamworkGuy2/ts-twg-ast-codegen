@@ -7,7 +7,7 @@ module FieldGen {
 
     /** optional conversion functions for field ASTs and data types with basic default functions
      */
-    interface FieldGenConverters {
+    export interface FieldGenConverters {
         /** get the access modifier string for a field declaration (i.e. 'public', 'private'), if null, defaults to {@code field.accessModifiers.join(" ") + " "} */
         getAccessModifierStr?: (fieldName: string, field: CodeAst.Field, context: CodeContext) => string;
         /** pre-processor for the field AST, it accepts the field name, the field's type, returns a field type */

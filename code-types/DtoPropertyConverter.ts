@@ -30,6 +30,7 @@ module DtoPropertyConverter {
                 primaryKey: srcServer.primaryKey != null ? srcServer.primaryKey : srcPrimaryKey,
                 readOnly: srcServer.readOnly != null ? srcServer.readOnly : srcReadOnly,
                 required: srcServer.required != null ? srcServer.required : srcRequired,
+                toLocal: srcServer.toLocal != null ? srcServer.toLocal : null,
                 type: typeof srcServer.type === "string"
                     ? serverTypeConverter(<string>srcServer.type)
                     : (srcServer.type != null ? <CodeAst.Type>srcServer.type : typeof src.type === "string" ? serverTypeConverter(<string>src.type) : <CodeAst.Type>src.type),

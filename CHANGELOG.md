@@ -4,7 +4,16 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.16.2](N/A) - 2016-12-21
+### [0.16.3](N/A) - 2017-01-28
+#### Added
+* Added `FieldGen.FieldGenConverters` interface
+
+#### Changed
+* Added optional `toLocal` property to `DtoProperty.server` and `DtoPropertyTemplate.server` types
+
+
+--------
+### [0.16.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/502885a617bd36175a91973166b0d45d3300e5c4) - 2016-12-21
 #### Changed
 * Removed "use strict" and tested compatibility with TypeScript 2.0
 
@@ -12,7 +21,7 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 --------
 ### [0.16.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/def1365ebb9030eabbe67814bce0a027b24f740a) - 2016-08-24
 #### Fixed
-Fixed DtoPropertyConverter.parseAndConvertTemplate() to handle defaultValue correctly
+Fixed `DtoPropertyConverter.parseAndConvertTemplate()` to handle `defaultValue` correctly
 Converted tests from qunit to mocha and chai
 
 
@@ -20,7 +29,7 @@ Converted tests from qunit to mocha and chai
 ### [0.16.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/0251c088bc27be13b133e31a96454aa2140cb413) - 2016-08-23
 #### Changed
 * Changed some TransformFile functions
-  * Changed return/callback types to { srcLines: string[]; transformedLines: string[] }
+  * Changed return/callback types to `{ srcLines: string[]; transformedLines: string[] }`
   * Renamed/replaced TransformFile._transformFileToLines() -> TransformFile.transformFileToLines()
   * Removed gutil.log() messages from TransformFile functions
 * Added simple StringCase test case

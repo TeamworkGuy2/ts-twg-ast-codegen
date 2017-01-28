@@ -91,7 +91,7 @@ interface PropertyConversionTemplate {
 /** A database column definition with meta-data paired with a 'server' database column definition with meta-data */
 interface DtoProperty extends TypeProperty, PropertyConversionTemplate {
     /** if not present, server property type data is copied from this DtoProperty */
-    server: TypeProperty & { name: string };
+    server: TypeProperty & { name: string, toLocal?: string };
     toLocal: string;
     toService: string;
 }
@@ -106,7 +106,7 @@ interface DtoPropertyNamed extends DtoProperty {
 /** A type template and database column meta-data paired with a 'server' type template with database column meta-data and property name */
 interface DtoPropertyTemplate extends TypeTemplate, TypeMetaData, PropertyConversionTemplate {
     /** if not present, server property type data is copied from this DtoProperty */
-    server?: TypeTemplate & TypeMetaData & { name?: string };
+    server?: TypeTemplate & TypeMetaData & { name?: string, toLocal?: string };
 }
 
 

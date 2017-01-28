@@ -28,6 +28,7 @@ var DtoPropertyConverter;
                 primaryKey: srcServer.primaryKey != null ? srcServer.primaryKey : srcPrimaryKey,
                 readOnly: srcServer.readOnly != null ? srcServer.readOnly : srcReadOnly,
                 required: srcServer.required != null ? srcServer.required : srcRequired,
+                toLocal: srcServer.toLocal != null ? srcServer.toLocal : null,
                 type: typeof srcServer.type === "string"
                     ? serverTypeConverter(srcServer.type)
                     : (srcServer.type != null ? srcServer.type : typeof src.type === "string" ? serverTypeConverter(src.type) : src.type),
