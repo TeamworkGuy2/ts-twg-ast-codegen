@@ -15,30 +15,30 @@
  * @author TeamworkGuy2
  */
 class SimpleTemplateCompiler<T extends { [id: string]: any }> {
-    private delimiterStart: string;
-    private delimiterStop: string;
-    private templateDataToExpressionNames: { [id: string]: string };
-    private templateExpressionToDataNames: { [id: string]: string };
-    private templateExpressions: { [id: string]: string };
+    public delimiterStart: string;
+    public delimiterStop: string;
+    public dataNameToExpression: T;
+    public expressionToDataName: { [id: string]: keyof T };
+    public expressions: { [id: string]: string };
 
 
     /** Create a template definition, ready to parse a template source string
      * @param delimiterStart: the text that identifies the start of a template variable
      * @param delimiterStop: the text that identifies the end of a template variable (may be the same as 'delimiterStart')
-     * @param templateDataToExpressionNames: associates template data property names with expression names
-     * @param templateExpressions: associates template expression names with their expansions (which are arbitrary expressions, possibly containing further expression names)
+     * @param dataNameToExpression: associates template data property names with expression names
+     * @param expressions: associates template expression names with their expansions (which are arbitrary expressions, possibly containing further expression names)
      */
-    constructor(delimiterStart: string, delimiterStop: string, templateDataToExpressionNames: T, templateExpressions: { [id: string]: string }) {
+    constructor(delimiterStart: string, delimiterStop: string, dataNameToExpression: T, expressions: { [id: string]: string }) {
         this.delimiterStart = delimiterStart;
         this.delimiterStop = delimiterStop;
-        this.templateExpressions = templateExpressions;
-        this.templateDataToExpressionNames = templateDataToExpressionNames;
-        this.templateExpressionToDataNames = {};
+        this.expressions = expressions;
+        this.dataNameToExpression = dataNameToExpression;
+        this.expressionToDataName = {};
 
-        var keys = Object.keys(templateDataToExpressionNames);
+        var keys = Object.keys(dataNameToExpression);
         for (var i = 0, size = keys.length; i < size; i++) {
             var key = keys[i];
-            this.templateExpressionToDataNames[templateDataToExpressionNames[key]] = key;
+            this.expressionToDataName[dataNameToExpression[key]] = key;
         }
     }
 
@@ -70,14 +70,14 @@ class SimpleTemplateCompiler<T extends { [id: string]: any }> {
             var dataVarName: string = null;
             var tmplResolved: string = null;
             // variables are resolved against context and if no matching context name-value exists, the 'variables' value is used
-            if (!!(dataVarName = this.templateExpressions[tmpl])) {
+            if (!!(dataVarName = this.expressions[tmpl])) {
                 tmplResolved = templateData[dataVarName];
                 if (tmplResolved === undefined) {
                     tmplResolved = dataVarName;
                 }
             }
             // context props are resolved against context only
-            else if (!!(dataVarName = this.templateExpressionToDataNames[tmpl])) {
+            else if (!!(dataVarName = this.expressionToDataName[tmpl])) {
                 tmplResolved = templateData[dataVarName];
             }
 

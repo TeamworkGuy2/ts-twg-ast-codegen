@@ -1,18 +1,18 @@
 {
   "name": "ts-code-gen-tools",
-  "version": "0.16.3",
+  "version": "0.16.4",
   "description": "TypeScript code generator utilities for C#, Java, TypeScript, etc. and reading/writing files in node.js",
   "author": "TeamworkGuy2",
   "license": "MIT",
   "dependencies": {
     "ts-mortar": "^0.3.0",
-    "q": "~1.4.1"
+    "q": "~1.5.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "~3.0.2",
-    "gulp-util": "~3.0.7",
-    "q": "~1.4.1"
+    "chai": "~3.5.0",
+    "mocha": "~3.2.0",
+    "gulp-util": "~3.0.8",
+    "q": "~1.5.0"
   },
   "scripts": {
     "test": "mocha -u tdd --recursive"

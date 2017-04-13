@@ -19,19 +19,19 @@ var SimpleTemplateCompiler = (function () {
     /** Create a template definition, ready to parse a template source string
      * @param delimiterStart: the text that identifies the start of a template variable
      * @param delimiterStop: the text that identifies the end of a template variable (may be the same as 'delimiterStart')
-     * @param templateDataToExpressionNames: associates template data property names with expression names
-     * @param templateExpressions: associates template expression names with their expansions (which are arbitrary expressions, possibly containing further expression names)
+     * @param dataNameToExpression: associates template data property names with expression names
+     * @param expressions: associates template expression names with their expansions (which are arbitrary expressions, possibly containing further expression names)
      */
-    function SimpleTemplateCompiler(delimiterStart, delimiterStop, templateDataToExpressionNames, templateExpressions) {
+    function SimpleTemplateCompiler(delimiterStart, delimiterStop, dataNameToExpression, expressions) {
         this.delimiterStart = delimiterStart;
         this.delimiterStop = delimiterStop;
-        this.templateExpressions = templateExpressions;
-        this.templateDataToExpressionNames = templateDataToExpressionNames;
-        this.templateExpressionToDataNames = {};
-        var keys = Object.keys(templateDataToExpressionNames);
+        this.expressions = expressions;
+        this.dataNameToExpression = dataNameToExpression;
+        this.expressionToDataName = {};
+        var keys = Object.keys(dataNameToExpression);
         for (var i = 0, size = keys.length; i < size; i++) {
             var key = keys[i];
-            this.templateExpressionToDataNames[templateDataToExpressionNames[key]] = key;
+            this.expressionToDataName[dataNameToExpression[key]] = key;
         }
     }
     /** Recursively replace template variable names in a string with their values.
@@ -58,13 +58,13 @@ var SimpleTemplateCompiler = (function () {
             var dataVarName = null;
             var tmplResolved = null;
             // variables are resolved against context and if no matching context name-value exists, the 'variables' value is used
-            if (!!(dataVarName = this.templateExpressions[tmpl])) {
+            if (!!(dataVarName = this.expressions[tmpl])) {
                 tmplResolved = templateData[dataVarName];
                 if (tmplResolved === undefined) {
                     tmplResolved = dataVarName;
                 }
             }
-            else if (!!(dataVarName = this.templateExpressionToDataNames[tmpl])) {
+            else if (!!(dataVarName = this.expressionToDataName[tmpl])) {
                 tmplResolved = templateData[dataVarName];
             }
             res += remaining.substring(0, startI) + tmplResolved;

@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.16.3](N/A) - 2017-01-28
+### [0.16.4](N/A) - 2017-04-13
+#### Changed
+* Renamed SimpleTemplateCompiler internal variables and made them public (delimiterStart, delimiterEnd, dataNameToExpression, expressionToDataName, expressions)
+
+
+--------
+### [0.16.3](https://github.com/TeamworkGuy2/ts-code-generator/commit/cf848451d9b5883da455137b700a193492bea380) - 2017-01-28
 #### Added
 * Added `FieldGen.FieldGenConverters` interface
 
