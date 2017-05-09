@@ -2,7 +2,7 @@
 var Arrays = require("../../ts-mortar/utils/Arrays");
 var ReadFile = require("./ReadFile");
 var WriteFile = require("./WriteFile");
-/** A manipulator for a file sections map created by {@link ReadFile#readLinesSections()) or similar function
+/** A manipulator for a file sections map created by ReadFile.readLinesSections() or similar function
  * @since 2015-8-11
  */
 var FileSectionManipulator = (function () {

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var chai = require("chai");
 var StringArray = require("../../strings/StringArray");
 var asr = chai.assert;

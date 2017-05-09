@@ -167,7 +167,7 @@ class StringArray {
 
 module StringArray {
 
-    /** Alias for {@link #toStringFromObjectsDeep()} 
+    /** Alias for toStringFromObjectsDeep()
      */
     export function toStrings(obj: any): string[] {
         var lines: string[] = [];
@@ -227,7 +227,7 @@ module StringArray {
 
 
     /** Convert a single level object containing string or string[] properties to an array of strings
-     * @return the flattened string array with {@code join} string[] inserted between each property
+     * @return the flattened string array with the 'join' string[] inserted between each property
      */
     export function flattenMapJoin(obj: { [id: string]: string[] }, join: string[], keys: string[] = Object.keys(obj), dst: string[] = []): string[] {
         if (join) {
@@ -257,7 +257,7 @@ module StringArray {
 
 
     /** Flatten a string[][] and optionally insert a 'join' string[] between each array
-     * @return the flattened {@code strsAry} joined by {@code join}
+     * @return the flattened 'strsAry' joined by 'join'
      */
     export function joinMulti(strArys: string[][], join?: string[], dst: string[] = []): string[] {
         var sizeN1 = strArys.length - 1;
@@ -310,7 +310,7 @@ module StringArray {
 
 
     /** Add a common prefix and suffix string to each of the strings in an array of strings
-     * @return {@code strs} with prefix and suffix strings added
+     * @return 'strs' with prefix and suffix strings added
      */
     export function preAppend(prefix: string, suffix: string, strs: string[], dst: string[] = []): string[] {
 
@@ -342,7 +342,7 @@ module StringArray {
 
 
     /** Add a common prefix and suffix string to each of the non-empty strings in an array of strings
-     * @return {@code strs} with prefix and suffix strings added
+     * @return 'strs' with prefix and suffix strings added
      */
     export function preAppendNonEmpty(prefix: string, suffix: string, strs: string[], dst: string[] = []): string[] {
 

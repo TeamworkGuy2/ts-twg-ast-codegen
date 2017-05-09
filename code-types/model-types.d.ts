@@ -1,5 +1,4 @@
-﻿/// <reference path="../../definitions/gulp-util/gulp-util.d.ts" />
-// Type definitions for code generators
+﻿// Type definitions for code generators
 
 interface IndexMap<T> {
     [id: number]: T;
@@ -116,13 +115,13 @@ interface DtoPropertyTemplateNamed extends DtoPropertyTemplate {
 }
 
 
-    /** the properties/fields this model has, see {@link DtoProperty} */
+/** the properties/fields this model has, see DtoProperty */
 interface DtoPropertyMap {
     [id: string]: DtoProperty;
 }
 
 
-/** the properties/fields this model has, see {@link DtoPropertyTemplate} */
+/** the properties/fields this model has, see DtoPropertyTemplate */
 interface DtoPropertyTemplateMap {
     [id: string]: DtoPropertyTemplate;
 }

@@ -7,7 +7,7 @@ module StringCase {
 
     /** Test if all characters in a string are digits
      * @param str: the string to check
-     * @return true if every character in the string is a digit {@code 0-9}, false if not
+     * @return true if every character in the string is a digit 0-9, false if not
      */
     function isDigit(str: string): boolean {
         if (str == null) {
@@ -24,13 +24,13 @@ module StringCase {
 
 
     /** Test if a char at a specific index in a string is upper case
-     * For example: {@code isCharAtUpperCase("Blue", 0)}
-     * returns: {@code true}
-     * Or example: {@code isCharAtUpperCase("Blue", 3)}
-     * returns: {@code false}
+     * For example: isCharAtUpperCase("Blue", 0)
+     * returns: true
+     * Or example: isCharAtUpperCase("Blue", 3)
+     * returns: false
      * @param str: the string that the char resides in
-     * @param i: the index of the character in {@code str} to test
-     * @return true if the character at index {@code i} is upper case
+     * @param i: the index of the character in 'str' to test
+     * @return true if the character at index 'i' is upper case
      */
     function isCharAtUpperCase(str: string, i: number): boolean {
         if (str == null || i < 0 || i >= str.length) {
@@ -42,12 +42,12 @@ module StringCase {
 
 
     /** Check if a string is underscore case.
-     * For example: {@code isUnderscoreCase("Java_Script")}
-     * returns: {@code true}
-     * Or example: {@code isUnderscoreCase("case")}
-     * returns: {@code false}
-     * @param {String} str: the string to check
-     * @param {Boolean} true if {@code str} is underscore case, false if not
+     * For example: isUnderscoreCase("Java_Script")
+     * returns: true
+     * Or example: isUnderscoreCase("case")
+     * returns: false
+     * @param str the string to check
+     * @param true if 'str' is underscore case, false if not
      */
     export function isUnderscoreCase(str: string): boolean {
         var underscoreIndex = str.indexOf('_');
@@ -77,8 +77,8 @@ module StringCase {
 
 
     /** Convert a string from camel case or title case to underscore case
-     * @param {String} str: the string to convert
-     * @return {String} the {@code str} converted to underscore case if possible,
+     * @param str the string to convert
+     * @return the 'str' converted to underscore case if possible,
      * throws an error if the string's format is not recognized
      */
     export function toUnderscoreCase(str: string): string {
@@ -122,12 +122,12 @@ module StringCase {
 
 
     /** Check if a string is title case.
-     * For example: {@code isUnderscoreCase("JavaScript")}
-     * returns: {@code true}
-     * Or example: {@code isUnderscoreCase("case")}
-     * returns: {@code false}
-     * @param {String} str: the string to check
-     * @param {Boolean} true if {@code str} is title case, false if not
+     * For example: isUnderscoreCase("JavaScript")
+     * returns: true
+     * Or example: isUnderscoreCase("case")
+     * returns: false
+     * @param str the string to check
+     * @param true if 'str' is title case, false if not
      */
     export function isTitleCase(str: string): boolean {
         var underscoreIndex = str.indexOf('_');
@@ -139,8 +139,8 @@ module StringCase {
 
 
     /** Convert a string from camel case or underscore case to title case
-     * @param {String} str: the string to convert
-     * @return {String} the {@code str} converted to title case if possible,
+     * @param str the string to convert
+     * @return the 'str' converted to title case if possible,
      * throws an error if the string's format is not recognized
      */
     export function toTitleCase(str: string): string {
@@ -176,12 +176,12 @@ module StringCase {
 
 
     /** Check if a string is camel case.
-     * For example: {@code isUnderscoreCase("javaScript")}
-     * returns: {@code true}
-     * Or example: {@code isUnderscoreCase("Case")}
-     * returns: {@code false}
-     * @param {String} str: the string to check
-     * @param {Boolean} true if {@code str} is camel case, false if not
+     * For example: isUnderscoreCase("javaScript")
+     * returns: true
+     * Or example: isUnderscoreCase("Case")
+     * returns: false
+     * @param str the string to check
+     * @param true if 'str' is camel case, false if not
      */
     export function isCamelCase(str: string): boolean {
         var underscoreIndex = str.indexOf('_');
@@ -193,8 +193,8 @@ module StringCase {
 
 
     /** Convert a string from title case or underscore case to camel case
-     * @param {String} str: the string to convert
-     * @return {String} the {@code str} converted to camel case if possible,
+     * @param str the string to convert
+     * @return the 'str' converted to camel case if possible,
      * throws an error if the string's format is not recognized
      */
     export function toCamelCase(str: string): string {

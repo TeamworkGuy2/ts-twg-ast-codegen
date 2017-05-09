@@ -4,7 +4,14 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.16.4](N/A) - 2017-04-13
+### [0.16.5](N/A) - 2017-05-09
+#### Changed
+* Update to TypeScript 2.3, added tsconfig.json, use @types/ definitions
+* Documentation changes to work better with Visual Studio
+
+
+--------
+### [0.16.4](https://github.com/TeamworkGuy2/ts-code-generator/commit/a4e1946176848c2984fbf08c511d5336d035aa97) - 2017-04-13
 #### Changed
 * Renamed SimpleTemplateCompiler internal variables and made them public (delimiterStart, delimiterEnd, dataNameToExpression, expressionToDataName, expressions)
 

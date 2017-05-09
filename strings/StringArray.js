@@ -133,7 +133,7 @@ var StringArray = (function () {
     return StringArray;
 }());
 (function (StringArray) {
-    /** Alias for {@link #toStringFromObjectsDeep()}
+    /** Alias for toStringFromObjectsDeep()
      */
     function toStrings(obj) {
         var lines = [];
@@ -188,7 +188,7 @@ var StringArray = (function () {
     }
     StringArray.toStringFromObjectsDeep = toStringFromObjectsDeep;
     /** Convert a single level object containing string or string[] properties to an array of strings
-     * @return the flattened string array with {@code join} string[] inserted between each property
+     * @return the flattened string array with the 'join' string[] inserted between each property
      */
     function flattenMapJoin(obj, join, keys, dst) {
         if (keys === void 0) { keys = Object.keys(obj); }
@@ -217,7 +217,7 @@ var StringArray = (function () {
     }
     StringArray.flatten = flatten;
     /** Flatten a string[][] and optionally insert a 'join' string[] between each array
-     * @return the flattened {@code strsAry} joined by {@code join}
+     * @return the flattened 'strsAry' joined by 'join'
      */
     function joinMulti(strArys, join, dst) {
         if (dst === void 0) { dst = []; }
@@ -267,7 +267,7 @@ var StringArray = (function () {
     }
     StringArray.preAppendArray = preAppendArray;
     /** Add a common prefix and suffix string to each of the strings in an array of strings
-     * @return {@code strs} with prefix and suffix strings added
+     * @return 'strs' with prefix and suffix strings added
      */
     function preAppend(prefix, suffix, strs, dst) {
         if (dst === void 0) { dst = []; }
@@ -297,7 +297,7 @@ var StringArray = (function () {
     }
     StringArray.preAppend = preAppend;
     /** Add a common prefix and suffix string to each of the non-empty strings in an array of strings
-     * @return {@code strs} with prefix and suffix strings added
+     * @return 'strs' with prefix and suffix strings added
      */
     function preAppendNonEmpty(prefix, suffix, strs, dst) {
         if (dst === void 0) { dst = []; }

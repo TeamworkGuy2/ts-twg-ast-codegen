@@ -4,7 +4,7 @@ var StringArray = require("../../strings/StringArray");
 var EmptyLine = require("../../strings/whitespace/EmptyLine");
 var TypeConverter = require("../../code-types/TypeConverter");
 var CsServiceModel = require("./CsServiceModel");
-/** For generating the source code string array tree for a C# class from a class meta-data representation (e.g. {@link CsClassSource})
+/** For generating the source code string array tree for a C# class from a class meta-data representation (e.g. CsClassSource)
  * @since 2015-8-9
  */
 var CsToSource = (function () {

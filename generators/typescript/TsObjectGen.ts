@@ -23,7 +23,7 @@ module TsObjectGen {
         var objStartStr = (indentFirstLine ? initialIndentation : "") + "{";
         var objEndStr = (prettyPrint ? initialIndentation + "}" : " }");
 
-        // append multiple lines or one long line to both the 'lines' and 'dstLines' arrays based on {@code prettyPrint} flag
+        // append multiple lines or one long line to both the 'lines' and 'dstLines' arrays based on 'prettyPrint' flag
         var lines: string[] = [];
         if (prettyPrint) {
             if (dstLines != null) {

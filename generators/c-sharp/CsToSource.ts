@@ -4,7 +4,7 @@ import EmptyLine = require("../../strings/whitespace/EmptyLine");
 import TypeConverter = require("../../code-types/TypeConverter");
 import CsServiceModel = require("./CsServiceModel");
 
-/** For generating the source code string array tree for a C# class from a class meta-data representation (e.g. {@link CsClassSource})
+/** For generating the source code string array tree for a C# class from a class meta-data representation (e.g. CsClassSource)
  * @since 2015-8-9
  */
 class CsToSource {

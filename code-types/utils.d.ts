@@ -1,4 +1,5 @@
-﻿
+﻿/// <reference types="node" />
+
 interface GenTools {
 
     indent(dst: string[], lines: string | string[]): string[];

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var chai = require("chai");
 var DefaultGenTools = require("../../generators/DefaultGenTools");
 var DefaultPrettyPrinter = require("../../strings/whitespace/DefaultPrettyPrinter");

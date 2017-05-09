@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var chai = require("chai");
 var SimpleTemplateCompiler = require("../../generators/SimpleTemplateCompiler");
 var asr = chai.assert;

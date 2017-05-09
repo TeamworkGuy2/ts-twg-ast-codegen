@@ -5,8 +5,8 @@
  */
 module TsParameterGen {
 
-    /** create a parameter type signature from a property name and {@link TypeTemplate}.
-     * For example, this could generate a string like {@code "userIds: List<string>"} or {@code "isActive?: boolean"}
+    /** create a parameter type signature from a property name and TypeTemplate.
+     * For example, this could generate a string like "userIds: List<string>" or "isActive?: boolean"
      */
     export function createParameterCode(name: string, prop: TypeTemplate, returnUnknownTypes: boolean = true): string {
         var type = prop.type;
@@ -14,7 +14,7 @@ module TsParameterGen {
     }
 
 
-    /** convert a map of property names and {@link TypeInfo} values into an array of code strings that convert each property to a string
+    /** convert a map of property names and TypeInfo values into an array of code strings that convert each property to a string
      */
     export function createParametersCode(props: StringMap<TypeTemplate>, returnUnknownTypes: boolean = true): string[] {
         var keys = Object.keys(props);

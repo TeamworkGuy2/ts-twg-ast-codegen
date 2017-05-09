@@ -9,7 +9,7 @@ var FieldGen;
      * @param fields the fields to convert to TypeScript field declaration source code
      * @param context the class/namespace/package context of the list of fields
      * @param converters optional conversion functions for field ASTs and data types with basic default functions
-     * - 'getAccessModifierStr': get the access modifier string for a field declaration (i.e. 'public', 'private'), if null, defaults to {@code field.accessModifiers.join(" ") + " "}
+     * - 'getAccessModifierStr': get the access modifier string for a field declaration (i.e. 'public', 'private'), if null, defaults to field.accessModifiers.join(" ") + " "
      * - 'fieldToStr': the main function which converts a field AST to a string, it accepts the field's name, the field's type, and type converter for individual type strings, returns a string,
      *     if null, defaults to 'TypeConverter.TypeScript.typeToString'
      * - 'preFieldToStr': pre-processor for the field AST, it accepts the field name, the field's type, returns a field type
