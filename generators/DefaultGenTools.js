@@ -5,23 +5,16 @@
 var DefaultGenTools = (function () {
     function DefaultGenTools() {
     }
-    Object.defineProperty(DefaultGenTools.prototype, "printer", {
-        get: function () {
-            return this._printer;
-        },
-        enumerable: true,
-        configurable: true
-    });
     DefaultGenTools.newInst = function (printer) {
         var genTools = new DefaultGenTools();
-        genTools._printer = printer;
+        genTools.printer = printer;
         return genTools;
     };
     DefaultGenTools.prototype.indent = function (dst, lines) {
         if (lines == null) {
             return dst;
         }
-        var indent = this._printer.getIndent();
+        var indent = this.printer.getIndent();
         if (typeof lines === "string") {
             dst.push(indent + lines);
             return dst;
@@ -32,7 +25,7 @@ var DefaultGenTools = (function () {
         return dst;
     };
     DefaultGenTools.prototype.indentNonEmpty = function (dst, strs) {
-        var indent = this._printer.getIndent();
+        var indent = this.printer.getIndent();
         if (typeof strs === "string") {
             dst.push(indent + strs);
             return dst;

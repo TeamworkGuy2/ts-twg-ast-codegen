@@ -3,8 +3,6 @@ TS Code Generator
 
 Dependencies:
 - ts-mortar
-- gulp-util (for TransformFile)
-- Q (for TransformFile)
 
 TypeScript code generator tools, designed for type safe transformation of data structures to code.
 See the `test/` directory for example usage of the functions in this project.
@@ -26,9 +24,6 @@ Finally, output the data back to JSON with JSON.stringify() (since the CodeAst i
 
 #### code-types/
 TypeScript definition files for code meta-data interfaces; i.e. classes, method signatures, fields, data models, source code blocks, etc.
-
-#### file-io/
-Utilities for reading/writing and manipulating files.
 
 #### generators/
 Source code generators for `code-types` models.

@@ -3,17 +3,12 @@
  * @since 2015-8-9
  */
 class DefaultGenTools implements GenTools {
-    private _printer: PrettyPrinter;
-
-
-    get printer() {
-        return this._printer;
-    }
+    public printer: PrettyPrinter;
 
 
     public static newInst(printer: PrettyPrinter): DefaultGenTools {
         var genTools = new DefaultGenTools();
-        genTools._printer = printer;
+        genTools.printer = printer;
         return genTools;
     }
 
@@ -23,7 +18,7 @@ class DefaultGenTools implements GenTools {
             return dst;
         }
 
-        var indent = this._printer.getIndent();
+        var indent = this.printer.getIndent();
 
         if (typeof lines === "string") {
             dst.push(indent + lines);
@@ -38,7 +33,7 @@ class DefaultGenTools implements GenTools {
 
 
     public indentNonEmpty(dst: string[], strs: string | string[]): string[] {
-        var indent = this._printer.getIndent();
+        var indent = this.printer.getIndent();
 
         if (typeof strs === "string") {
             dst.push(indent + strs);

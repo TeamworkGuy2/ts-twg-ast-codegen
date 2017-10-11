@@ -4,7 +4,18 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.16.6](N/A) - 2017-08-06
+### [0.17.0](N/A) - 2017-10-10
+#### Changed
+* Marked `DefaultGenTools` `printer` field public, modify at your own risk
+* Fixed `package.json` name field (forgot to rename when project renamed to `ts-code-generator@0.4.0`)
+
+#### Removed
+* Removed `file-io/` (contained ReadFile, WriteFile, and TransformFile, FileSectionManipulator), moved to `ts-file-io` project
+* Removed `parsers/` (contained vs-proj/VsProjManipulator), moved to `ts-file-io` project
+
+
+--------
+### [0.16.6](https://github.com/TeamworkGuy2/ts-code-generator/commit/86cffc15cd38354b990e04946d4ebd8ab57dd86c) - 2017-08-06
 #### Changed
 * Update to TypeScript 2.4
 
