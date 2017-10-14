@@ -1,5 +1,4 @@
-﻿import Arrays = require("../../../ts-mortar/utils/Arrays");
-
+﻿
 module EmptyLine {
 
     export function preAppendIfAny(strs: string[],
@@ -7,19 +6,19 @@ module EmptyLine {
             postToAddIfAny: string[], postToAddIfNone: string[], nextLines: string[], dst: string[] = []): string[] {
         if (strs && strs.length > 0) {
             if (prevLines && prevLines.length > 0) {
-                Arrays.addAll(dst, preToAddIfAny);
+                addAll(dst, preToAddIfAny);
             }
             else {
-                Arrays.addAll(dst, preToAddIfNone);
+                addAll(dst, preToAddIfNone);
             }
 
-            Arrays.addAll(dst, strs);
+            addAll(dst, strs);
 
             if (nextLines && nextLines.length > 0) {
-                Arrays.addAll(dst, postToAddIfAny);
+                addAll(dst, postToAddIfAny);
             }
             else {
-                Arrays.addAll(dst, postToAddIfNone);
+                addAll(dst, postToAddIfNone);
             }
         }
         return dst;
@@ -31,6 +30,15 @@ module EmptyLine {
             postToAddIfAny: string[], postToAddIfNone: string[], nextLines: string[], dst: string[] = []): string[] {
         var res = preAppendIfAny(strs, preToAddIfAny, preToAddIfNone, prevLines, postToAddIfAny, postToAddIfNone, nextLines, dst);
         return res;
+    }
+
+
+    // Copied from ts-mortar/utils/Arrays
+    function addAll<E>(src: E[], toAdd: E[]): E[] {
+        if (toAdd != null && toAdd.length > 0) {
+            Array.prototype.push.apply(src, toAdd);
+        }
+        return src;
     }
 
 }

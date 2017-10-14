@@ -1,22 +1,21 @@
 "use strict";
-var Arrays = require("../../../ts-mortar/utils/Arrays");
 var EmptyLine;
 (function (EmptyLine) {
     function preAppendIfAny(strs, preToAddIfAny, preToAddIfNone, prevLines, postToAddIfAny, postToAddIfNone, nextLines, dst) {
         if (dst === void 0) { dst = []; }
         if (strs && strs.length > 0) {
             if (prevLines && prevLines.length > 0) {
-                Arrays.addAll(dst, preToAddIfAny);
+                addAll(dst, preToAddIfAny);
             }
             else {
-                Arrays.addAll(dst, preToAddIfNone);
+                addAll(dst, preToAddIfNone);
             }
-            Arrays.addAll(dst, strs);
+            addAll(dst, strs);
             if (nextLines && nextLines.length > 0) {
-                Arrays.addAll(dst, postToAddIfAny);
+                addAll(dst, postToAddIfAny);
             }
             else {
-                Arrays.addAll(dst, postToAddIfNone);
+                addAll(dst, postToAddIfNone);
             }
         }
         return dst;
@@ -28,5 +27,12 @@ var EmptyLine;
         return res;
     }
     EmptyLine.preAppendIndentIfAny = preAppendIndentIfAny;
+    // Copied from ts-mortar/utils/Arrays
+    function addAll(src, toAdd) {
+        if (toAdd != null && toAdd.length > 0) {
+            Array.prototype.push.apply(src, toAdd);
+        }
+        return src;
+    }
 })(EmptyLine || (EmptyLine = {}));
 module.exports = EmptyLine;

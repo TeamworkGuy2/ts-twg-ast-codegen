@@ -90,6 +90,7 @@ module FieldGen {
             type: typeInfo,
             required: info.required,
             accessModifiers: ["public"],
+            annotations: [],
             comments: []
         };
     }

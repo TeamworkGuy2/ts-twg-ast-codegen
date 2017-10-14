@@ -1,5 +1,4 @@
-﻿import Arrays = require("../../ts-mortar/utils/Arrays");
-
+﻿
 class StringArray {
     private strs: string[] = [];
 
@@ -23,7 +22,7 @@ class StringArray {
             this.strs.unshift(String(str));
         }
         else {
-            this.strs = Arrays.splice(this.strs, [String(str)], idx, 0);
+            this.strs = StringArray.splice(this.strs, [String(str)], idx);
         }
         return this;
     }
@@ -36,7 +35,7 @@ class StringArray {
             }
         }
         else {
-            this.strs = Arrays.splice(this.strs, strAry.map((s) => String(s)), idx, 0);
+            this.strs = StringArray.splice(this.strs, strAry.map((s) => String(s)), idx);
         }
         return this;
     }
@@ -233,17 +232,17 @@ module StringArray {
         if (join) {
             for (var i = 0, count = keys.length - 1; i < count; i++) {
                 var prop = obj[keys[i]];
-                Arrays.addAll(dst, prop);
-                Arrays.addAll(dst, join);
+                addAll(dst, prop);
+                addAll(dst, join);
             }
             if (count > 0) {
-                Arrays.addAll(dst, obj[keys[count]]);
+                addAll(dst, obj[keys[count]]);
             }
         }
         else {
             for (var i = 0, size = keys.length; i < size; i++) {
                 var prop = obj[keys[i]];
-                Arrays.addAll(dst, prop);
+                addAll(dst, prop);
             }
         }
 
@@ -264,12 +263,12 @@ module StringArray {
         if (sizeN1 > 0) {
             for (var i = 0; i < sizeN1; i++) {
                 var strs = strArys[i];
-                Arrays.addAll(dst, strs);
+                addAll(dst, strs);
                 if (join) {
-                    Arrays.addAll(dst, join);
+                    addAll(dst, join);
                 }
             }
-            Arrays.addAll(dst, strArys[sizeN1 - 1]);
+            addAll(dst, strArys[sizeN1 - 1]);
         }
 
         return dst;
@@ -373,6 +372,47 @@ module StringArray {
         }
 
         return dst;
+    }
+
+
+    // Copied from ts-mortar/utils/Arrays
+    export function addAll<E>(src: E[], toAdd: E[]): E[] {
+        if (toAdd != null && toAdd.length > 0) {
+            Array.prototype.push.apply(src, toAdd);
+        }
+        return src;
+    }
+
+
+    // Copied from ts-mortar/utils/Arrays
+    export function splice<E>(origAry: E[], insertAry: E[], index: number): E[] {
+        if (insertAry.length === 0) {
+            return origAry;
+        }
+
+        // add to the end of the array
+        if (index === origAry.length) {
+            Array.prototype.push.apply(origAry, insertAry);
+        }
+        // add to the beginning of the array
+        else if (index === 0) {
+            Array.prototype.unshift.apply(origAry, insertAry);
+        }
+        // copy up to the index to insert, then insert the array, and copying the remaining portion
+        else {
+            var tmp: E[] = [];
+            for (var i = 0; i < index; i++) {
+                tmp.push(origAry[i]);
+            }
+
+            Array.prototype.push.apply(tmp, insertAry);
+
+            for (var i = index, size = origAry.length; i < size; i++) {
+                tmp.push(origAry[i]);
+            }
+            return tmp;
+        }
+        return origAry;
     }
 
 }

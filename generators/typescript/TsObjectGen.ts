@@ -1,5 +1,4 @@
-﻿import Arrays = require("../../../ts-mortar/utils/Arrays");
-
+﻿
 /**
  * @since 2016-3-20
  */
@@ -33,11 +32,11 @@ module TsObjectGen {
                 else {
                     dstLines.push(objStartStr);
                 }
-                Arrays.addAll(dstLines, propLines);
+                Array.prototype.push.apply(dstLines, propLines);
                 dstLines.push(objEndStr);
             }
             lines.push(objStartStr);
-            Arrays.addAll(lines, propLines);
+            Array.prototype.push.apply(lines, propLines);
             lines.push(objEndStr);
         }
         else {

@@ -5,21 +5,14 @@
 module StringCase {
 
 
-    /** Test if all characters in a string are digits
-     * @param str: the string to check
-     * @return true if every character in the string is a digit 0-9, false if not
+    /** Test if a character in a string is are digit
+     * @param string: the character to check
+     * @param idx: the string index
+     * @return true if the specified character in the string is a digit ['0'-'9'], false if not
      */
-    function isDigit(str: string): boolean {
-        if (str == null) {
-            return false;
-        }
-        for (var i = 0, size = str.length; i < size; i++) {
-            var ch = str.charCodeAt(i) - 48;
-            if (ch < 0 || ch > 9) {
-                return false;
-            }
-        }
-        return true;
+    function isDigit(str: string, idx: number): boolean {
+        var ch = str.charCodeAt(idx) - 48;
+        return (ch >= 0 && ch <= 9);
     }
 
 
@@ -50,20 +43,15 @@ module StringCase {
      * @param true if 'str' is underscore case, false if not
      */
     export function isUnderscoreCase(str: string): boolean {
-        var underscoreIndex = str.indexOf('_');
-        if (underscoreIndex === 0) {
-            throw new Error("invalid underscoreCase string starting with underscore '" + str + "'");
-        }
-
         var isUpper = false;
         for (var i = 1, size = str.length; i < size; i++) {
             var ch = str.charAt(i);
             isUpper = (ch === ch.toUpperCase());
             if (ch !== '_' && isUpper) {
-                if (str.charAt(i - 1) !== '_' && !isDigit(ch) && !isCharAtUpperCase(str, i - 1)) {
+                if (str.charAt(i - 1) !== '_' && !isDigit(str, i) && !isCharAtUpperCase(str, i - 1)) {
                     return false;
                 }
-                // read consecutive capital characters after an underscore, for example "Bid_ID" is valid because the capital "D" gets skipped
+                // read consecutive capital characters after an underscore, for example "My_ID" is valid because the capital "D" gets skipped
                 for (; i < size; i++) {
                     ch = str.charAt(i);
                     if (ch !== ch.toUpperCase() || ch === '_') {
@@ -89,24 +77,32 @@ module StringCase {
     export function toSeparatedCase(str: string, separator: string): string {
         var resStr = null;
         if (StringCase.isCamelCase(str)) {
-            var res = [str.charAt(0).toUpperCase()];
+            var ch0 = str.charAt(0);
+            var prevDigit = isDigit(str, 0);
+            var res = [ch0.toUpperCase()];
             for (var i = 1, size = str.length; i < size; i++) {
                 var ch = str.charAt(i);
-                if (ch === ch.toUpperCase()) {
+                var digit = isDigit(str, i);
+                if (ch === ch.toUpperCase() && (!prevDigit || !digit)) {
                     res.push(separator);
                 }
                 res.push(ch);
+                prevDigit = digit;
             }
             resStr = res.join('');
         }
         else if (StringCase.isTitleCase(str)) {
-            var res = [str.charAt(0)];
+            var ch0 = str.charAt(0);
+            var prevDigit = isDigit(str, 0);
+            var res = [ch0];
             for (var i = 1, size = str.length; i < size; i++) {
                 var ch = str.charAt(i);
-                if (ch === ch.toUpperCase()) {
+                var digit = isDigit(str, i);
+                if (ch === ch.toUpperCase() && (!prevDigit || !digit)) {
                     res.push(separator);
                 }
                 res.push(ch);
+                prevDigit = digit;
             }
             resStr = res.join('');
         }
@@ -114,7 +110,7 @@ module StringCase {
             resStr = str;
         }
         else {
-            throw new Error("unknown case of str '" + str + "'");
+            throw new Error("unknown string casing for '" + str + "'");
         }
 
         return resStr;
@@ -130,11 +126,9 @@ module StringCase {
      * @param true if 'str' is title case, false if not
      */
     export function isTitleCase(str: string): boolean {
-        var underscoreIndex = str.indexOf('_');
-        if (underscoreIndex === 0) {
-            throw new Error("invalid TitleCase string starting with underscore '" + str + "'");
-        }
-        return underscoreIndex === -1 && str.charAt(0) === str.charAt(0).toUpperCase();
+        var underscoreIdx = str.indexOf('_');
+        var ch0: string;
+        return underscoreIdx === -1 && (ch0 = str.charAt(0)) === ch0.toUpperCase();
     }
 
 
@@ -144,7 +138,7 @@ module StringCase {
      * throws an error if the string's format is not recognized
      */
     export function toTitleCase(str: string): string {
-        var resStr = null;
+        var resStr: string = null;
         if (StringCase.isCamelCase(str)) {
             resStr = str.charAt(0).toUpperCase() + str.substr(1);
         }
@@ -152,23 +146,22 @@ module StringCase {
             resStr = str;
         }
         else if (StringCase.isUnderscoreCase(str)) {
-            var res = [str.charAt(0).toUpperCase()];
+            var resStr = str.charAt(0).toUpperCase();
             for (var i = 1, size = str.length; i < size; i++) {
                 var ch = str.charAt(i);
                 if (ch === '_') {
                     if (i < size - 1) {
-                        res.push(str.charAt(i + 1));
+                        resStr += str.charAt(i + 1);
                         i++;
                     }
                 }
                 else {
-                    res.push(ch);
+                    resStr += ch;
                 }
             }
-            resStr = res.join('');
         }
         else {
-            throw new Error("unknown case of str '" + str + "'");
+            throw new Error("unknown string casing for '" + str + "'");
         }
 
         return resStr;
@@ -184,11 +177,9 @@ module StringCase {
      * @param true if 'str' is camel case, false if not
      */
     export function isCamelCase(str: string): boolean {
-        var underscoreIndex = str.indexOf('_');
-        if (underscoreIndex === 0) {
-            throw new Error("invalid camelCase string starting with underscore '" + str + "'");
-        }
-        return underscoreIndex === -1 && str.charAt(0) !== str.charAt(0).toUpperCase();
+        var underscoreIdx = str.indexOf('_');
+        var ch0: string;
+        return underscoreIdx === -1 && (ch0 = str.charAt(0)) !== ch0.toUpperCase();
     }
 
 
@@ -222,7 +213,7 @@ module StringCase {
             resStr = res.join('');
         }
         else {
-            throw new Error("unknown case of str '" + str + "'");
+            throw new Error("unknown string casing for '" + str + "'");
         }
 
         return resStr;

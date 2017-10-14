@@ -1,5 +1,4 @@
 "use strict";
-var Arrays = require("../../ts-mortar/utils/Arrays");
 var StringArray = (function () {
     function StringArray() {
         this.strs = [];
@@ -20,7 +19,7 @@ var StringArray = (function () {
             this.strs.unshift(String(str));
         }
         else {
-            this.strs = Arrays.splice(this.strs, [String(str)], idx, 0);
+            this.strs = StringArray.splice(this.strs, [String(str)], idx);
         }
         return this;
     };
@@ -32,7 +31,7 @@ var StringArray = (function () {
             }
         }
         else {
-            this.strs = Arrays.splice(this.strs, strAry.map(function (s) { return String(s); }), idx, 0);
+            this.strs = StringArray.splice(this.strs, strAry.map(function (s) { return String(s); }), idx);
         }
         return this;
     };
@@ -196,17 +195,17 @@ var StringArray = (function () {
         if (join) {
             for (var i = 0, count = keys.length - 1; i < count; i++) {
                 var prop = obj[keys[i]];
-                Arrays.addAll(dst, prop);
-                Arrays.addAll(dst, join);
+                addAll(dst, prop);
+                addAll(dst, join);
             }
             if (count > 0) {
-                Arrays.addAll(dst, obj[keys[count]]);
+                addAll(dst, obj[keys[count]]);
             }
         }
         else {
             for (var i = 0, size = keys.length; i < size; i++) {
                 var prop = obj[keys[i]];
-                Arrays.addAll(dst, prop);
+                addAll(dst, prop);
             }
         }
         return dst;
@@ -225,12 +224,12 @@ var StringArray = (function () {
         if (sizeN1 > 0) {
             for (var i = 0; i < sizeN1; i++) {
                 var strs = strArys[i];
-                Arrays.addAll(dst, strs);
+                addAll(dst, strs);
                 if (join) {
-                    Arrays.addAll(dst, join);
+                    addAll(dst, join);
                 }
             }
-            Arrays.addAll(dst, strArys[sizeN1 - 1]);
+            addAll(dst, strArys[sizeN1 - 1]);
         }
         return dst;
     }
@@ -329,5 +328,39 @@ var StringArray = (function () {
         return dst;
     }
     StringArray.preAppendNonEmpty = preAppendNonEmpty;
+    // Copied from ts-mortar/utils/Arrays
+    function addAll(src, toAdd) {
+        if (toAdd != null && toAdd.length > 0) {
+            Array.prototype.push.apply(src, toAdd);
+        }
+        return src;
+    }
+    StringArray.addAll = addAll;
+    // Copied from ts-mortar/utils/Arrays
+    function splice(origAry, insertAry, index) {
+        if (insertAry.length === 0) {
+            return origAry;
+        }
+        // add to the end of the array
+        if (index === origAry.length) {
+            Array.prototype.push.apply(origAry, insertAry);
+        }
+        else if (index === 0) {
+            Array.prototype.unshift.apply(origAry, insertAry);
+        }
+        else {
+            var tmp = [];
+            for (var i = 0; i < index; i++) {
+                tmp.push(origAry[i]);
+            }
+            Array.prototype.push.apply(tmp, insertAry);
+            for (var i = index, size = origAry.length; i < size; i++) {
+                tmp.push(origAry[i]);
+            }
+            return tmp;
+        }
+        return origAry;
+    }
+    StringArray.splice = splice;
 })(StringArray || (StringArray = {}));
 module.exports = StringArray;

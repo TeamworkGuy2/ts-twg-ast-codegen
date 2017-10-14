@@ -4,23 +4,29 @@
 declare module CodeAst {
 
     export interface Class {
-        classSignature: {
-            access: string;
-            name: string;
-            declarationType: string;
-            genericParameters: Type[];
-            extendClassName?: Type;
-            implementClassNames?: Type[];
-        };
+        classSignature: ClassSignature;
+        blockType: string;
         using: string[];
+        enumMembers?: (Field & { initializer?: number | boolean | string | null; initializerExpression?: string; })[];
         fields: Field[];
         methods: Method[];
+    }
+
+
+    export interface ClassSignature {
+        access: string;
+        name: string;
+        declarationType: string;
+        genericParameters?: Type[];
+        extendClassName?: Type;
+        implementClassNames?: Type[];
     }
 
 
     export interface Type {
         typeName: string;
         nullable?: boolean;
+        primitive?: boolean;
         arrayDimensions?: number;
         genericParameters?: Type[];
     }
@@ -31,6 +37,7 @@ declare module CodeAst {
         type: Type;
         required?: boolean;
         accessModifiers: string[];
+        annotations: Annotation[];
         comments: string[];
     }
 
