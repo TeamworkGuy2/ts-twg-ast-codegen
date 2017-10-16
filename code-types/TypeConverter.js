@@ -8,32 +8,47 @@ var TypeConverter;
      * @param type the type to stringify
      * @param [typeConverter] an optional converter for the type names in the type
      * @param [includeNullability=true] whether to include type nullability (i.e. the '?' part of 'int?[]')
+     * @param [nullableSymbol="?"] the symbol for nullability (i.e. '?' for C# or ' | null' for TypeScript)
      */
-    function typeToString(type, typeConverter, includeNullability) {
+    function typeToString(type, typeConverter, includeNullability, nullableSymbol) {
         if (includeNullability === void 0) { includeNullability = true; }
+        if (nullableSymbol === void 0) { nullableSymbol = "?"; }
         var dst = [];
-        _typeToString(type, dst, typeConverter, includeNullability);
+        _typeToString(type, dst, typeConverter, includeNullability, nullableSymbol);
         return dst.join("");
     }
     TypeConverter.typeToString = typeToString;
-    function _typeToString(type, dst, typeConverter, includeNullability) {
+    function _typeToString(type, dst, typeConverter, includeNullability, nullableSymbol) {
         dst.push(typeConverter ? typeConverter(type.typeName) : type.typeName);
         var childs = type.genericParameters;
         if (childs && childs.length > 0) {
             dst.push("<");
             for (var i = 0, sizeM1 = childs.length - 1; i < sizeM1; i++) {
-                _typeToString(childs[i], dst, typeConverter, includeNullability);
+                _typeToString(childs[i], dst, typeConverter, includeNullability, nullableSymbol);
                 dst.push(", ");
             }
-            _typeToString(childs[sizeM1], dst, typeConverter, includeNullability);
+            _typeToString(childs[sizeM1], dst, typeConverter, includeNullability, nullableSymbol);
             dst.push(">");
         }
         if (type.nullable && includeNullability) {
-            dst.push("?");
+            dst.push(nullableSymbol);
         }
         if (type.arrayDimensions) {
+            var needsParens = matchAny(dst, function (s) { return s.indexOf("|") > -1 || s.indexOf("&") > -1; });
+            if (needsParens) {
+                dst.unshift("(");
+                dst.push(")");
+            }
             dst.push(new Array(type.arrayDimensions + 1).join("[]"));
         }
+    }
+    function matchAny(ary, filter) {
+        for (var i = 0, size = ary.length; i < size; i++) {
+            if (filter(ary[i], i)) {
+                return true;
+            }
+        }
+        return false;
     }
     /** Parse a simple data type string, the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
      */
@@ -182,12 +197,14 @@ var TypeConverter;
          * @param typeTemplate a Type, or string where the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param returnUnknownTypes
          * @param [includeNullability=false]
+         * @param [nullableSymbol="?"]
          */
-        TypeScript.parseAndConvertTypeTemplate = function (typeTemplate, returnUnknownTypes, includeNullability) {
+        TypeScript.parseAndConvertTypeTemplate = function (typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol) {
             if (includeNullability === void 0) { includeNullability = false; }
+            if (nullableSymbol === void 0) { nullableSymbol = "?"; }
             return (typeof typeTemplate === "string"
                 ? TypeScript.parseAndConvertTypeTemplateString(typeTemplate, returnUnknownTypes, includeNullability)
-                : typeToString(typeTemplate, function (t) { return TypeScript.convertSimpleType(t, returnUnknownTypes); }, includeNullability));
+                : typeToString(typeTemplate, function (t) { return TypeScript.convertSimpleType(t, returnUnknownTypes); }, includeNullability, nullableSymbol));
         };
         /** Parse and convert a simple type template string to a TypeScript type string.
          * The format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
@@ -195,11 +212,16 @@ var TypeConverter;
          * @param returnUnknownTypes
          * @param [includeNullability=false]
          */
-        TypeScript.parseAndConvertTypeTemplateString = function (typeTemplate, returnUnknownTypes, includeNullability) {
+        TypeScript.parseAndConvertTypeTemplateString = function (typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol) {
+            if (nullableSymbol === void 0) { nullableSymbol = "?"; }
             var typeInfo = TypeConverter.parseTypeTemplate(typeTemplate);
             var arrayCount = typeInfo.arrayDimensions;
             var tsType = TypeScript.convertSimpleType(typeInfo.typeName, returnUnknownTypes);
-            return tsType + (typeInfo.nullable && includeNullability ? "?" : "") + (arrayCount > 0 ? new Array(arrayCount + 1).join("[]") : "");
+            tsType += (typeInfo.nullable && includeNullability ? nullableSymbol : "");
+            var needsParens = arrayCount > 0 && (tsType.indexOf("|") > -1 || tsType.indexOf("&") > -1);
+            if (needsParens)
+                tsType = "(" + tsType + ")";
+            return tsType + (arrayCount > 0 ? new Array(arrayCount + 1).join("[]") : "");
         };
         /** Convert primitive and common builtin C# and Java types to TypeScript equivalent types
          * @param typeName the type name (i.e. 'bool' or 'String')

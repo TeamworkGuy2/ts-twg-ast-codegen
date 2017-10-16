@@ -4,7 +4,15 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.18.0](N/A) - 2017-10-14
+### [0.18.1](N/A) - 2017-10-16
+#### Changed
+* TypeConverter `typeToString()`, `parseAndConvertTypeTemplate()`, and `parseAndConvertTypeTemplateString()` functions now include an optional `nullableSymbol` parameter (default value `?` for C#), you can pass ` | null` for TypeScript and types will be correctly parenthesized
+* Added a `TypeConverter.typeToString()` test
+* Updated mocha@4.0.0 library and node@8.0.0 type definition dependencies
+
+
+--------
+### [0.18.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/6d1c625e1e3d5ecc9367947824e2d696ed404753) - 2017-10-14
 #### Fixed
 * Fixed `ast-types.d.ts` `CodeAst` definitions to properly match [jparse-code](https://github.com/TeamworkGuy2/JParseCode) library output
 * Fixed `StringCase` to better handle numbers when converting to underscore casing
