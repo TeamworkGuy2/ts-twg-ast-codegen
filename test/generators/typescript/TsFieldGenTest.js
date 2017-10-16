@@ -14,6 +14,6 @@ suite("TsFieldGen", function TsFieldGenTest() {
         };
         var props = Object.keys(fields).map(function (name) { return TsFieldGen.typeTemplateToField(name, fields[name], true); });
         var res = TsFieldGen.createFieldsSrcCode(props, null, {});
-        asr.deepEqual(res, ["public a: number;", "public b: boolean?[];", "public c?: number[];", "public d: IList<String>;", "public e?: IList<string>;"]);
+        asr.deepEqual(res, ["public a: number;", "public b: (boolean | null)[];", "public c?: number[];", "public d: IList<String>;", "public e?: IList<string>;"]);
     });
 });

@@ -196,24 +196,23 @@ var TypeConverter;
          * If given a Type, convert the types to TypeScript and convert to a string (see typeToString()).
          * @param typeTemplate a Type, or string where the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param returnUnknownTypes
-         * @param [includeNullability=false]
+         * @param includeNullability
          * @param [nullableSymbol="?"]
          */
         TypeScript.parseAndConvertTypeTemplate = function (typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol) {
-            if (includeNullability === void 0) { includeNullability = false; }
             if (nullableSymbol === void 0) { nullableSymbol = "?"; }
             return (typeof typeTemplate === "string"
-                ? TypeScript.parseAndConvertTypeTemplateString(typeTemplate, returnUnknownTypes, includeNullability)
+                ? TypeScript.parseAndConvertTypeTemplateString(typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol)
                 : typeToString(typeTemplate, function (t) { return TypeScript.convertSimpleType(t, returnUnknownTypes); }, includeNullability, nullableSymbol));
         };
         /** Parse and convert a simple type template string to a TypeScript type string.
          * The format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param typeName the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param returnUnknownTypes
-         * @param [includeNullability=false]
+         * @param includeNullability
+         * @param nullableSymbol the symbol to put after nullable types (i.e. '?' for C# or ' | null' for TypeScript)
          */
         TypeScript.parseAndConvertTypeTemplateString = function (typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol) {
-            if (nullableSymbol === void 0) { nullableSymbol = "?"; }
             var typeInfo = TypeConverter.parseTypeTemplate(typeTemplate);
             var arrayCount = typeInfo.arrayDimensions;
             var tsType = TypeScript.convertSimpleType(typeInfo.typeName, returnUnknownTypes);

@@ -48,11 +48,11 @@ module FieldGen {
         }
         // default type converter maps Java and C# primitive types (and some common built in types) to typescript types
         if (converters.typeConverter == null) {
-            converters.typeConverter = (name, type, ctx) => TypeConverter.TypeScript.parseAndConvertTypeTemplateString(type, true);
+            converters.typeConverter = (name, type, ctx) => TypeConverter.TypeScript.parseAndConvertTypeTemplateString(type, true, true, " | null");
         }
         // default to-string function recursively builds a generic type (i.e. 'Map<String, List<int[]>')
         if (converters.fieldToStr == null) {
-            converters.fieldToStr = (name, type, typeConverter, ctx) => TypeConverter.typeToString(type, (t) => typeConverter(name, t, ctx));
+            converters.fieldToStr = (name, type, typeConverter, ctx) => TypeConverter.typeToString(type, (t) => typeConverter(name, t, ctx), true, " | null");
         }
 
         var typeConverter = converters.typeConverter;

@@ -10,7 +10,7 @@ module TsParameterGen {
      */
     export function createParameterCode(name: string, prop: TypeTemplate, returnUnknownTypes: boolean = true): string {
         var type = prop.type;
-        return name + (prop.required === false ? "?" : "") + ": " + TypeConverter.TypeScript.parseAndConvertTypeTemplate(type, returnUnknownTypes);
+        return name + (prop.required === false ? "?" : "") + ": " + TypeConverter.TypeScript.parseAndConvertTypeTemplate(type, returnUnknownTypes, true, " | null");
     }
 
 
@@ -18,7 +18,7 @@ module TsParameterGen {
      */
     export function createParametersCode(props: StringMap<TypeTemplate>, returnUnknownTypes: boolean = true): string[] {
         var keys = Object.keys(props);
-        return keys.map(k => k + (props[k].required === false ? "?" : "") + ": " + TypeConverter.TypeScript.parseAndConvertTypeTemplate(props[k].type, returnUnknownTypes));
+        return keys.map(k => k + (props[k].required === false ? "?" : "") + ": " + TypeConverter.TypeScript.parseAndConvertTypeTemplate(props[k].type, returnUnknownTypes, true, " | null"));
     }
 
 }

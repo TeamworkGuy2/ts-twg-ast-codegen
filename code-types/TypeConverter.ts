@@ -219,12 +219,12 @@ module TypeConverter {
          * If given a Type, convert the types to TypeScript and convert to a string (see typeToString()).
          * @param typeTemplate a Type, or string where the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param returnUnknownTypes
-         * @param [includeNullability=false]
+         * @param includeNullability
          * @param [nullableSymbol="?"]
          */
-        static parseAndConvertTypeTemplate(typeTemplate: string | CodeAst.Type, returnUnknownTypes: boolean, includeNullability: boolean = false, nullableSymbol = "?"): string {
+        static parseAndConvertTypeTemplate(typeTemplate: string | CodeAst.Type, returnUnknownTypes: boolean, includeNullability: boolean, nullableSymbol = "?"): string {
             return (typeof typeTemplate === "string"
-                ? TypeScript.parseAndConvertTypeTemplateString(typeTemplate, returnUnknownTypes, includeNullability)
+                ? TypeScript.parseAndConvertTypeTemplateString(typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol)
                 : typeToString(typeTemplate, (t) => TypeScript.convertSimpleType(t, returnUnknownTypes), includeNullability, nullableSymbol));
         }
 
@@ -233,9 +233,10 @@ module TypeConverter {
          * The format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param typeName the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param returnUnknownTypes
-         * @param [includeNullability=false]
+         * @param includeNullability
+         * @param nullableSymbol the symbol to put after nullable types (i.e. '?' for C# or ' | null' for TypeScript)
          */
-        static parseAndConvertTypeTemplateString(typeTemplate: string, returnUnknownTypes: boolean, includeNullability?: boolean, nullableSymbol = "?"): string {
+        static parseAndConvertTypeTemplateString(typeTemplate: string, returnUnknownTypes: boolean, includeNullability: boolean, nullableSymbol: string): string {
             var typeInfo = TypeConverter.parseTypeTemplate(typeTemplate);
             var arrayCount = typeInfo.arrayDimensions;
 

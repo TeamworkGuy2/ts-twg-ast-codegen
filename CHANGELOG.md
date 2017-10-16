@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.18.1](N/A) - 2017-10-16
+### [0.18.2](N/A) - 2017-10-16
+#### Changed
+* Fixed TypeConverter function calls to include new `nullableSymbol` parameter
+
+
+--------
+### [0.18.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/9e0179b56af883c687da52a9f09633e80b953977) - 2017-10-16
 #### Changed
 * TypeConverter `typeToString()`, `parseAndConvertTypeTemplate()`, and `parseAndConvertTypeTemplateString()` functions now include an optional `nullableSymbol` parameter (default value `?` for C#), you can pass ` | null` for TypeScript and types will be correctly parenthesized
 * Added a `TypeConverter.typeToString()` test

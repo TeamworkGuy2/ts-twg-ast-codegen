@@ -11,7 +11,7 @@ var TsParameterGen;
     function createParameterCode(name, prop, returnUnknownTypes) {
         if (returnUnknownTypes === void 0) { returnUnknownTypes = true; }
         var type = prop.type;
-        return name + (prop.required === false ? "?" : "") + ": " + TypeConverter.TypeScript.parseAndConvertTypeTemplate(type, returnUnknownTypes);
+        return name + (prop.required === false ? "?" : "") + ": " + TypeConverter.TypeScript.parseAndConvertTypeTemplate(type, returnUnknownTypes, true, " | null");
     }
     TsParameterGen.createParameterCode = createParameterCode;
     /** convert a map of property names and TypeInfo values into an array of code strings that convert each property to a string
@@ -19,7 +19,7 @@ var TsParameterGen;
     function createParametersCode(props, returnUnknownTypes) {
         if (returnUnknownTypes === void 0) { returnUnknownTypes = true; }
         var keys = Object.keys(props);
-        return keys.map(function (k) { return k + (props[k].required === false ? "?" : "") + ": " + TypeConverter.TypeScript.parseAndConvertTypeTemplate(props[k].type, returnUnknownTypes); });
+        return keys.map(function (k) { return k + (props[k].required === false ? "?" : "") + ": " + TypeConverter.TypeScript.parseAndConvertTypeTemplate(props[k].type, returnUnknownTypes, true, " | null"); });
     }
     TsParameterGen.createParametersCode = createParametersCode;
 })(TsParameterGen || (TsParameterGen = {}));

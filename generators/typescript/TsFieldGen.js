@@ -27,11 +27,11 @@ var FieldGen;
         }
         // default type converter maps Java and C# primitive types (and some common built in types) to typescript types
         if (converters.typeConverter == null) {
-            converters.typeConverter = function (name, type, ctx) { return TypeConverter.TypeScript.parseAndConvertTypeTemplateString(type, true); };
+            converters.typeConverter = function (name, type, ctx) { return TypeConverter.TypeScript.parseAndConvertTypeTemplateString(type, true, true, " | null"); };
         }
         // default to-string function recursively builds a generic type (i.e. 'Map<String, List<int[]>')
         if (converters.fieldToStr == null) {
-            converters.fieldToStr = function (name, type, typeConverter, ctx) { return TypeConverter.typeToString(type, function (t) { return typeConverter(name, t, ctx); }); };
+            converters.fieldToStr = function (name, type, typeConverter, ctx) { return TypeConverter.typeToString(type, function (t) { return typeConverter(name, t, ctx); }, true, " | null"); };
         }
         var typeConverter = converters.typeConverter;
         if (converters.preTypeConverter || converters.postTypeConverter) {
