@@ -109,41 +109,12 @@ interface DtoPropertyTemplate extends TypeTemplate, TypeMetaData, PropertyConver
 }
 
 
-interface DtoPropertyTemplateNamed extends DtoPropertyTemplate {
-    /** the name of the property */
-    name: string;
-}
-
-
-/** the properties/fields this model has, see DtoProperty */
-interface DtoPropertyMap {
-    [id: string]: DtoProperty;
-}
-
-
-/** the properties/fields this model has, see DtoPropertyTemplate */
-interface DtoPropertyTemplateMap {
-    [id: string]: DtoPropertyTemplate;
-}
-
-
 interface DtoModel {
-    properties: DtoPropertyMap;
-}
-
-
-interface DtoModelTemplate {
-    properties: DtoPropertyTemplateMap;
+    properties: StringMap<DtoProperty>;
 }
 
 
 interface DtoModelNamed extends DtoModel {
-    /** the name of the data model */
-    name: string;
-}
-
-
-interface DtoModelTemplateNamed extends DtoModelTemplate {
     /** the name of the data model */
     name: string;
 }

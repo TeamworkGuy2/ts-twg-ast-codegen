@@ -4,8 +4,14 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.18.2](N/A) - 2017-10-16
-#### Changed
+### [0.19.0](N/A) - 2017-10-26
+#### Removed
+* Removed interfaces: `DtoPropertyTemplatedNamed`, `DtoPropertyMap`, `DtoPropertyTemplateMap`, `DtoModelTemplate`, and `DtoModelTemplateNamed` since they could either be easily replaced by `StringMap<*>` types or were unused.
+
+
+--------
+### [0.18.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/e17236bc267a7535bc0b9b78297157d56aed8c07) - 2017-10-16
+#### Fixed
 * Fixed TypeConverter function calls to include new `nullableSymbol` parameter
 
 

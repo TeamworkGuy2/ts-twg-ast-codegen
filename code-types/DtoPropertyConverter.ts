@@ -58,8 +58,8 @@ module DtoPropertyConverter {
      * @param [serverPropNamer] an optional function to transform 'DtoPropertyTemplate.server.name' strings given a 'DtoPropertyTemplate.name'
      * @param [propModifier] an optional function to modifier the parsed/converted properties (short cut so calling code doesn't having to loop through the returned map to make small changes)
      */
-    export function parseAndConvertTemplateMap(srcProps: DtoPropertyTemplateMap, typeConverter: TypeTemplateParser, serverTypeConverter: TypeTemplateParser,
-        serverPropNamer?: (propName: string, prop: DtoPropertyTemplate) => string, propModifier?: (prop: DtoProperty) => void): DtoPropertyMap {
+    export function parseAndConvertTemplateMap(srcProps: StringMap<DtoPropertyTemplate>, typeConverter: TypeTemplateParser, serverTypeConverter: TypeTemplateParser,
+        serverPropNamer?: (propName: string, prop: DtoPropertyTemplate) => string, propModifier?: (prop: DtoProperty) => void): StringMap<DtoProperty> {
 
         var resProps: { [id: string]: DtoProperty } = {};
 
