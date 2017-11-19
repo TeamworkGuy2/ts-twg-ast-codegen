@@ -247,6 +247,10 @@ var StringArray = (function () {
             else if (!prefix && suffix) {
                 return str + suffix;
             }
+            else {
+                // impossible
+                return null;
+            }
         }
         else {
             return str;

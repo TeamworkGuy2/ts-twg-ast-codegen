@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.19.0](N/A) - 2017-10-26
+### [0.19.1](N/A) - 2017-11-19
+#### Removed
+* `package.json` added `strictNullChecks` and code changes for null types
+
+
+--------
+### [0.19.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/90e3c37c4b45ed46227c6713bf5b376b1b551b76) - 2017-10-26
 #### Removed
 * Removed interfaces: `DtoPropertyTemplatedNamed`, `DtoPropertyMap`, `DtoPropertyTemplateMap`, `DtoModelTemplate`, and `DtoModelTemplateNamed` since they could either be easily replaced by `StringMap<*>` types or were unused.
 

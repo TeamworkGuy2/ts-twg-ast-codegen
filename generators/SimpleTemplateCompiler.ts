@@ -23,10 +23,10 @@ class SimpleTemplateCompiler<T extends { [id: string]: any }> {
 
 
     /** Create a template definition, ready to parse a template source string
-     * @param delimiterStart: the text that identifies the start of a template variable
-     * @param delimiterStop: the text that identifies the end of a template variable (may be the same as 'delimiterStart')
-     * @param dataNameToExpression: associates template data property names with expression names
-     * @param expressions: associates template expression names with their expansions (which are arbitrary expressions, possibly containing further expression names)
+     * @param delimiterStart the text that identifies the start of a template variable
+     * @param delimiterStop the text that identifies the end of a template variable (may be the same as 'delimiterStart')
+     * @param dataNameToExpression associates template data property names with expression names
+     * @param expressions associates template expression names with their expansions (which are arbitrary expressions, possibly containing further expression names)
      */
     constructor(delimiterStart: string, delimiterStop: string, dataNameToExpression: T, expressions: { [id: string]: string }) {
         this.delimiterStart = delimiterStart;
@@ -46,11 +46,11 @@ class SimpleTemplateCompiler<T extends { [id: string]: any }> {
     /** Recursively replace template variable names in a string with their values.
      * Recursive variable resolution continues until no 'delimiterStart' sequences remain in the rendered 'src'.
      * NOTE: if a variable's expansion contains itself or a cyclic reference, a stack overflow will occur
-     * @param src: the template string to render
-     * @param templateData: associates template context property names with values
+     * @param src the template string to render
+     * @param templateData associates template context property names with values
      * @return 'src' with template variable names replaced with 'variables' passed to the constructor and values from 'values'
      */
-    render(src: string, templateData: T): string {
+    render(src: string, templateData: { [P in keyof T]: any }): string {
         var res = "";
         var startSym = this.delimiterStart;
         var endSym = this.delimiterStop;
@@ -67,8 +67,8 @@ class SimpleTemplateCompiler<T extends { [id: string]: any }> {
 
             var tmpl = remaining.substring(startI, endI + endSym.length);
 
-            var dataVarName: string = null;
-            var tmplResolved: string = null;
+            var dataVarName: string | null = null;
+            var tmplResolved: string | null = null;
             // variables are resolved against context and if no matching context name-value exists, the 'variables' value is used
             if (!!(dataVarName = this.expressions[tmpl])) {
                 tmplResolved = templateData[dataVarName];

@@ -138,7 +138,7 @@ module StringCase {
      * throws an error if the string's format is not recognized
      */
     export function toTitleCase(str: string): string {
-        var resStr: string = null;
+        var resStr: string = <never>null;
         if (StringCase.isCamelCase(str)) {
             resStr = str.charAt(0).toUpperCase() + str.substr(1);
         }

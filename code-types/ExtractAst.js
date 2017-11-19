@@ -123,34 +123,5 @@ var ExtractAst;
         };
     }
     ExtractAst.claimParams = claimParams;
-    /** Find an annotation containing a given property
-     * @param annotations the array of annotations to process
-     * @param getProp the property accessor used to check
-     * @param minCount the minimum number of expected matching annotations (if this many matches aren't found, throw an error)
-     * @param propName the optional name of the property to display in error messages
-     */
-    function findOneAnnotationProp(annotations, getProp, minCount, propName) {
-        if (minCount === void 0) { minCount = 0; }
-        var prop = null;
-        var foundCount = 0;
-        for (var i = 0, size = annotations.length; i < size; i++) {
-            var annt = annotations[i];
-            var annProp = getProp(annt);
-            if (annProp) {
-                if (foundCount === 0) {
-                    prop = annProp;
-                }
-                foundCount++;
-            }
-        }
-        if (foundCount > 1) {
-            throw new Error("annotations contained multiple '" + propName + "' props: " + JSON.stringify(annotations));
-        }
-        if (foundCount < minCount) {
-            throw new Error("annotations contained no '" + propName + "' props: " + JSON.stringify(annotations));
-        }
-        return prop;
-    }
-    ExtractAst.findOneAnnotationProp = findOneAnnotationProp;
 })(ExtractAst || (ExtractAst = {}));
 module.exports = ExtractAst;

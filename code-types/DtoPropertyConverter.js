@@ -14,7 +14,7 @@ var DtoPropertyConverter;
         var srcPrimaryKey = src.primaryKey != null ? src.primaryKey : false;
         var srcReadOnly = src.readOnly != null ? src.readOnly : false;
         var srcRequired = src.required != null ? src.required : true;
-        var srcServer = src.server || {};
+        var srcServer = (src.server || {});
         var resProp = {
             autoGenerate: srcAutoGen,
             //defaultValue: src.defaultValue,

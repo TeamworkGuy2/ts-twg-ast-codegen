@@ -15,7 +15,7 @@ module DtoPropertyConverter {
         var srcPrimaryKey = src.primaryKey != null ? src.primaryKey : false;
         var srcReadOnly = src.readOnly != null ? src.readOnly : false;
         var srcRequired = src.required != null ? src.required : true;
-        var srcServer = src.server || <typeof src.server>{};
+        var srcServer = <TypeTemplate & TypeMetaData & { name?: string, toLocal?: string | null }>(src.server || {});
 
         var resProp: DtoProperty = {
             autoGenerate: srcAutoGen,

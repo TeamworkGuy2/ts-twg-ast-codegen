@@ -18,7 +18,7 @@ module TypeConverter {
     }
 
 
-    function _typeToString(type: CodeAst.Type, dst: string[], typeConverter: (typeName: string) => string, includeNullability: boolean, nullableSymbol: string): void {
+    function _typeToString(type: CodeAst.Type, dst: string[], typeConverter: ((typeName: string) => string) | null | undefined, includeNullability: boolean, nullableSymbol: string): void {
         dst.push(typeConverter ? typeConverter(type.typeName) : type.typeName);
 
         var childs = type.genericParameters;
@@ -244,9 +244,9 @@ module TypeConverter {
 
             tsType += (typeInfo.nullable && includeNullability ? nullableSymbol : "");
 
-            var needsParens = arrayCount > 0 && (tsType.indexOf("|") > -1 || tsType.indexOf("&") > -1);
+            var needsParens = <number>arrayCount > 0 && (tsType.indexOf("|") > -1 || tsType.indexOf("&") > -1);
             if (needsParens) tsType = "(" + tsType + ")";
-            return tsType + (arrayCount > 0 ? new Array(arrayCount + 1).join("[]") : "");
+            return tsType + (<number>arrayCount > 0 ? new Array(<number>arrayCount + 1).join("[]") : "");
         }
 
 
@@ -310,7 +310,7 @@ module TypeConverter {
             switch (typeTemplate) {
                 case "bool":
                 case "boolean":
-                    if (arrayCount > 0) { throw new Error("converting array of " + typeName + " to string not supported"); }
+                    if (<number>arrayCount > 0) { throw new Error("converting array of " + typeName + " to string not supported"); }
                     return "(" + variableName + " ? \"true\" : \"false\")";
                 case "byte":
                 case "sbyte":
@@ -329,7 +329,7 @@ module TypeConverter {
                 case "date":
                 case "DateTime":
                 case "any":
-                    if (arrayCount > 0) { throw new Error("converting array of " + typeName + " to strings not supported"); }
+                    if (<number>arrayCount > 0) { throw new Error("converting array of " + typeName + " to strings not supported"); }
                     return "(" + variableName + " ? " + variableName + ".toString() : \"null\")";
                 case "string":
                     return variableName;

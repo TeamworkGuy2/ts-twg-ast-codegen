@@ -258,7 +258,7 @@ module StringArray {
     /** Flatten a string[][] and optionally insert a 'join' string[] between each array
      * @return the flattened 'strsAry' joined by 'join'
      */
-    export function joinMulti(strArys: string[][], join?: string[], dst: string[] = []): string[] {
+    export function joinMulti(strArys: string[][], join?: string[] | null, dst: string[] = []): string[] {
         var sizeN1 = strArys.length - 1;
         if (sizeN1 > 0) {
             for (var i = 0; i < sizeN1; i++) {
@@ -287,6 +287,10 @@ module StringArray {
             }
             else if (!prefix && suffix) {
                 return str + suffix;
+            }
+            else {
+                // impossible
+                return <never>null;
             }
         }
         else {
