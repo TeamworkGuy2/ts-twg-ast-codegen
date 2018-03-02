@@ -1,5 +1,5 @@
 "use strict";
-var StringArray = (function () {
+var StringArray = /** @class */ (function () {
     function StringArray() {
         this.strs = [];
     }

@@ -170,7 +170,7 @@ var TypeConverter;
     TypeConverter.mapType = mapType;
     /** Functions for transforming and manipulating type information into TypesScript types (i.e. number, boolean, string)
      */
-    var TypeScript = (function () {
+    var TypeScript = /** @class */ (function () {
         function TypeScript() {
         }
         /** Given a string or a Type, convert either to a TypeScript type:

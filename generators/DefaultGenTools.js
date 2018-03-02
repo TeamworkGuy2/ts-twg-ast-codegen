@@ -2,7 +2,7 @@
 /**
  * @since 2015-8-9
  */
-var DefaultGenTools = (function () {
+var DefaultGenTools = /** @class */ (function () {
     function DefaultGenTools() {
     }
     DefaultGenTools.newInst = function (printer) {
