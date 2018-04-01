@@ -1,6 +1,7 @@
 "use strict";
 var TypeConverter = require("../../code-types/TypeConverter");
-/** Generators for TypeScript field declarations
+/** Generator TypeScript field declarations
+ * @author TeamworkGuy2
  * @since 2016-3-20
  */
 var FieldGen;

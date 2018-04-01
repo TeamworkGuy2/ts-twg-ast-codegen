@@ -6,12 +6,20 @@
  * to a 'variables' key, you could end up with an infinite resolution loop causing a stack overflow!
  *
  * For example:
- * var t = new SimpleTemplateCompiler("$", "$", { "userName": "$id$", "$userStatus$": "$status$" }, { "$displayText$": "$helloMsg$, $id$ - $userStatus$", "$helloMsg$": "Welcome", "$userStatus$": "$status$" });
+ * var t = new SimpleTemplateCompiler("$", "$", {
+ *   "userName": "$id$",
+ *   "$userStatus$": "$status$"
+ * }, {
+ *   "$displayText$": "$helloMsg$, $id$ - $userStatus$",
+ *   "$helloMsg$": "Welcome",
+ *   "$userStatus$": "$status$"
+ * });
+ *
  * t.render("1. $displayText$", { userName: "Bill Mill", "$userStatus$": "Stand back, I'm doing code!" });
+ * // => "1. Welcome, Bill Mill - Stand back, I'm doing code!"
+ *
  * t.render("2. $displayText$", { userName: "Jill Will", "$userStatus$": null });
- * Result:
- * "1. Welcome, Bill Mill - Stand back, I'm doing code!"
- * "2. Welcome, Jill Will - null"
+ * // => "2. Welcome, Jill Will - null"
  * @author TeamworkGuy2
  */
 class SimpleTemplateCompiler<T extends { [id: string]: any }> {
@@ -50,7 +58,7 @@ class SimpleTemplateCompiler<T extends { [id: string]: any }> {
      * @param templateData associates template context property names with values
      * @return 'src' with template variable names replaced with 'variables' passed to the constructor and values from 'values'
      */
-    render(src: string, templateData: { [P in keyof T]: any }): string {
+    public render(src: string, templateData: { [P in keyof T]: any }): string {
         var res = "";
         var startSym = this.delimiterStart;
         var endSym = this.delimiterStop;
@@ -69,14 +77,14 @@ class SimpleTemplateCompiler<T extends { [id: string]: any }> {
 
             var dataVarName: string | null = null;
             var tmplResolved: string | null = null;
-            // variables are resolved against context and if no matching context name-value exists, the 'variables' value is used
+            // look for an expression name matching the delimited sub-string
             if (!!(dataVarName = this.expressions[tmpl])) {
                 tmplResolved = templateData[dataVarName];
                 if (tmplResolved === undefined) {
                     tmplResolved = dataVarName;
                 }
             }
-            // context props are resolved against context only
+            // if no matching expression name-value exists, the inverted 'dataNameToExpression' value is used if one with a matching name is found
             else if (!!(dataVarName = this.expressionToDataName[tmpl])) {
                 tmplResolved = templateData[dataVarName];
             }

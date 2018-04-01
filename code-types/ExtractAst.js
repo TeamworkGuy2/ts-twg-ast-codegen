@@ -1,6 +1,6 @@
 "use strict";
 var TypeConverter = require("./TypeConverter");
-/** ExtractAst - functions for traversing code file ASTs and extracting type information from method and field signatures
+/** Traverse ASTs and extracting type information from method and field signatures
  * @author TeamworkGuy2
  */
 var ExtractAst;

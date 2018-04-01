@@ -1,4 +1,9 @@
 ﻿
+/** Methods for building an array of strings with methods for working with prefixes, suffixes, and indentation.
+ * Includes static methods for toString()'ing objects with nested properties, and static methods
+ * for adding prefixes and suffixes to arrays, as well as flattening nested arrays.
+ * @author TeamworkGuy2
+ */
 class StringArray {
     private strs: string[] = [];
 
@@ -170,7 +175,7 @@ module StringArray {
      */
     export function toStrings(obj: any): string[] {
         var lines: string[] = [];
-        StringArray.toStringFromObjectsDeep(obj, lines);
+        toStringFromObjectsDeep(obj, lines);
         return lines;
     }
 
@@ -200,13 +205,13 @@ module StringArray {
                             dst.push(ary[ii]);
                         }
                         else {
-                            StringArray.toStringFromObjectsDeep(ary[ii], dst);
+                            toStringFromObjectsDeep(ary[ii], dst);
                         }
                     }
                 }
                 // Object
                 else {
-                    StringArray.toStringFromObjectsDeep(prop, dst);
+                    toStringFromObjectsDeep(prop, dst);
                 }
             }
         }
@@ -218,7 +223,7 @@ module StringArray {
                     dst.push(ary[i]);
                 }
                 else {
-                    StringArray.toStringFromObjectsDeep(ary[i], dst);
+                    toStringFromObjectsDeep(ary[i], dst);
                 }
             }
         }
@@ -251,7 +256,7 @@ module StringArray {
 
 
     export function flatten(strsAry: string[][]): string[] {
-        return StringArray.joinMulti(strsAry, null, []);
+        return joinMulti(strsAry, null, []);
     }
 
 

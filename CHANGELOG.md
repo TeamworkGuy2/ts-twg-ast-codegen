@@ -4,8 +4,20 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.19.2](N/A) - 2018-03-01
+### [0.19.3](N/A) - 2018-03-31
+#### Changed
+* Update to TypeScript 2.8
+* Update dependencies: @types/mocha
+* Update documentation
+
 #### Removed
+* tsMeta/modifiers: Access.ts, Modifier.ts
+* Removed dependency: @types/node
+
+
+--------
+### [0.19.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/e80e73f49dcc5213eac7e020d04148860577843e) - 2018-03-01
+#### Changed
 * Update to TypeScript 2.7
 * Update dependencies: mocha, @types/chai, @types/mocha, @types/node
 * Enable tsconfig.json `noImplicitAny`
@@ -13,7 +25,7 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 --------
 ### [0.19.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/5a8f7f9a0b70485fa34781c83cd2f6fa61e8d97c) - 2017-11-19
-#### Removed
+#### Changed
 * `package.json` added `strictNullChecks` and code changes for null types
 
 

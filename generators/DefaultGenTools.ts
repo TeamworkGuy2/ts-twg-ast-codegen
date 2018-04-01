@@ -1,11 +1,14 @@
 ﻿
 /**
+ * @author TeamworkGuy2
  * @since 2015-8-9
  */
 class DefaultGenTools implements GenTools {
     public printer: PrettyPrinter;
 
 
+    /** Create a GenTools implementation which uses the given PrettyPrinter for indentation
+     */
     public static newInst(printer: PrettyPrinter): DefaultGenTools {
         var genTools = new DefaultGenTools();
         genTools.printer = printer;
@@ -13,6 +16,8 @@ class DefaultGenTools implements GenTools {
     }
 
 
+    /** Indent each of the 'lines' and append them to the 'dst' array, return 'dst'
+     */
     public indent(dst: string[], lines: string | string[]): string[] {
         if (lines == null) {
             return dst;
@@ -32,6 +37,8 @@ class DefaultGenTools implements GenTools {
     }
 
 
+    /** Indent each of the none empty 'lines' and append all the lines to the 'dst' array, return 'dst'
+     */
     public indentNonEmpty(dst: string[], strs: string | string[]): string[] {
         var indent = this.printer.getIndent();
 

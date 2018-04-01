@@ -1,5 +1,4 @@
-﻿
-/** Helper functions for transforming DtoPropertyTemplate and DtoProperty objects
+﻿/** Helper functions for transforming DtoPropertyTemplate and DtoProperty objects
  * @author TeamworkGuy2
  * @since 2016-05-14
  */

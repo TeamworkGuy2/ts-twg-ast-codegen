@@ -1,5 +1,6 @@
 "use strict";
 /**
+ * @author TeamworkGuy2
  * @since 2015-8-9
  */
 var DefaultPrettyPrinter = /** @class */ (function () {

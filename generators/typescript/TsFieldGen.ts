@@ -1,6 +1,7 @@
 ﻿import TypeConverter = require("../../code-types/TypeConverter");
 
-/** Generators for TypeScript field declarations
+/** Generator TypeScript field declarations
+ * @author TeamworkGuy2
  * @since 2016-3-20
  */
 module FieldGen {
@@ -8,22 +9,36 @@ module FieldGen {
     /** optional conversion functions for field ASTs and data types with basic default functions
      */
     export interface FieldGenConverters {
-        /** get the access modifier string for a field declaration (i.e. 'public', 'private'), if null, defaults to field.accessModifiers.join(" ") + " " */
-        getAccessModifierStr: (fieldName: string, field: CodeAst.Field, context: CodeContext) => string;
-        /** pre-processor for the field AST, it accepts the field name, the field's type, returns a field type */
-        preFieldToStr: (fieldName: string, fieldType: CodeAst.Type, context: CodeContext) => CodeAst.Type;
+
+        /** get the access modifier string for a field declaration (i.e. 'public', 'private'), if null, defaults to field.accessModifiers.join(" ") + " "
+         */
+        getAccessModifierStr(fieldName: string, field: CodeAst.Field, context: CodeContext): string;
+
+        /** pre-processor for the field AST, it accepts the field name, the field's type, returns a field type
+         */
+        preFieldToStr(fieldName: string, fieldType: CodeAst.Type, context: CodeContext): CodeAst.Type;
+
         /** the main function which converts a field AST to a string, it accepts the field's name, the field's type, and type converter for individual type strings, returns a string,
-         * if null, defaults to 'TypeConverter.TypeScript.typeToString' */
-        fieldToStr: (fieldName: string, fieldType: CodeAst.Type, typeConverter: (fieldName: string, dataType: string, context: CodeContext) => string, context: CodeContext) => string;
-        /** post-processor for the resulting field AST string, it accepts the field's name, the field's type string representation, returns a string */
-        postFieldToStr: (fieldName: string, typeStr: string, context: CodeContext) => string;
-        /** pre-process a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string */
-        preTypeConverter: (fieldName: string, dataType: string, context: CodeContext) => string;
+         * if null, defaults to 'TypeConverter.TypeScript.typeToString'
+         */
+        fieldToStr(fieldName: string, fieldType: CodeAst.Type, typeConverter: (fieldName: string, dataType: string, context: CodeContext) => string, context: CodeContext): string;
+
+        /** post-processor for the resulting field AST string, it accepts the field's name, the field's type string representation, returns a string
+         */
+        postFieldToStr(fieldName: string, typeStr: string, context: CodeContext): string;
+
+        /** pre-process a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string
+         */
+        preTypeConverter(fieldName: string, dataType: string, context: CodeContext): string;
+
         /** convert a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string,
-          * if null, defaults to 'TypeConverter.TypeScript.parseCsOrJavaType' */
-        typeConverter: (fieldName: string, dataType: string, context: CodeContext) => string;
-        /** post-process a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string */
-        postTypeConverter: (fieldName: string, dataType: string, context: CodeContext) => string;
+         * if null, defaults to 'TypeConverter.TypeScript.parseCsOrJavaType'
+         */
+        typeConverter(fieldName: string, dataType: string, context: CodeContext): string;
+
+        /** post-process a 'CodeAst.Type' data type string to a string, accepts a data type string, returns a string
+         */
+        postTypeConverter(fieldName: string, dataType: string, context: CodeContext): string;
     }
 
 

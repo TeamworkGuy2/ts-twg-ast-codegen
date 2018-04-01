@@ -1,5 +1,5 @@
-﻿
-/** Types exported to JSON definition files by 'jparse-code' (https://github.com/TeamworkGuy2/JParserCode)
+﻿/** Types exported to JSON definition files by 'jparse-code' (https://github.com/TeamworkGuy2/JParserCode)
+ * @author TeamworkGuy2
  */
 declare module CodeAst {
 

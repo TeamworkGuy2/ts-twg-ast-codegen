@@ -1,15 +1,23 @@
 ﻿
-/**
+/** Generate source code which converts the properties of an object from a source to destination format.
+ * @author TeamworkGuy2
  * @since 2016-3-20
  */
 module TsObjectGen {
 
-    /** create code to convert an object's values from one format into another
+    /** Generate source code that converts an object's properties from one format into another
      */
-    export function createConvertObjectCode(objVarName: string, objDef: StringMap<TypeTemplate>,
-            dataConverter: (typeTemplate: string | CodeAst.Type, varName: string) => string, propNameConverter: (name: string) => string,
-            prettyPrint: boolean = false, initialIndentation: string = "", blockIndentation: string = "\t", indentFirstLine: boolean = false, dstLines?: string[]): string[] {
-
+    export function createConvertObjectCode(
+        objVarName: string,
+        objDef: StringMap<TypeTemplate>,
+        dataConverter: (typeTemplate: string | CodeAst.Type, varName: string) => string,
+        propNameConverter: (name: string) => string,
+        prettyPrint: boolean = false,
+        initialIndentation: string = "",
+        blockIndentation: string = "\t",
+        indentFirstLine: boolean = false,
+        dstLines?: string[]
+    ): string[] {
         var keys = Object.keys(objDef);
         // keep single property object declarations on one line
         if (keys.length === 1) {

@@ -1,10 +1,11 @@
 "use strict";
-/**
+/** Generate source code which converts the properties of an object from a source to destination format.
+ * @author TeamworkGuy2
  * @since 2016-3-20
  */
 var TsObjectGen;
 (function (TsObjectGen) {
-    /** create code to convert an object's values from one format into another
+    /** Generate source code that converts an object's properties from one format into another
      */
     function createConvertObjectCode(objVarName, objDef, dataConverter, propNameConverter, prettyPrint, initialIndentation, blockIndentation, indentFirstLine, dstLines) {
         if (prettyPrint === void 0) { prettyPrint = false; }

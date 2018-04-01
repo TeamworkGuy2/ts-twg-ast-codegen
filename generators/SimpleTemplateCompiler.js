@@ -7,12 +7,20 @@
  * to a 'variables' key, you could end up with an infinite resolution loop causing a stack overflow!
  *
  * For example:
- * var t = new SimpleTemplateCompiler("$", "$", { "userName": "$id$", "$userStatus$": "$status$" }, { "$displayText$": "$helloMsg$, $id$ - $userStatus$", "$helloMsg$": "Welcome", "$userStatus$": "$status$" });
+ * var t = new SimpleTemplateCompiler("$", "$", {
+ *   "userName": "$id$",
+ *   "$userStatus$": "$status$"
+ * }, {
+ *   "$displayText$": "$helloMsg$, $id$ - $userStatus$",
+ *   "$helloMsg$": "Welcome",
+ *   "$userStatus$": "$status$"
+ * });
+ *
  * t.render("1. $displayText$", { userName: "Bill Mill", "$userStatus$": "Stand back, I'm doing code!" });
+ * // => "1. Welcome, Bill Mill - Stand back, I'm doing code!"
+ *
  * t.render("2. $displayText$", { userName: "Jill Will", "$userStatus$": null });
- * Result:
- * "1. Welcome, Bill Mill - Stand back, I'm doing code!"
- * "2. Welcome, Jill Will - null"
+ * // => "2. Welcome, Jill Will - null"
  * @author TeamworkGuy2
  */
 var SimpleTemplateCompiler = /** @class */ (function () {
@@ -57,13 +65,14 @@ var SimpleTemplateCompiler = /** @class */ (function () {
             var tmpl = remaining.substring(startI, endI + endSym.length);
             var dataVarName = null;
             var tmplResolved = null;
-            // variables are resolved against context and if no matching context name-value exists, the 'variables' value is used
+            // look for an expression name matching the delimited sub-string
             if (!!(dataVarName = this.expressions[tmpl])) {
                 tmplResolved = templateData[dataVarName];
                 if (tmplResolved === undefined) {
                     tmplResolved = dataVarName;
                 }
             }
+            // if no matching expression name-value exists, the inverted 'dataNameToExpression' value is used if one with a matching name is found
             else if (!!(dataVarName = this.expressionToDataName[tmpl])) {
                 tmplResolved = templateData[dataVarName];
             }

@@ -1,4 +1,5 @@
 ﻿/** Data types for source code ASTs
+ * @author TeamworkGuy2
  * @since 2016-05-13
  */
 declare module CodeBlock {
