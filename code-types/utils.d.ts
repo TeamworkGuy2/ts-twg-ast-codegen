@@ -1,4 +1,5 @@
-﻿
+﻿/// <reference path="./ast-types.d.ts" />
+
 interface GenTools {
 
     indent(dst: string[], lines: string | string[]): string[];

@@ -13,10 +13,6 @@ var TsObjectGen;
         if (blockIndentation === void 0) { blockIndentation = "\t"; }
         if (indentFirstLine === void 0) { indentFirstLine = false; }
         var keys = Object.keys(objDef);
-        // keep single property object declarations on one line
-        if (keys.length === 1) {
-            prettyPrint = false;
-        }
         var propLines = keys.map(function (k) { return (prettyPrint ? initialIndentation + blockIndentation : " ") +
             propNameConverter(k) + ": " + dataConverter(objDef[k].type, objVarName + "." + k) + ","; });
         var objStartStr = (indentFirstLine ? initialIndentation : "") + "{";

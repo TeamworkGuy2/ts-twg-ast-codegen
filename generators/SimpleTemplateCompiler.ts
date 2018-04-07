@@ -1,4 +1,6 @@
-﻿/** A very simple template compiler for simple tasks like function signature and data type templating/generating.
+﻿/// <reference path="../code-types/utils.d.ts" />
+
+/** A very simple template compiler for simple tasks like function signature and data type templating/generating.
  * Template resolution has two stages, variables can be mapped to literal values or other variables using the 'variables' string map passed to the constructor. 
  * Or context properties can be mapped to variables using the 'contextPropToVariableLinks' map and then values can be supplied dynamically to '.render(...)'. 
  * See below example, variables are always resolved against the 'variables' map first.

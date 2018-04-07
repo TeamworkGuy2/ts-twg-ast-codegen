@@ -1,6 +1,6 @@
 {
   "name": "ts-code-generator",
-  "version": "0.19.3",
+  "version": "0.19.4",
   "description": "TypeScript code generator utils",
   "author": "TeamworkGuy2",
   "homepage": "https://github.com/TeamworkGuy2/ts-code-generator",
@@ -14,6 +14,7 @@
     "typescript": "~2.8.0"
   },
   "scripts": {
+    "build-package": "node ../build-npm-like-pkg.js",
     "test": "mocha -u tdd --recursive",
     "tsc": "tsc"
   }

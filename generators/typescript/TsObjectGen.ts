@@ -19,11 +19,6 @@ module TsObjectGen {
         dstLines?: string[]
     ): string[] {
         var keys = Object.keys(objDef);
-        // keep single property object declarations on one line
-        if (keys.length === 1) {
-            prettyPrint = false;
-        }
-
         var propLines = keys.map(k => (prettyPrint ? initialIndentation + blockIndentation : " ") +
             propNameConverter(k) + ": " + dataConverter(objDef[k].type, objVarName + "." + k) + ",");
 

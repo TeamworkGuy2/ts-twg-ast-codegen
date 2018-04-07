@@ -4,7 +4,15 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.19.3](N/A) - 2018-03-31
+### [0.19.4](N/A) - 2018-04-07
+#### Fixed
+* `TsParameterGen.createConvertObjectCode()` now properly prettyPrints objects with one property
+* Issue passing `CodeAst.Type` parameter to `TypeConverter.createTypeTemplateToStringCode()`
+* Error trying to import only `SimpleTepmCompiler` into another project, added some .d.ts references
+
+
+--------
+### [0.19.3](https://github.com/TeamworkGuy2/ts-code-generator/commit/1c998785e3ba958d7f45444a94feb86ca981b493) - 2018-03-31
 #### Changed
 * Update to TypeScript 2.8
 * Update dependencies: @types/mocha

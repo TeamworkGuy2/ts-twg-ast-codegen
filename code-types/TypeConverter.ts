@@ -306,7 +306,7 @@ module TypeConverter {
             var arrayCount = typeInfo.arrayDimensions;
             var typeName = typeInfo.typeName;
 
-            switch (typeTemplate) {
+            switch (typeName) {
                 case "bool":
                 case "boolean":
                     if (<number>arrayCount > 0) { throw new Error("converting array of " + typeName + " to string not supported"); }
