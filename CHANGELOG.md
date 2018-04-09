@@ -4,7 +4,17 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
+### [0.19.5](N/A) - 2018-04-09
+#### Fixed
+* Fix error with certain TypeScript 2.8 compile settings
+
+
+--------
 ### [0.19.4](N/A) - 2018-04-07
+#### Added
+* tarball file in `bin/` for release
+* added npm script `build-package` to package.json referencing external process to generate tarball
+
 #### Fixed
 * `TsParameterGen.createConvertObjectCode()` now properly prettyPrints objects with one property
 * Issue passing `CodeAst.Type` parameter to `TypeConverter.createTypeTemplateToStringCode()`
