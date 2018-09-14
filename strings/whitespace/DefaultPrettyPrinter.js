@@ -3,7 +3,7 @@
  * @author TeamworkGuy2
  * @since 2015-8-9
  */
-var DefaultPrettyPrinter = /** @class */ (function () {
+var DefaultPrettyPrinter = (function () {
     function DefaultPrettyPrinter() {
     }
     DefaultPrettyPrinter.prototype.getIndent = function () {

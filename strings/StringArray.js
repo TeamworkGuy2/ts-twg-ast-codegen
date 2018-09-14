@@ -4,7 +4,7 @@
  * for adding prefixes and suffixes to arrays, as well as flattening nested arrays.
  * @author TeamworkGuy2
  */
-var StringArray = /** @class */ (function () {
+var StringArray = (function () {
     function StringArray() {
         this.strs = [];
     }
@@ -153,7 +153,6 @@ var StringArray = /** @class */ (function () {
         if (typeof obj === "string") {
             dst.push(obj);
         }
-        // Object
         else if (!Array.isArray(obj)) {
             var props = Object.keys(obj);
             // Object properties
@@ -163,7 +162,6 @@ var StringArray = /** @class */ (function () {
                 if (typeof prop === "string") {
                     dst.push(prop);
                 }
-                // Array
                 else if (Array.isArray(prop)) {
                     var ary = prop;
                     for (var ii = 0, sizeI = ary.length; ii < sizeI; ii++) {
@@ -175,13 +173,11 @@ var StringArray = /** @class */ (function () {
                         }
                     }
                 }
-                // Object
                 else {
                     toStringFromObjectsDeep(prop, dst);
                 }
             }
         }
-        // Array
         else {
             var ary = obj;
             for (var i = 0, size = ary.length; i < size; i++) {
@@ -358,11 +354,9 @@ var StringArray = /** @class */ (function () {
         if (index === origAry.length) {
             Array.prototype.push.apply(origAry, insertAry);
         }
-        // add to the beginning of the array
         else if (index === 0) {
             Array.prototype.unshift.apply(origAry, insertAry);
         }
-        // copy up to the index to insert, then insert the array, and copying the remaining portion
         else {
             var tmp = [];
             for (var i = 0; i < index; i++) {

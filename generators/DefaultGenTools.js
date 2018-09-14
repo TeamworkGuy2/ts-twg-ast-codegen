@@ -3,7 +3,7 @@
  * @author TeamworkGuy2
  * @since 2015-8-9
  */
-var DefaultGenTools = /** @class */ (function () {
+var DefaultGenTools = (function () {
     function DefaultGenTools() {
     }
     /** Create a GenTools implementation which uses the given PrettyPrinter for indentation

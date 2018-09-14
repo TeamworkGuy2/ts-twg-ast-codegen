@@ -35,10 +35,11 @@ declare module CodeAst {
     export interface Field {
         name: string;
         type: Type;
-        required?: boolean;
         accessModifiers: string[];
         annotations: Annotation[];
+        initializer?: number | boolean | string | null;
         comments: string[];
+        required?: boolean; // for compatiblity with Dto types
     }
 
 
@@ -46,8 +47,8 @@ declare module CodeAst {
         name: string;
         parameters: MethodParameter[];
         accessModifiers: string[];
-        returnType: Type;
         annotations: Annotation[];
+        returnType: Type;
         comments: string[];
     }
 
@@ -55,6 +56,8 @@ declare module CodeAst {
     export interface MethodParameter {
         name: string;
         type: Type;
+        parameterModifiers: string[];
+        annotations?: Annotation[];
         optional?: boolean;
         defaultValue?: string;
     }
@@ -62,12 +65,7 @@ declare module CodeAst {
 
     export interface Annotation {
         name: string;
-        arguments: {
-            ResponseFormat?: string;
-            RequestFormat?: string;
-            Method?: string;
-            UriTemplate?: string;
-        };
+        arguments: StringMap<string>;
     }
 
 }

@@ -4,7 +4,16 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.19.5](N/A) - 2018-04-09
+### [0.19.6](N/A) - 2018-09-14
+#### Changed
+* Adjusted ast-types.d.ts to match jparse-code@0.15.4
+  * Added `Field.initializer`
+  * Added `MethodParameter` `parameterModifiers` and `annotations`
+  * Changed `Annotation.arguments` to be a string map
+
+
+--------
+### [0.19.5](https://github.com/TeamworkGuy2/ts-code-generator/commit/8b146cb576f135828966c3f4e1d7834f7e289e92) - 2018-04-09
 #### Fixed
 * Fix error with certain TypeScript 2.8 compile settings
 
