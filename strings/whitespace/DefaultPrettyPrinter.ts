@@ -9,6 +9,13 @@ class DefaultPrettyPrinter implements PrettyPrinter {
     private currentIndent: string;
 
 
+    constructor(defaultIndent: string, currentLevel: number, currentIndent: string) {
+        this.defaultIndent = defaultIndent;
+        this.currentLevel = currentLevel;
+        this.currentIndent = currentIndent;
+    }
+
+
     public getIndent(): string {
         return this.currentIndent;
     }
@@ -33,12 +40,8 @@ class DefaultPrettyPrinter implements PrettyPrinter {
 
 
     public static newInst(indent: string, startLevel: number = 0): DefaultPrettyPrinter {
-        var pp = new DefaultPrettyPrinter();
         var indentStr = new Array(startLevel + 1).join(indent);
-        pp.defaultIndent = indent;
-        pp.currentLevel = startLevel;
-        pp.currentIndent = indentStr;
-
+        var pp = new DefaultPrettyPrinter(indent, startLevel, indentStr);
         return pp;
     }
 

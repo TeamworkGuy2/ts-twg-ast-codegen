@@ -7,11 +7,15 @@ class DefaultGenTools implements GenTools {
     public printer: PrettyPrinter;
 
 
+    constructor(printer: PrettyPrinter) {
+        this.printer = printer;
+    }
+
+
     /** Create a GenTools implementation which uses the given PrettyPrinter for indentation
      */
     public static newInst(printer: PrettyPrinter): DefaultGenTools {
-        var genTools = new DefaultGenTools();
-        genTools.printer = printer;
+        var genTools = new DefaultGenTools(printer);
         return genTools;
     }
 

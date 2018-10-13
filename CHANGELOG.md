@@ -4,7 +4,17 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.19.6](N/A) - 2018-09-14
+### [0.20.0](N/A) - 2018-10-13
+#### Changed
+* Update to TypeScript 3.1 and fix code to work with new keyof behavior
+* Enable tsconfig.json `strict` to replace other strict options
+
+#### Removed
+* code-types.d.ts since it is not used
+
+
+--------
+### [0.19.6](https://github.com/TeamworkGuy2/ts-code-generator/commit/1b0472bbba9deacb21e90e15b14b70a77244df76) - 2018-09-14
 #### Changed
 * Adjusted ast-types.d.ts to match jparse-code@0.15.4
   * Added `Field.initializer`
@@ -170,7 +180,7 @@ Converted tests from qunit to mocha and chai
 
 
 --------
-### [0.14.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/364a2db87aac9ff2db20d5de51e52fd1cbca337c) - 2016-5-14
+### [0.14.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/4a97a522f8eb1225a50414dbffb61d1fbdb210bc) - 2016-5-14
 Integrate with [lokijs-collections](https://github.com/TeamworkGuy2/lokijs-collections) ModelDefinitions and DataCollection/DtoCollection Models
 
 #### Added

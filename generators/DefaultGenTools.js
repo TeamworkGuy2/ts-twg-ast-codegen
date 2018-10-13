@@ -3,14 +3,14 @@
  * @author TeamworkGuy2
  * @since 2015-8-9
  */
-var DefaultGenTools = (function () {
-    function DefaultGenTools() {
+var DefaultGenTools = /** @class */ (function () {
+    function DefaultGenTools(printer) {
+        this.printer = printer;
     }
     /** Create a GenTools implementation which uses the given PrettyPrinter for indentation
      */
     DefaultGenTools.newInst = function (printer) {
-        var genTools = new DefaultGenTools();
-        genTools.printer = printer;
+        var genTools = new DefaultGenTools(printer);
         return genTools;
     };
     /** Indent each of the 'lines' and append them to the 'dst' array, return 'dst'

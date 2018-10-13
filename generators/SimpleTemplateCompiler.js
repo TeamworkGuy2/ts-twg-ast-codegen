@@ -24,7 +24,7 @@
  * // => "2. Welcome, Jill Will - null"
  * @author TeamworkGuy2
  */
-var SimpleTemplateCompiler = (function () {
+var SimpleTemplateCompiler = /** @class */ (function () {
     /** Create a template definition, ready to parse a template source string
      * @param delimiterStart the text that identifies the start of a template variable
      * @param delimiterStop the text that identifies the end of a template variable (may be the same as 'delimiterStart')
@@ -73,6 +73,7 @@ var SimpleTemplateCompiler = (function () {
                     tmplResolved = dataVarName;
                 }
             }
+            // if no matching expression name-value exists, the inverted 'dataNameToExpression' value is used if one with a matching name is found
             else if (!!(dataVarName = this.expressionToDataName[tmpl])) {
                 tmplResolved = templateData[dataVarName];
             }

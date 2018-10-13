@@ -3,8 +3,11 @@
  * @author TeamworkGuy2
  * @since 2015-8-9
  */
-var DefaultPrettyPrinter = (function () {
-    function DefaultPrettyPrinter() {
+var DefaultPrettyPrinter = /** @class */ (function () {
+    function DefaultPrettyPrinter(defaultIndent, currentLevel, currentIndent) {
+        this.defaultIndent = defaultIndent;
+        this.currentLevel = currentLevel;
+        this.currentIndent = currentIndent;
     }
     DefaultPrettyPrinter.prototype.getIndent = function () {
         return this.currentIndent;
@@ -26,11 +29,8 @@ var DefaultPrettyPrinter = (function () {
     };
     DefaultPrettyPrinter.newInst = function (indent, startLevel) {
         if (startLevel === void 0) { startLevel = 0; }
-        var pp = new DefaultPrettyPrinter();
         var indentStr = new Array(startLevel + 1).join(indent);
-        pp.defaultIndent = indent;
-        pp.currentLevel = startLevel;
-        pp.currentIndent = indentStr;
+        var pp = new DefaultPrettyPrinter(indent, startLevel, indentStr);
         return pp;
     };
     return DefaultPrettyPrinter;

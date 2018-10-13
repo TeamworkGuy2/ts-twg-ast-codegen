@@ -28,7 +28,7 @@ class SimpleTemplateCompiler<T extends { [id: string]: any }> {
     public delimiterStart: string;
     public delimiterStop: string;
     public dataNameToExpression: T;
-    public expressionToDataName: { [id: string]: keyof T };
+    public expressionToDataName: { [id: string]: (keyof T) & string };
     public expressions: { [id: string]: string };
 
 
