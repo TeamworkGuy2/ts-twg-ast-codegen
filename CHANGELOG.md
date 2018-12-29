@@ -4,10 +4,19 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.20.0](N/A) - 2018-10-13
+### [0.20.1](N/A) - 2018-12-29
+#### Changed
+* Update to TypeScript 3.2
+* Update @types dependencies
+
+
+--------
+### [0.20.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/4fd4bdad8ae7d618d99d76c378bcadc23b5652f5) - 2018-10-13
 #### Changed
 * Update to TypeScript 3.1 and fix code to work with new keyof behavior
+* Update dev dependencies and @types
 * Enable tsconfig.json `strict` to replace other strict options
+* Removed compiled bin tarball in favor of git tags and github releases
 
 #### Removed
 * code-types.d.ts since it is not used
