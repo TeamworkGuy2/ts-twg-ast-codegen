@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.20.1](N/A) - 2018-12-29
+### [0.20.2](N/A) - 2018-12-29
+#### Changed
+* Forgot to update package.json in previous version `0.20.1`
+
+
+--------
+### [0.20.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/e84de4ff36b928c15d80bdf2aa8995a20504d9b5) - 2018-12-29
 #### Changed
 * Update to TypeScript 3.2
 * Update @types dependencies
