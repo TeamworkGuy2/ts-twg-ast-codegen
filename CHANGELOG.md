@@ -4,7 +4,14 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.20.2](N/A) - 2018-12-29
+### [0.20.3](N/A) - 2019-03-19
+#### Changed
+* Adjusted ast-types.d.ts to match jparse-code@0.16.1
+  * Added `ClassSignature.annotations` and `comments`
+
+
+--------
+### [0.20.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/198310f564c00f49a2e53b90b7fca0cd4f2d18e0) - 2018-12-29
 #### Changed
 * Forgot to update package.json in previous version `0.20.1`
 

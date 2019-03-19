@@ -20,6 +20,8 @@ declare module CodeAst {
         genericParameters?: Type[];
         extendClassName?: Type;
         implementClassNames?: Type[];
+        annotations?: Annotation[];
+        comments?: string[];
     }
 
 
