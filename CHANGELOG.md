@@ -4,7 +4,15 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.20.3](N/A) - 2019-03-19
+### [0.21.0](N/A) - 2019-03-20
+#### Changed
+ * Renamed project from `ts-code-generator` -> `ts-twg-ast-codegen` to reflect this project's basis on the TWG AST format, see [jparse-code](https://github.com/TeamworkGuy2/JParseCode).
+ * Consolidated some `ExtractAst` and `TypeConverter` code
+ * Now dependent on `String.prototype.repeat()` instead of `new Array().join()` internally which may not be available on older platforms without a polyfill. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/repeat#Polyfill
+
+
+--------
+### [0.20.3](https://github.com/TeamworkGuy2/ts-code-generator/commit/d3710dd543b38e0e80f788e0b29a1b167154795b) - 2019-03-19
 #### Changed
 * Adjusted ast-types.d.ts to match jparse-code@0.16.1
   * Added `ClassSignature.annotations` and `comments`

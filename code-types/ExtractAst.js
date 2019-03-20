@@ -14,12 +14,12 @@ var ExtractAst;
     function extractInheritedTypeNames(childTypes, allTypeDefs, transformTypeName) {
         var typesUsed = {};
         // TODO doesn't recursively extract parents beyond the first inheritance level
-        for (var p = 0, sizeP = childTypes.length; p < sizeP; p++) {
-            var classDef = allTypeDefs[childTypes[p]];
+        for (var i = 0, size = childTypes.length; i < size; i++) {
+            var classDef = allTypeDefs[childTypes[i]];
             if (classDef != null && classDef.classSignature.extendClassName) {
                 var extendTypes = extractGenericTypes(classDef.classSignature.extendClassName);
                 for (var k = 0, sizeK = extendTypes.length; k < sizeK; k++) {
-                    var t1 = transformTypeName ? transformTypeName(extendTypes[k]) : extendTypes[k];
+                    var t1 = transformTypeName != null ? transformTypeName(extendTypes[k]) : extendTypes[k];
                     if (t1 != null) {
                         typesUsed[t1] = true;
                     }
@@ -29,7 +29,7 @@ var ExtractAst;
                 for (var j = 0, sizeJ = classDef.classSignature.implementClassNames.length; j < sizeJ; j++) {
                     var implementTypes = extractGenericTypes(classDef.classSignature.implementClassNames[j]);
                     for (var k = 0, sizeK = implementTypes.length; k < sizeK; k++) {
-                        var t2 = transformTypeName ? transformTypeName(implementTypes[k]) : implementTypes[k];
+                        var t2 = transformTypeName != null ? transformTypeName(implementTypes[k]) : implementTypes[k];
                         if (t2 != null) {
                             typesUsed[t2] = true;
                         }
@@ -42,24 +42,23 @@ var ExtractAst;
     ExtractAst.extractInheritedTypeNames = extractInheritedTypeNames;
     /** Get a map of all none primitive (number, boolean, etc.) field type names from the specified group of class definitions
      * @param childTypes
-     * @param availableTypeDefs
+     * @param typeDefs
      * @param includePrimitiveTypes
      */
-    function extractFieldTypeNames(childTypes, availableTypeDefs, includePrimitiveTypes, transformTypeName) {
+    function extractFieldTypeNames(childTypes, typeDefs, includePrimitiveTypes, transformTypeName) {
         var typesUsed = {};
         // TODO doesn't recursively extract generic beyond the fields' own generic types
         for (var p = 0, sizeP = childTypes.length; p < sizeP; p++) {
-            var classDef = availableTypeDefs[childTypes[p]];
+            var classDef = typeDefs[childTypes[p]];
             if (classDef != null && classDef.fields) {
                 var fields = classDef.fields;
                 for (var k = 0, sizeK = fields.length; k < sizeK; k++) {
                     // extract generic types
                     var fieldTypes = extractGenericTypes(fields[k].type);
                     for (var m = 0, sizeM = fieldTypes.length; m < sizeM; m++) {
-                        var typeName = transformTypeName ? transformTypeName(fieldTypes[m]) : fieldTypes[m]; // returns null for types not starting with upper-case letter (which automatically excludes most primitives)
+                        var typeName = transformTypeName != null ? transformTypeName(fieldTypes[m]) : fieldTypes[m]; // returns null for types not starting with upper-case letter (which automatically excludes most primitives)
                         if (typeName) {
-                            var isPrimitive = TypeConverter.isPrimitive(typeName) || TypeConverter.isCore(typeName);
-                            if (includePrimitiveTypes || !isPrimitive) {
+                            if (includePrimitiveTypes || (!TypeConverter.isPrimitive(typeName) && !TypeConverter.isCore(typeName))) {
                                 typesUsed[typeName] = true;
                             }
                         }

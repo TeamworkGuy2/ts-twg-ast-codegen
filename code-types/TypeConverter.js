@@ -34,21 +34,16 @@ var TypeConverter;
             dst.push(nullableSymbol);
         }
         if (type.arrayDimensions) {
-            var needsParens = matchAny(dst, function (s) { return s.indexOf("|") > -1 || s.indexOf("&") > -1; });
-            if (needsParens) {
-                dst.unshift("(");
-                dst.push(")");
+            for (var i = 0, size = dst.length; i < size; i++) {
+                var str = dst[i];
+                if (str.indexOf("|") > -1 || str.indexOf("&") > -1) {
+                    dst.unshift("(");
+                    dst.push(")");
+                    break;
+                }
             }
-            dst.push(new Array(type.arrayDimensions + 1).join("[]"));
+            dst.push("[]".repeat(type.arrayDimensions));
         }
-    }
-    function matchAny(ary, filter) {
-        for (var i = 0, size = ary.length; i < size; i++) {
-            if (filter(ary[i], i)) {
-                return true;
-            }
-        }
-        return false;
     }
     /** Parse a simple data type string, the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
      */
@@ -220,7 +215,7 @@ var TypeConverter;
             var needsParens = arrayCount > 0 && (tsType.indexOf("|") > -1 || tsType.indexOf("&") > -1);
             if (needsParens)
                 tsType = "(" + tsType + ")";
-            return tsType + (arrayCount > 0 ? new Array(arrayCount + 1).join("[]") : "");
+            return tsType + (arrayCount > 0 ? "[]".repeat(arrayCount) : "");
         };
         /** Convert primitive and common builtin C# and Java types to TypeScript equivalent types
          * @param typeName the type name (i.e. 'bool' or 'String')

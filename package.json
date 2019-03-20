@@ -1,13 +1,13 @@
 {
-  "name": "ts-code-generator",
-  "version": "0.20.3",
+  "name": "ts-twg-ast-codegen",
+  "version": "0.21.0",
   "description": "TypeScript code generator utils",
   "author": "TeamworkGuy2",
-  "homepage": "https://github.com/TeamworkGuy2/ts-code-generator",
+  "homepage": "https://github.com/TeamworkGuy2/ts-twg-ast-codegen",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TeamworkGuy2/ts-code-generator.git"
+    "url": "https://github.com/TeamworkGuy2/ts-twg-ast-codegen.git"
   },
   "dependencies": {},
   "devDependencies": {

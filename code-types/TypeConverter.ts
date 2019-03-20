@@ -36,23 +36,17 @@ module TypeConverter {
         }
 
         if (type.arrayDimensions) {
-            var needsParens = matchAny(dst, (s) => s.indexOf("|") > -1 || s.indexOf("&") > -1);
-            if (needsParens) {
-                dst.unshift("(");
-                dst.push(")");
+            for (var i = 0, size = dst.length; i < size; i++) {
+                var str = dst[i];
+                if (str.indexOf("|") > -1 || str.indexOf("&") > -1) {
+                    dst.unshift("(");
+                    dst.push(")");
+                    break;
+                }
             }
-            dst.push(new Array(type.arrayDimensions + 1).join("[]"));
-        }
-    }
 
-
-    function matchAny<T>(ary: T[], filter: (value: T, index: number) => boolean) {
-        for (var i = 0, size = ary.length; i < size; i++) {
-            if (filter(ary[i], i)) {
-                return true;
-            }
+            dst.push("[]".repeat(type.arrayDimensions));
         }
-        return false;
     }
 
 
@@ -245,7 +239,7 @@ module TypeConverter {
 
             var needsParens = <number>arrayCount > 0 && (tsType.indexOf("|") > -1 || tsType.indexOf("&") > -1);
             if (needsParens) tsType = "(" + tsType + ")";
-            return tsType + (<number>arrayCount > 0 ? new Array(<number>arrayCount + 1).join("[]") : "");
+            return tsType + (<number>arrayCount > 0 ? "[]".repeat(<number>arrayCount) : "");
         }
 
 

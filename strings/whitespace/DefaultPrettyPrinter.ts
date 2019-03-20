@@ -22,7 +22,7 @@ class DefaultPrettyPrinter implements PrettyPrinter {
 
 
     public indent(levels: number = 1): void {
-        var indentStr = this.currentIndent + (levels === 1 ? this.defaultIndent : new Array(levels + 1).join(this.defaultIndent));
+        var indentStr = this.currentIndent + (levels === 1 ? this.defaultIndent : this.defaultIndent.repeat(levels));
         this.currentIndent = indentStr;
         this.currentLevel += levels;
     }
@@ -40,7 +40,7 @@ class DefaultPrettyPrinter implements PrettyPrinter {
 
 
     public static newInst(indent: string, startLevel: number = 0): DefaultPrettyPrinter {
-        var indentStr = new Array(startLevel + 1).join(indent);
+        var indentStr = indent.repeat(startLevel);
         var pp = new DefaultPrettyPrinter(indent, startLevel, indentStr);
         return pp;
     }

@@ -15,26 +15,31 @@ module ExtractAst {
         var typesUsed: StringMap<boolean> = {};
 
         // TODO doesn't recursively extract parents beyond the first inheritance level
-        for (var p = 0, sizeP = childTypes.length; p < sizeP; p++) {
-            var classDef = allTypeDefs[childTypes[p]];
-            if (classDef != null && classDef.classSignature.extendClassName) {
-                var extendTypes = extractGenericTypes(classDef.classSignature.extendClassName);
+        for (var i = 0, size = childTypes.length; i < size; i++) {
+            var classDef = allTypeDefs[childTypes[i]];
+            if (classDef != null) {
+                var classSig = classDef.classSignature;
 
-                for (var k = 0, sizeK = extendTypes.length; k < sizeK; k++) {
-                    var t1 = transformTypeName ? transformTypeName(extendTypes[k]) : extendTypes[k];
-                    if (t1 != null) {
-                        typesUsed[t1] = true;
+                if (classSig.extendClassName != null) {
+                    var extendTypes = extractGenericTypes(classSig.extendClassName);
+
+                    for (var k = 0, sizeK = extendTypes.length; k < sizeK; k++) {
+                        var t1 = transformTypeName != null ? transformTypeName(extendTypes[k]) : extendTypes[k];
+                        if (t1 != null) {
+                            typesUsed[t1] = true;
+                        }
                     }
                 }
-            }
-            if (classDef != null && classDef.classSignature.implementClassNames) {
-                for (var j = 0, sizeJ = classDef.classSignature.implementClassNames.length; j < sizeJ; j++) {
-                    var implementTypes = extractGenericTypes(classDef.classSignature.implementClassNames[j]);
 
-                    for (var k = 0, sizeK = implementTypes.length; k < sizeK; k++) {
-                        var t2 = transformTypeName ? transformTypeName(implementTypes[k]) : implementTypes[k];
-                        if (t2 != null) {
-                            typesUsed[t2] = true;
+                if (classSig.implementClassNames != null) {
+                    for (var j = 0, sizeJ = classSig.implementClassNames.length; j < sizeJ; j++) {
+                        var implementTypes = extractGenericTypes(classSig.implementClassNames[j]);
+
+                        for (var p = 0, sizeP = implementTypes.length; p < sizeP; p++) {
+                            var t2 = transformTypeName != null ? transformTypeName(implementTypes[p]) : implementTypes[p];
+                            if (t2 != null) {
+                                typesUsed[t2] = true;
+                            }
                         }
                     }
                 }
@@ -46,25 +51,24 @@ module ExtractAst {
 
     /** Get a map of all none primitive (number, boolean, etc.) field type names from the specified group of class definitions
      * @param childTypes
-     * @param availableTypeDefs
+     * @param typeDefs
      * @param includePrimitiveTypes
      */
-    export function extractFieldTypeNames(childTypes: string[], availableTypeDefs: StringMap<CodeAst.Class>, includePrimitiveTypes: boolean, transformTypeName?: (type: string) => string): StringMap<boolean> {
+    export function extractFieldTypeNames(childTypes: string[], typeDefs: StringMap<CodeAst.Class>, includePrimitiveTypes: boolean, transformTypeName?: (type: string) => string): StringMap<boolean> {
         var typesUsed: StringMap<boolean> = {};
 
         // TODO doesn't recursively extract generic beyond the fields' own generic types
         for (var p = 0, sizeP = childTypes.length; p < sizeP; p++) {
-            var classDef = availableTypeDefs[childTypes[p]];
-            if (classDef != null && classDef.fields) {
+            var classDef = typeDefs[childTypes[p]];
+            if (classDef != null && classDef.fields != null) {
                 var fields = classDef.fields;
                 for (var k = 0, sizeK = fields.length; k < sizeK; k++) {
                     // extract generic types
                     var fieldTypes = extractGenericTypes(fields[k].type);
                     for (var m = 0, sizeM = fieldTypes.length; m < sizeM; m++) {
-                        var typeName = transformTypeName ? transformTypeName(fieldTypes[m]) : fieldTypes[m]; // returns null for types not starting with upper-case letter (which automatically excludes most primitives)
-                        if (typeName) {
-                            var isPrimitive = TypeConverter.isPrimitive(typeName) || TypeConverter.isCore(typeName);
-                            if (includePrimitiveTypes || !isPrimitive) {
+                        var typeName = transformTypeName != null ? transformTypeName(fieldTypes[m]) : fieldTypes[m]; // returns null for types not starting with upper-case letter (which automatically excludes most primitives)
+                        if (typeName != null) {
+                            if (includePrimitiveTypes || (!TypeConverter.isPrimitive(typeName) && !TypeConverter.isCore(typeName))) {
                                 typesUsed[typeName] = true;
                             }
                         }
@@ -84,7 +88,7 @@ module ExtractAst {
     export function extractGenericTypes(type: CodeAst.Type, dst: string[] = []): string[] {
         dst.push(type.typeName);
 
-        if (type.genericParameters) {
+        if (type.genericParameters != null) {
             for (var i = 0, size = type.genericParameters.length; i < size; i++) {
                 extractGenericTypes(type.genericParameters[i], dst);
             }
