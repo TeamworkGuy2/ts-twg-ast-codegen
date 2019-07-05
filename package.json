@@ -1,6 +1,6 @@
 {
-  "name": "ts-twg-ast-codegen",
-  "version": "0.21.0",
+  "name": "@twg2/ts-twg-ast-codegen",
+  "version": "0.21.1",
   "description": "TypeScript code generator utils",
   "author": "TeamworkGuy2",
   "homepage": "https://github.com/TeamworkGuy2/ts-twg-ast-codegen",
@@ -15,10 +15,11 @@
     "@types/mocha": "~5.2.5",
     "chai": "~4.2.0",
     "mocha": "~5.2.0",
-    "typescript": "~3.2.2"
+    "typescript": "~3.5.2"
   },
   "scripts": {
-    "test": "mocha -u tdd --recursive",
-    "tsc": "tsc"
+    "publish": "npm publish --access public",
+    "test": "node node_modules/mocha/bin/_mocha -u tdd --recursive",
+    "tsc": "node node_modules/typescript/bin/tsc"
   }
 }

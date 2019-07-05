@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.21.0](N/A) - 2019-03-20
+### [0.21.1](N/A) - 2019-07-05
+#### Changed
+* Update to TypeScript 3.5
+
+
+--------
+### [0.21.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/ee5e8ea94a2ca6657d68ad4fcd74d7b54c1b9e19) - 2019-03-20
 #### Changed
  * Renamed project from `ts-code-generator` -> `ts-twg-ast-codegen` to reflect this project's basis on the TWG AST format, see [jparse-code](https://github.com/TeamworkGuy2/JParseCode).
  * Consolidated some `ExtractAst` and `TypeConverter` code
@@ -12,27 +18,27 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.20.3](https://github.com/TeamworkGuy2/ts-code-generator/commit/d3710dd543b38e0e80f788e0b29a1b167154795b) - 2019-03-19
+### [0.20.3](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/d3710dd543b38e0e80f788e0b29a1b167154795b) - 2019-03-19
 #### Changed
 * Adjusted ast-types.d.ts to match jparse-code@0.16.1
   * Added `ClassSignature.annotations` and `comments`
 
 
 --------
-### [0.20.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/198310f564c00f49a2e53b90b7fca0cd4f2d18e0) - 2018-12-29
+### [0.20.2](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/198310f564c00f49a2e53b90b7fca0cd4f2d18e0) - 2018-12-29
 #### Changed
 * Forgot to update package.json in previous version `0.20.1`
 
 
 --------
-### [0.20.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/e84de4ff36b928c15d80bdf2aa8995a20504d9b5) - 2018-12-29
+### [0.20.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/e84de4ff36b928c15d80bdf2aa8995a20504d9b5) - 2018-12-29
 #### Changed
 * Update to TypeScript 3.2
 * Update @types dependencies
 
 
 --------
-### [0.20.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/4fd4bdad8ae7d618d99d76c378bcadc23b5652f5) - 2018-10-13
+### [0.20.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/4fd4bdad8ae7d618d99d76c378bcadc23b5652f5) - 2018-10-13
 #### Changed
 * Update to TypeScript 3.1 and fix code to work with new keyof behavior
 * Update dev dependencies and @types
@@ -44,7 +50,7 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.19.6](https://github.com/TeamworkGuy2/ts-code-generator/commit/1b0472bbba9deacb21e90e15b14b70a77244df76) - 2018-09-14
+### [0.19.6](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/1b0472bbba9deacb21e90e15b14b70a77244df76) - 2018-09-14
 #### Changed
 * Adjusted ast-types.d.ts to match jparse-code@0.15.4
   * Added `Field.initializer`
@@ -53,7 +59,7 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.19.5](https://github.com/TeamworkGuy2/ts-code-generator/commit/8b146cb576f135828966c3f4e1d7834f7e289e92) - 2018-04-09
+### [0.19.5](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/8b146cb576f135828966c3f4e1d7834f7e289e92) - 2018-04-09
 #### Fixed
 * Fix error with certain TypeScript 2.8 compile settings
 
@@ -71,7 +77,7 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.19.3](https://github.com/TeamworkGuy2/ts-code-generator/commit/1c998785e3ba958d7f45444a94feb86ca981b493) - 2018-03-31
+### [0.19.3](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/1c998785e3ba958d7f45444a94feb86ca981b493) - 2018-03-31
 #### Changed
 * Update to TypeScript 2.8
 * Update dependencies: @types/mocha
@@ -83,7 +89,7 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.19.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/e80e73f49dcc5213eac7e020d04148860577843e) - 2018-03-01
+### [0.19.2](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/e80e73f49dcc5213eac7e020d04148860577843e) - 2018-03-01
 #### Changed
 * Update to TypeScript 2.7
 * Update dependencies: mocha, @types/chai, @types/mocha, @types/node
@@ -91,25 +97,25 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.19.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/5a8f7f9a0b70485fa34781c83cd2f6fa61e8d97c) - 2017-11-19
+### [0.19.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/5a8f7f9a0b70485fa34781c83cd2f6fa61e8d97c) - 2017-11-19
 #### Changed
 * `package.json` added `strictNullChecks` and code changes for null types
 
 
 --------
-### [0.19.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/90e3c37c4b45ed46227c6713bf5b376b1b551b76) - 2017-10-26
+### [0.19.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/90e3c37c4b45ed46227c6713bf5b376b1b551b76) - 2017-10-26
 #### Removed
 * Removed interfaces: `DtoPropertyTemplatedNamed`, `DtoPropertyMap`, `DtoPropertyTemplateMap`, `DtoModelTemplate`, and `DtoModelTemplateNamed` since they could either be easily replaced by `StringMap<*>` types or were unused.
 
 
 --------
-### [0.18.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/e17236bc267a7535bc0b9b78297157d56aed8c07) - 2017-10-16
+### [0.18.2](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/e17236bc267a7535bc0b9b78297157d56aed8c07) - 2017-10-16
 #### Fixed
 * Fixed TypeConverter function calls to include new `nullableSymbol` parameter
 
 
 --------
-### [0.18.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/9e0179b56af883c687da52a9f09633e80b953977) - 2017-10-16
+### [0.18.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/9e0179b56af883c687da52a9f09633e80b953977) - 2017-10-16
 #### Changed
 * TypeConverter `typeToString()`, `parseAndConvertTypeTemplate()`, and `parseAndConvertTypeTemplateString()` functions now include an optional `nullableSymbol` parameter (default value `?` for C#), you can pass ` | null` for TypeScript and types will be correctly parenthesized
 * Added a `TypeConverter.typeToString()` test
@@ -117,7 +123,7 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.18.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/6d1c625e1e3d5ecc9367947824e2d696ed404753) - 2017-10-14
+### [0.18.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/6d1c625e1e3d5ecc9367947824e2d696ed404753) - 2017-10-14
 #### Fixed
 * Fixed `ast-types.d.ts` `CodeAst` definitions to properly match [jparse-code](https://github.com/TeamworkGuy2/JParseCode) library output
 * Fixed `StringCase` to better handle numbers when converting to underscore casing
@@ -128,7 +134,7 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.17.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/299eff221acb01d404ed303e9674ac59ddac2ec9) - 2017-10-10
+### [0.17.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/299eff221acb01d404ed303e9674ac59ddac2ec9) - 2017-10-10
 #### Changed
 * Marked `DefaultGenTools` `printer` field public, modify at your own risk
 * Fixed `package.json` name field (forgot to rename when project renamed to `ts-code-generator@0.4.0`)
@@ -139,26 +145,26 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.16.6](https://github.com/TeamworkGuy2/ts-code-generator/commit/86cffc15cd38354b990e04946d4ebd8ab57dd86c) - 2017-08-06
+### [0.16.6](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/86cffc15cd38354b990e04946d4ebd8ab57dd86c) - 2017-08-06
 #### Changed
 * Update to TypeScript 2.4
 
 
 --------
-### [0.16.5](https://github.com/TeamworkGuy2/ts-code-generator/commit/789fe6b9eee548e5325d6e9b250749ee1fd6d0fe) - 2017-05-09
+### [0.16.5](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/789fe6b9eee548e5325d6e9b250749ee1fd6d0fe) - 2017-05-09
 #### Changed
 * Update to TypeScript 2.3, added tsconfig.json, use @types/ definitions
 * Documentation changes to work better with Visual Studio
 
 
 --------
-### [0.16.4](https://github.com/TeamworkGuy2/ts-code-generator/commit/a4e1946176848c2984fbf08c511d5336d035aa97) - 2017-04-13
+### [0.16.4](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/a4e1946176848c2984fbf08c511d5336d035aa97) - 2017-04-13
 #### Changed
 * Renamed SimpleTemplateCompiler internal variables and made them public (delimiterStart, delimiterEnd, dataNameToExpression, expressionToDataName, expressions)
 
 
 --------
-### [0.16.3](https://github.com/TeamworkGuy2/ts-code-generator/commit/cf848451d9b5883da455137b700a193492bea380) - 2017-01-28
+### [0.16.3](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/cf848451d9b5883da455137b700a193492bea380) - 2017-01-28
 #### Added
 * Added `FieldGen.FieldGenConverters` interface
 
@@ -167,20 +173,20 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.16.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/502885a617bd36175a91973166b0d45d3300e5c4) - 2016-12-21
+### [0.16.2](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/502885a617bd36175a91973166b0d45d3300e5c4) - 2016-12-21
 #### Changed
 * Removed "use strict" and tested compatibility with TypeScript 2.0
 
 
 --------
-### [0.16.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/def1365ebb9030eabbe67814bce0a027b24f740a) - 2016-08-24
+### [0.16.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/def1365ebb9030eabbe67814bce0a027b24f740a) - 2016-08-24
 #### Fixed
 Fixed `DtoPropertyConverter.parseAndConvertTemplate()` to handle `defaultValue` correctly
 Converted tests from qunit to mocha and chai
 
 
 --------
-### [0.16.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/0251c088bc27be13b133e31a96454aa2140cb413) - 2016-08-23
+### [0.16.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/0251c088bc27be13b133e31a96454aa2140cb413) - 2016-08-23
 #### Changed
 * Changed some TransformFile functions
   * Changed return/callback types to `{ srcLines: string[]; transformedLines: string[] }`
@@ -194,7 +200,7 @@ Converted tests from qunit to mocha and chai
 
 
 --------
-### [0.15.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/a6b52ff3c4b61f2e61df9a5977027473bda3dbe3) - 2016-5-15
+### [0.15.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/a6b52ff3c4b61f2e61df9a5977027473bda3dbe3) - 2016-5-15
 #### Added
 * TypeConverter functions: isPrimitive(), isCore(), and isGeneric()
 
@@ -210,7 +216,7 @@ Converted tests from qunit to mocha and chai
 
 
 --------
-### [0.14.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/4a97a522f8eb1225a50414dbffb61d1fbdb210bc) - 2016-5-14
+### [0.14.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/4a97a522f8eb1225a50414dbffb61d1fbdb210bc) - 2016-5-14
 Integrate with [lokijs-collections](https://github.com/TeamworkGuy2/lokijs-collections) ModelDefinitions and DataCollection/DtoCollection Models
 
 #### Added
@@ -230,7 +236,7 @@ Integrate with [lokijs-collections](https://github.com/TeamworkGuy2/lokijs-colle
 
 
 --------
-### [0.14.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/6e6f33ce252270d07b50a28d0a940de721801d94) - 2016-5-14
+### [0.14.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/6e6f33ce252270d07b50a28d0a940de721801d94) - 2016-5-14
 #### Added
 * CodAst.Field.required field to interface
 * model-types.d.ts added:
@@ -258,7 +264,7 @@ Changes designed to use CodeAst interfaces as common type wherever possible
 
 
 --------
-### [0.13.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/c6063c79d003b5e52e5d03ce9fe9c22a957818bc) - 2016-5-13
+### [0.13.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/c6063c79d003b5e52e5d03ce9fe9c22a957818bc) - 2016-5-13
 #### Added
   * DtoModelTemplateNamed to model-types.d.ts
   * Unit test for DefaultGenTools and DefaultPrettyPrinter
@@ -280,7 +286,7 @@ Changes designed to use CodeAst interfaces as common type wherever possible
 
 
 --------
-### [0.12.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/c2c63681d200f4e03a2f1b3106fc4619614b859b) - 2016-4-16
+### [0.12.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/c2c63681d200f4e03a2f1b3106fc4619614b859b) - 2016-4-16
 #### Added
 * A CHANGELOG.md covering all previous releases after being reminded about the need for change logs from http://keepachangelog.com/
 
@@ -295,13 +301,13 @@ Changes designed to use CodeAst interfaces as common type wherever possible
 
 
 --------
-### [0.11.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/c7d3e9cc5805c4946b5ceced07841780c74c271d) - 2016-03-22
+### [0.11.2](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/c7d3e9cc5805c4946b5ceced07841780c74c271d) - 2016-03-22
 #### Changed
 * TsFieldGen.createFieldsSrcCode() added 'fieldName' and 'context' (CodeContext) parameters to callbacks
 
 
 --------
-### [0.11.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/a8afba91424b9d6846a9f6d940af0888284abf03) - 2016-03-21
+### [0.11.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/a8afba91424b9d6846a9f6d940af0888284abf03) - 2016-03-21
 #### Added
 * TsFieldGen.typeInfoToField() - create a CodeAst field with default 'public' access from a field name and 'TypeInfo'
 
@@ -316,7 +322,7 @@ Changes designed to use CodeAst interfaces as common type wherever possible
 
 
 --------
-### [0.11.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/9234721bc5231e5b8777cc539a0d66799d6859f0) - 2016-03-20
+### [0.11.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/9234721bc5231e5b8777cc539a0d66799d6859f0) - 2016-03-20
 #### Added
 * new generators/typescript/TsFieldGen.ts for generating TypeScript field declarations from CodeAst fields, includes: createFieldsSrcCode()
 * new generators/typescript/TsObjectGen.ts for generating an object's fields from a string map of 'TypeInfo', includes: createConvertObjectCode()
@@ -332,13 +338,13 @@ Changes designed to use CodeAst interfaces as common type wherever possible
 
 
 --------
-### [0.10.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/3ef89ccb4ba8f5eac93d4559ad6efd14121050df) - 2016-03-19
+### [0.10.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/3ef89ccb4ba8f5eac93d4559ad6efd14121050df) - 2016-03-19
 #### Changed
 * Renamed ExtractTypes -> ExtractAst and added claimParams() and findOneAnnotationProp()
 
 
 --------
-### [0.9.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/4aebab6e53f8c63b2d8aa7eb11ff94910d81a1f8) - 2016-03-19
+### [0.9.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/4aebab6e53f8c63b2d8aa7eb11ff94910d81a1f8) - 2016-03-19
 #### Changed
 * Renamed project 'ts-code-gen-tools' and standardized folder names using dash-case
 * Moved whitespace/ directory from tsMeta/ -> strings/
@@ -346,7 +352,7 @@ Changes designed to use CodeAst interfaces as common type wherever possible
 
 
 --------
-### [0.8.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/ef0c9727a058f6b67be53b7ded27adf30df95ede) - 2015-02-10
+### [0.8.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/ef0c9727a058f6b67be53b7ded27adf30df95ede) - 2015-02-10
 #### Added
 * code-types/ExtractTypes.ts for extracting CodeAst data, including extractInheritedTypeNames(), extractFieldTypeNames(), and extractGenericTypes()
 * code-types/ast-types.d.ts with interfaces for the JSON types generated by the [jparse-code](https://github.com/TeamworkGuy2/JParseCode) library
@@ -357,7 +363,7 @@ Changes designed to use CodeAst interfaces as common type wherever possible
 
 
 --------
-### [0.7.4](https://github.com/TeamworkGuy2/ts-code-generator/commit/b09f044563ae51b50f51ce59a424267e19d29d22) - 2016-02-09
+### [0.7.4](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/b09f044563ae51b50f51ce59a424267e19d29d22) - 2016-02-09
 #### Added
 TypeConverter.isPrimitiveOrBuiltInType()
 
@@ -366,7 +372,7 @@ TypeConverter.isPrimitiveOrBuiltInType()
 
 
 --------
-### [0.7.3](https://github.com/TeamworkGuy2/ts-code-generator/commit/2cc1e9ac1a378bc70e217df85b8d9bd9522bcbfe) - 2015-12-29
+### [0.7.3](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/2cc1e9ac1a378bc70e217df85b8d9bd9522bcbfe) - 2015-12-29
 #### Changed
 * TypeConverter parseCsOrJavaType(), createParameterCode(), and createParametersCode() 'returnUnknownTypes' flag
 
@@ -375,7 +381,7 @@ TypeConverter.isPrimitiveOrBuiltInType()
 
 
 --------
-### [0.7.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/4042b2c22edf2e722e5140167532f2eb731ecab3) - 2015-12-17
+### [0.7.2](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/4042b2c22edf2e722e5140167532f2eb731ecab3) - 2015-12-17
 #### Changed
 model-types.d.ts:
 * Added OptionalNamedProperty interface
@@ -384,7 +390,7 @@ model-types.d.ts:
 
 
 --------
-### [0.7.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/af7536569fc09c5072e26a1ccb0031500bc7114c) - 2015-12-16
+### [0.7.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/af7536569fc09c5072e26a1ccb0031500bc7114c) - 2015-12-16
 #### Changed
 model-types.d.ts:
 * Documentation additions
@@ -392,7 +398,7 @@ model-types.d.ts:
 
 
 --------
-### [0.7.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/43ee41566aa268a24175ca69815c483632bbfb6b#diff-b9cfc7f2cdf78a7f4b91a753d10865a2) - 2015-12-16
+### [0.7.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/43ee41566aa268a24175ca69815c483632bbfb6b#diff-b9cfc7f2cdf78a7f4b91a753d10865a2) - 2015-12-16
 #### Added
 * Added qunit.d.ts and Q.d.ts definition files
 
@@ -406,26 +412,26 @@ Renamed various model-types.d.ts types:
 
 
 --------
-### [0.6.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/b78e20c83353f58aeb6459c8c16108cd2b937ac9) - 2015-11-21
+### [0.6.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/b78e20c83353f58aeb6459c8c16108cd2b937ac9) - 2015-11-21
 #### Changed
 * Removed TransformFile transformFileToFile() and transformFileToFileAsync() unused 'compileTypeScript' flag
 * Removed TransformFile.convertTemplateFile() unused 'successMsg' parameter
 
 
 --------
-### [0.5.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/39917cf1e19fcbce053f58e0782b6654a4b4222f) - 2015-11-21
+### [0.5.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/39917cf1e19fcbce053f58e0782b6654a4b4222f) - 2015-11-21
 #### Changed
 Removed WriteFile gutil.log() lines, rely on existing error callbacks instead
 
 
 --------
-### [0.5.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/dc4d4cc756345ede8c6174c6f96141dd1a907e7b#diff-b9cfc7f2cdf78a7f4b91a753d10865a2) - 2015-11-21
+### [0.5.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/dc4d4cc756345ede8c6174c6f96141dd1a907e7b#diff-b9cfc7f2cdf78a7f4b91a753d10865a2) - 2015-11-21
 #### Changed
 TransformFile - existing functions changed to synchronous, added separate async functions suffixed by '*Async'
 
 
 --------
-### [0.4.2](https://github.com/TeamworkGuy2/ts-code-generator/commit/eb478dcf7dc57c5fca77133d94b78f6c96811b64) - 2015-11-17
+### [0.4.2](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/eb478dcf7dc57c5fca77133d94b78f6c96811b64) - 2015-11-17
 #### Changed
 Made TransformFile.MatchOperation enum and TransformFile.ReplaceVar interface public
 
@@ -434,7 +440,7 @@ TypeConverter parseCsOrJavaType() and createTypeToStringCode() bugs resulting in
 
 
 --------
-### [0.4.1](https://github.com/TeamworkGuy2/ts-code-generator/commit/f02b84fe82be72f75dae2f6f6c32f51a7f3ad3e6#diff-b9cfc7f2cdf78a7f4b91a753d10865a2) - 2015-11-16
+### [0.4.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/f02b84fe82be72f75dae2f6f6c32f51a7f3ad3e6#diff-b9cfc7f2cdf78a7f4b91a753d10865a2) - 2015-11-16
 #### Added
 * SimpleTemplateCompiler for simple templates (Handlebars or Mustache style) but without any features, just for simple build time code generating, not meant for runtime/prod use
 * TransformFile for reading input files, transforming text lines, replacing template variables, and optionally writing the result to a destination file
@@ -445,7 +451,7 @@ More refactoring to flatten directory structure.
 
 
 --------
-### [0.4.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/894ad735808be3bb1e07efc76e01e7c0461fb358) - 2015-11-13
+### [0.4.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/894ad735808be3bb1e07efc76e01e7c0461fb358) - 2015-11-13
 #### Added
 * qunit test runner
 * StringArray instance implementation which builds a string array via methods like add(), addAll(), insert(), prefixNonEmpty(), etc.
@@ -459,7 +465,7 @@ More refactoring to flatten directory structure.
 
 
 --------
-### [0.3.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/886006eb911eebaeafae0be0d2ddc5e67d66200e) - 2015-11-11
+### [0.3.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/886006eb911eebaeafae0be0d2ddc5e67d66200e) - 2015-11-11
 #### Added
 * LICENSE and README files
 
@@ -473,7 +479,7 @@ More refactoring to flatten directory structure.
 
 
 --------
-### [0.2.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/26d046d49199fb63ae1b158ee19e57e0e594dced) - 2015-11-08
+### [0.2.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/26d046d49199fb63ae1b158ee19e57e0e594dced) - 2015-11-08
 #### Notable
 * Setup unit tests
 * Added vs-proj file manipulation and related file-io utilities
@@ -496,7 +502,7 @@ More refactoring to flatten directory structure.
 
 
 --------
-### [0.1.0](https://github.com/TeamworkGuy2/ts-code-generator/commit/0ba01a130697530dcc09ceb8bcfff8c2cc11db91) - 2015-08-10
+### [0.1.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/0ba01a130697530dcc09ceb8bcfff8c2cc11db91) - 2015-08-10
 #### Added
 Initial commit of existing code, including:
 * gulpfile.ts, package.json

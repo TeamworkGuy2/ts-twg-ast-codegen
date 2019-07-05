@@ -1,4 +1,4 @@
-TS TWG AST Code Generator
+TypeScript TWG AST Code Generator
 ==============
 
 Dependencies:
