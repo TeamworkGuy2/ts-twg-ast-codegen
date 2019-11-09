@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.21.1](N/A) - 2019-07-05
+### [0.21.2](N/A) - 2019-11-09
+#### Changed
+* Update to TypeScript 3.7
+
+
+--------
+### [0.21.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/c9bc92569c1970b666b66451173a11b3d26831fa) - 2019-07-05
 #### Changed
 * Update to TypeScript 3.5
 
