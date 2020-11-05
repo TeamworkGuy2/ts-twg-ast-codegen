@@ -9,10 +9,10 @@ module ExtractAst {
      * @param childTypes the list of 'allTypeDefs' names to extract from
      * @param allTypeDefs a map of all type definition names and CodeAst classes
      * @param transformTypeName an optional transformer for the returned type name map
-     * @return a map of type names used
+     * @return a map of types found
      */
-    export function extractInheritedTypeNames(childTypes: string[], allTypeDefs: StringMap<CodeAst.Class>, transformTypeName?: (type: string) => string): StringMap<boolean> {
-        var typesUsed: StringMap<boolean> = {};
+    export function extractInheritedTypeNames(childTypes: string[], allTypeDefs: StringMap<CodeAst.Class>, transformTypeName?: (type: string) => string): StringMap<({ class: CodeAst.Class; extendType: string } | { class: CodeAst.Class; implementType: string })[]> {
+        var typesUsed: StringMap<({ class: CodeAst.Class; extendType: string } | { class: CodeAst.Class; implementType: string })[]> = {};
 
         // TODO doesn't recursively extract parents beyond the first inheritance level
         for (var i = 0, size = childTypes.length; i < size; i++) {
@@ -26,7 +26,8 @@ module ExtractAst {
                     for (var k = 0, sizeK = extendTypes.length; k < sizeK; k++) {
                         var t1 = transformTypeName != null ? transformTypeName(extendTypes[k]) : extendTypes[k];
                         if (t1 != null) {
-                            typesUsed[t1] = true;
+                            var tu1 = typesUsed[t1] || (typesUsed[t1] = []);
+                            tu1.push({ class: classDef, extendType: extendTypes[k] });
                         }
                     }
                 }
@@ -38,7 +39,8 @@ module ExtractAst {
                         for (var p = 0, sizeP = implementTypes.length; p < sizeP; p++) {
                             var t2 = transformTypeName != null ? transformTypeName(implementTypes[p]) : implementTypes[p];
                             if (t2 != null) {
-                                typesUsed[t2] = true;
+                                var tu2 = typesUsed[t2] || (typesUsed[t2] = []);
+                                tu2.push({ class: classDef, implementType: implementTypes[p] });
                             }
                         }
                     }
@@ -53,9 +55,10 @@ module ExtractAst {
      * @param childTypes
      * @param typeDefs
      * @param includePrimitiveTypes
+     * @return a map of types found
      */
-    export function extractFieldTypeNames(childTypes: string[], typeDefs: StringMap<CodeAst.Class>, includePrimitiveTypes: boolean, transformTypeName?: (type: string) => string): StringMap<boolean> {
-        var typesUsed: StringMap<boolean> = {};
+    export function extractFieldTypeNames(childTypes: string[], typeDefs: StringMap<CodeAst.Class>, includePrimitiveTypes: boolean, transformTypeName?: (type: string) => string): StringMap<{ class: CodeAst.Class; field: CodeAst.Field }[]> {
+        var typesUsed: StringMap<{ class: CodeAst.Class; field: CodeAst.Field }[]> = {};
 
         // TODO doesn't recursively extract generic beyond the fields' own generic types
         for (var p = 0, sizeP = childTypes.length; p < sizeP; p++) {
@@ -69,7 +72,8 @@ module ExtractAst {
                         var typeName = transformTypeName != null ? transformTypeName(fieldTypes[m]) : fieldTypes[m]; // returns null for types not starting with upper-case letter (which automatically excludes most primitives)
                         if (typeName != null) {
                             if (includePrimitiveTypes || (!TypeConverter.isPrimitive(typeName) && !TypeConverter.isCore(typeName))) {
-                                typesUsed[typeName] = true;
+                                var tu1 = typesUsed[typeName] || (typesUsed[typeName] = []);
+                                tu1.push({ class: classDef, field: fields[k] });
                             }
                         }
                     }

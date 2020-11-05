@@ -92,13 +92,20 @@ var TypeConverter;
             case "short":
             case "ushort":
             case "int":
+            case "int16":
+            case "int32":
+            case "int64":
             case "uint":
+            case "uint16":
+            case "uint32":
+            case "uint64":
             case "long":
             case "ulong":
             case "float":
             case "double":
             case "decimal":
             case "real":
+            case "single":
             case "number":
                 return true;
             default:
@@ -115,6 +122,7 @@ var TypeConverter;
         switch (typeName) {
             case "date":
             case "datetime":
+            case "object":
             case "string":
                 return true;
             default:

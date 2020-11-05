@@ -4,7 +4,16 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.22.0](N/A) - 2020-09-04
+### [0.23.0](N/A) - 2020-11-05
+#### Changed
+* `ExtractAst` `extractInheritedTypeNames()` and `extractFieldTypeNames()` modified to return `StringMap`s of arrays of objects referencing where each type is used rather than just a boolean.
+* Added C# primitive wrapper types to `TypeConverter.isPrimitive()`, e.g. `Int16/32/64`
+* Added `object` to the list of types in `TypeConverter.isCore()`
+* Added basic `ExtractAstTest` unit test
+
+
+--------
+### [0.22.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/9c08310d9d02a8a93e1f3efe96fc46a7a6fc16e8) - 2020-09-04
 #### Changed
 * Update to TypeScript 4.0
 
