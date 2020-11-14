@@ -8,11 +8,11 @@ module ExtractAst {
     /** Get a map of all none primitive (number, boolean, etc.) extended/implemented class and interface type names from the specified group of class definitions
      * @param childTypes the list of 'allTypeDefs' names to extract from
      * @param allTypeDefs a map of all type definition names and CodeAst classes
-     * @param transformTypeName an optional transformer for the returned type name map
-     * @return a map of types found
-     */
-    export function extractInheritedTypeNames(childTypes: string[], allTypeDefs: StringMap<CodeAst.Class>, transformTypeName?: (type: string) => string): StringMap<({ class: CodeAst.Class; extendType: string } | { class: CodeAst.Class; implementType: string })[]> {
-        var typesUsed: StringMap<({ class: CodeAst.Class; extendType: string } | { class: CodeAst.Class; implementType: string })[]> = {};
+     * @param transformTypeName optional transform for the returned type name map
+     * @returns a map of types found
+    */
+    export function extractInheritedTypeNames(childTypes: string[], allTypeDefs: StringMap<CodeAst.Class>, transformTypeName?: (type: string) => (string | null)): StringMap<(TypeUsage.ClassExtends | TypeUsage.ClassImplements)[]> {
+        var typesUsed: StringMap<(TypeUsage.ClassExtends | TypeUsage.ClassImplements)[]> = {};
 
         // TODO doesn't recursively extract parents beyond the first inheritance level
         for (var i = 0, size = childTypes.length; i < size; i++) {
@@ -51,14 +51,17 @@ module ExtractAst {
     }
 
 
-    /** Get a map of all none primitive (number, boolean, etc.) field type names from the specified group of class definitions
-     * @param childTypes
-     * @param typeDefs
-     * @param includePrimitiveTypes
-     * @return a map of types found
+    /** Get a map of the field type names from the specified subset of class definitions
+     * @param childTypes the list of 'typeDefs' names to extract field types from
+     * @param typeDefs a map of all type definition names to their CodeAst's
+     * @param includePrimitiveTypes whether to include primitive field types (number, boolean, string, etc) in the returned map
+     * @param transformTypeName optional field type transformer, returns a new type string for a given type string, returns null to ignore a field type
+     * @returns a map of types found
      */
-    export function extractFieldTypeNames(childTypes: string[], typeDefs: StringMap<CodeAst.Class>, includePrimitiveTypes: boolean, transformTypeName?: (type: string) => string): StringMap<{ class: CodeAst.Class; field: CodeAst.Field }[]> {
-        var typesUsed: StringMap<{ class: CodeAst.Class; field: CodeAst.Field }[]> = {};
+    export function extractFieldTypeNames(childTypes: string[], typeDefs: StringMap<CodeAst.Class>, includePrimitiveTypes: boolean,
+        transformTypeName?: (type: string) => (string | null)
+    ): StringMap<TypeUsage.Field[]> {
+        var typesUsed: StringMap<TypeUsage.Field[]> = {};
 
         // TODO doesn't recursively extract generic beyond the fields' own generic types
         for (var p = 0, sizeP = childTypes.length; p < sizeP; p++) {
@@ -85,9 +88,49 @@ module ExtractAst {
     }
 
 
+    /** Get a map of the types extracted from annotation arguments from the specified subset of class definitions
+     * @param childTypes the list of 'typeDefs' names to extract annotation argument types from
+     * @param typeDefs a map of all type definition names to their CodeAst's
+     * @param includePrimitiveTypes whether to include primitive field types (number, boolean, string, etc) in the returned map
+     * @param extractAnnotationArgument the annotation argument type extractor, returns a string if the annotation argument is successfully mapped to a type, returns null to ignore an annotation argument
+     * @returns a map of types found
+     */
+    export function extractAnnotationArgumentTypes(childTypes: string[], typeDefs: StringMap<CodeAst.Class>, includePrimitiveTypes: boolean,
+        transformAnnotationArgument: (annotation: CodeAst.Annotation, argumentName: string, argumentValue: string) => (string | null)
+    ): StringMap<TypeUsage.Annotation[]> {
+        var typesUsed: StringMap<TypeUsage.Annotation[]> = {};
+
+        // Loop through all used types to find any missing children
+        for (var i = 0, size = childTypes.length; i < size; i++) {
+            var classDef = typeDefs[childTypes[i]];
+            if (classDef != null && classDef.classSignature.annotations != null) {
+                var annotations = classDef.classSignature.annotations;
+
+                for (var k = 0, sizeK = annotations.length; k < sizeK; k++) {
+                    var annotation = annotations[k];
+                    var argNames = Object.keys(annotation.arguments);
+
+                    for (var m = 0, sizeM = argNames.length; m < sizeM; m++) {
+                        var argType = transformAnnotationArgument(annotation, argNames[m], annotation.arguments[argNames[m]]);
+                        if (argType != null) {
+                            if (includePrimitiveTypes || (!TypeConverter.isPrimitive(argType) && !TypeConverter.isCore(argType))) {
+                                var tu = typesUsed[argType] = typesUsed[argType] || [];
+                                tu.push({ class: classDef, annotation: annotation });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return typesUsed;
+    }
+
+
     /** Recursively traverse a generic type and extract a list of all type names
-     * @param type
-     * @param dst
+     * @param type the data type to extract generic types from
+     * @param dst optional, array in which to store extracted generic types
+     * @returns the 'dst' parameter or a new array (if 'dst' was not provided) containing the extracted generic types
      */
     export function extractGenericTypes(type: CodeAst.Type, dst: string[] = []): string[] {
         dst.push(type.typeName);
@@ -104,35 +147,33 @@ module ExtractAst {
     /** Given a list of CodeAst parameters and a list/map of parameter names, return maps of parameter names and types that exist and do not exist in the 'paramNames' map
      * @param params the list of parameters to process
      * @param paramNames the map of parameter names to check
+     * @returns an object containing 'params' and 'unclaimedParams' properties which are each an array of properties
      */
-    export function claimParams(params: CodeAst.MethodParameter[], paramNames: StringMap<any> | string[]): { params: StringMap<CodeAst.Type>; unclaimedParams: StringMap<CodeAst.Type>; } {
-        var types: StringMap<CodeAst.Type> = {};
-        var unknownTypes: StringMap<CodeAst.Type> = {};
+    export function claimParams(params: CodeAst.MethodParameter[], paramNames: StringMap<any> | string[]): { params: CodeAst.MethodParameter[]; unclaimedParams: CodeAst.MethodParameter[]; } {
+        var types: CodeAst.MethodParameter[] = [];
+        var unknownTypes: CodeAst.MethodParameter[] = [];
 
         if (Array.isArray(paramNames)) {
             for (var i = 0, size = params.length; i < size; i++) {
                 var param = params[i];
-                var name = param.name;
 
-                var idx: number;
-                if ((idx = paramNames.indexOf(name)) > -1) {
-                    types[paramNames[idx]] = param.type;
+                if (paramNames.indexOf(param.name) > -1) {
+                    types.push(param);
                 }
                 else {
-                    unknownTypes[name] = param.type;
+                    unknownTypes.push(param);
                 }
             }
         }
         else {
             for (var i = 0, size = params.length; i < size; i++) {
                 var param = params[i];
-                var name = param.name;
 
-                if (paramNames[name]) {
-                    types[paramNames[name]] = param.type;
+                if (paramNames[param.name]) {
+                    types.push(param);
                 }
                 else {
-                    unknownTypes[name] = param.type;
+                    unknownTypes.push(param);
                 }
             }
         }

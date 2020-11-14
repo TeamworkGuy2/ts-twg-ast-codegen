@@ -71,6 +71,21 @@ suite("TypeConverter", function TypeConverterTest() {
                 "(myVal ? myVal.toString() : \"null\")"
             ]);
         });
+
+        test("parseAndConvertTypeTemplate", function parseAndConvertTypeTemplateTest() {
+            var parseAndConvert = TypeConverter.TypeScript.parseAndConvertTypeTemplate;
+
+            asr.equal(parseAndConvert("bool?", true, true), "boolean?");
+            asr.equal(parseAndConvert("UnknownType[]", true, true), "UnknownType[]");
+            asr.equal(parseAndConvert("string & IEnumerable[]", true, true), "(string & IEnumerable)[]");
+            asr.equal(parseAndConvert("float?[]", true, true), "number?[]");
+
+            asr.equal(parseAndConvert("float?[]", false, false), "number[]");
+            asr.throws(() => parseAndConvert("UnknownType[]", false, false));
+
+            asr.equal(parseAndConvert({ typeName: "bool", nullable: true }, true, true), "boolean?");
+            asr.equal(parseAndConvert({ typeName: "UnknownType", arrayDimensions: 1 }, true, true), "UnknownType[]");
+        });
     });
 
 });

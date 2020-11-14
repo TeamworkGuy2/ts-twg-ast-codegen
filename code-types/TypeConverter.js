@@ -4,7 +4,7 @@
  */
 var TypeConverter;
 (function (TypeConverter) {
-    /** Convert a CodeAst.Type to a string in the format 'TypeName<GenericParams, ...>[][]...'
+    /** Convert a CodeAst.Type to a string in the format 'TypeName<GenericParams, ...>[]'
      * @param type the type to stringify
      * @param [typeConverter] an optional converter for the type names in the type
      * @param [includeNullability=true] whether to include type nullability (i.e. the '?' part of 'int?[]')
@@ -92,20 +92,13 @@ var TypeConverter;
             case "short":
             case "ushort":
             case "int":
-            case "int16":
-            case "int32":
-            case "int64":
             case "uint":
-            case "uint16":
-            case "uint32":
-            case "uint64":
             case "long":
             case "ulong":
             case "float":
             case "double":
             case "decimal":
             case "real":
-            case "single":
             case "number":
                 return true;
             default:

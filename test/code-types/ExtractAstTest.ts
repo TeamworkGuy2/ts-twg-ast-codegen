@@ -1,6 +1,7 @@
 ﻿"use strict";
 import chai = require("chai");
 import ExtractAst = require("../../code-types/ExtractAst");
+import TypeConverter = require("../../code-types/TypeConverter");
 
 declare var console: any;
 var asr = chai.assert;
@@ -66,9 +67,9 @@ suite("ExtractAst", function ExtractAstTest() {
             "blockType": "CLASS",
             "using": ["System.Collections.Generic", "System.Runtime.Serialization"],
             "fields": [
-                { "name": "PageNumber", "type": { "typeName": "int", "primitive": true }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>The page number.</value>"] },
-                { "name": "TotalRecords", "type": { "typeName": "int", "primitive": true }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>The total record count.</value>"] },
-                { "name": "Items", "type": { "typeName": "IList", "genericParameters": [{ "typeName": "T" }] }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>The search result items.</value>"] }
+                { "name": "PageNumber", "type": { "typeName": "int", "primitive": true }, "accessModifiers": ["public"], "annotations": [], "comments": [" <value>The page number.</value>"] },
+                { "name": "TotalRecords", "type": { "typeName": "int", "primitive": true }, "accessModifiers": ["public"], "annotations": [], "comments": [" <value>The total record count.</value>"] },
+                { "name": "Items", "type": { "typeName": "IList", "genericParameters": [{ "typeName": "T" }] }, "accessModifiers": ["public"], "annotations": [], "comments": [" <value>The search result items.</value>"] }
             ],
             "methods": [
                 { "name": "ToString", "parameters": [], "accessModifiers": [], "annotations": [], "returnType": { "typeName": "string" }, "comments": [] }
@@ -76,26 +77,26 @@ suite("ExtractAst", function ExtractAstTest() {
         },
         // Search criteria
         {
-            "classSignature": { "access": "PUBLIC", "name": "TestApp.Models.Base.SearchCriteria", "declarationType": "class", "annotations": [{ "name": "DataContract", "arguments": {} }] },
+            "classSignature": { "access": "PUBLIC", "name": "TestApp.Models.Base.SearchCriteria", "declarationType": "class", "annotations": [{ "name": "Criteria", "arguments": { "value": "TestApp.Models.Base.SearchCriteria" } }] },
             "blockType": "CLASS",
             "using": ["System.Runtime.Serialization", "TestApp.Models.Enums"],
             "fields": [
-                { "name": "PageSize", "type": { "typeName": "int", "primitive": true }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>The page size. Number of records.</value>"] },
-                { "name": "PageNumber", "type": { "typeName": "int", "primitive": true }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>The page number. If PageNumber is present, PageSize must be present as well. Multiply by 'PageSize' to get the record offset</value>"] },
-                { "name": "SortBy", "type": { "typeName": "string" }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>The column name to sort by.</value>"] },
-                { "name": "SortOrder", "type": { "typeName": "TestApp.Models.Enums.SortOrder" }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [] }
+                { "name": "PageSize", "type": { "typeName": "int", "primitive": true }, "accessModifiers": ["public"], "annotations": [{ "name": "Criteria", "arguments": {} }], "comments": [" <value>The page size. Number of records.</value>"] },
+                { "name": "PageNumber", "type": { "typeName": "int", "primitive": true }, "accessModifiers": ["public"], "annotations": [{ "name": "Criteria", "arguments": {} }], "comments": [" <value>The page number. If PageNumber is present, PageSize must be present as well. Multiply by 'PageSize' to get the record offset</value>"] },
+                { "name": "SortBy", "type": { "typeName": "string" }, "accessModifiers": ["public"], "annotations": [{ "name": "Criteria", "arguments": {} }], "comments": [" <value>The column name to sort by.</value>"] },
+                { "name": "SortOrder", "type": { "typeName": "TestApp.Models.Enums.SortOrder" }, "accessModifiers": ["public"], "annotations": [{ "name": "Criteria", "arguments": { "JsonType": "int" } }], "comments": [] }
             ],
             "methods": []
         }, {
-            "classSignature": { "access": "PUBLIC", "name": "TestApp.Models.Searching.CoverLogSearchCriteria", "declarationType": "class", "extendClassName": { "typeName": "TestApp.Models.Base.SearchCriteria" }, "annotations": [{ "name": "DataContract", "arguments": {} }] },
+            "classSignature": { "access": "PUBLIC", "name": "TestApp.Models.Searching.CoverLogSearchCriteria", "declarationType": "class", "extendClassName": { "typeName": "TestApp.Models.Base.SearchCriteria" }, "annotations": [{ "name": "Criteria", "arguments": { "value": "string" } }] },
             "blockType": "CLASS",
             "using": ["System", "System.Runtime.Serialization", "TestApp.Models.Base"],
             "fields": [
-                { "name": "ServiceNames", "type": { "typeName": "string", "arrayDimensions": 1 }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>Service names to search for.</value>"] },
-                { "name": "MethodNames", "type": { "typeName": "string", "arrayDimensions": 1 }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>Method names to search for.</value>"] },
-                { "name": "ServiceMethodNames", "type": { "typeName": "string", "arrayDimensions": 1 }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>Compound 'service.menthod' format names to search for.</value>"] },
-                { "name": "SearchPeriodStart", "type": { "typeName": "DateTime" }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>The start of the search period.</value>"] },
-                { "name": "SearchPeriodEnd", "type": { "typeName": "DateTime" }, "accessModifiers": ["public"], "annotations": [{ "name": "DataMember", "arguments": {} }], "comments": [" <value>The end of the search period.</value>"] }
+                { "name": "ServiceNames", "type": { "typeName": "string", "arrayDimensions": 1 }, "accessModifiers": ["public"], "annotations": [{ "name": "Criteria", "arguments": { "JsonType": "string[]" } }], "comments": [" <value>Service names to search for.</value>"] },
+                { "name": "MethodNames", "type": { "typeName": "string", "arrayDimensions": 1 }, "accessModifiers": ["public"], "annotations": [{ "name": "Criteria", "arguments": { "JsonType": "string[]" } }], "comments": [" <value>Method names to search for.</value>"] },
+                { "name": "ServiceMethodNames", "type": { "typeName": "string", "arrayDimensions": 1 }, "accessModifiers": ["public"], "annotations": [{ "name": "Criteria", "arguments": { "JsonType": "string[]" } }], "comments": [" <value>Compound 'service.menthod' format names to search for.</value>"] },
+                { "name": "SearchPeriodStart", "type": { "typeName": "DateTime" }, "accessModifiers": ["public"], "annotations": [{ "name": "Criteria", "arguments": { "JsonType": "string" } }], "comments": [" <value>The start of the search period.</value>"] },
+                { "name": "SearchPeriodEnd", "type": { "typeName": "DateTime" }, "accessModifiers": ["public"], "annotations": [{ "name": "Criteria", "arguments": { "JsonType": "string" } }], "comments": [" <value>The end of the search period.</value>"] }
             ],
             "methods": []
         }];
@@ -194,6 +195,7 @@ suite("ExtractAst", function ExtractAstTest() {
         //console.log(JSON.stringify(res));
     });
 
+
     test("extractFieldTypeNames", function extractFieldTypeNamesTest() {
         var models = toMap(getModelAsts(), (obj) => obj.classSignature.name);
 
@@ -217,6 +219,23 @@ suite("ExtractAst", function ExtractAstTest() {
         asr.deepEqual(Object.keys(res).sort(), ["IList", "T", "TestApp.Models.Enums.SortOrder", "TestApp.Models.PhotoHeader", "UserIdentifier"])
 
         //console.log(JSON.stringify(res));
+    });
+
+
+    test("extractAnnotationArgumentTypes", function extractAnnotationArgumentTypesTest() {
+        var models = toMap(getModelAsts(), (obj) => obj.classSignature.name);
+
+        var res = ExtractAst.extractAnnotationArgumentTypes(Object.keys(models), models, true, (annot, argName, argValue) => {
+            console.log("annotation '" + argName + "': " + argValue);
+            var type = TypeConverter.parseTypeTemplate(argValue).typeName;
+            return (TypeConverter.isPrimitive(type) || TypeConverter.isCore(type) || models[type] != null) ? argValue : null;
+        });
+
+        asr.deepEqual(Object.keys(res).map((k) => res[k].map((au) => au.annotation)), [[{
+            "name": "Criteria", "arguments": { "value": "TestApp.Models.Base.SearchCriteria" }
+        }], [{
+            "name": "Criteria", "arguments": { "value": "string" }
+        }]]);
     });
 
 

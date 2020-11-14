@@ -1,6 +1,6 @@
 {
   "name": "@twg2/ts-twg-ast-codegen",
-  "version": "0.23.0",
+  "version": "0.24.0",
   "description": "TypeScript code generator utils",
   "author": "TeamworkGuy2",
   "homepage": "https://github.com/TeamworkGuy2/ts-twg-ast-codegen",

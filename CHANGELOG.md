@@ -4,7 +4,20 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.23.0](N/A) - 2020-11-05
+### [0.24.0](N/A) - 2020-11-14
+#### Added
+* `type-usage.d.ts` with `TypeUsage` interfaces
+* Added `TypeTracking` module with `is*Usage()` and `typeUsageToString()` functions
+* `ExtractAst.extractAnnotationArgumentTypes()`
+
+#### Changed
+* `ExtractAst` `extractInheritedTypeNames()` and `extractFieldTypeNames()` modified to return arrays of objects referencing where each type is used rather than `StringMap`s
+* Removed C# primitive wrapper types from `TypeConverter.isPrimitive()`, e.g. `Int16/32/64`
+* Adjust `ExtractAst.claimParams()` to return an object with arrays of parameters rather than object with maps of parameter types
+
+
+--------
+### [0.23.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/e4314e411c5956619653c848b2f1f6e985c74416) - 2020-11-05
 #### Changed
 * `ExtractAst` `extractInheritedTypeNames()` and `extractFieldTypeNames()` modified to return `StringMap`s of arrays of objects referencing where each type is used rather than just a boolean.
 * Added C# primitive wrapper types to `TypeConverter.isPrimitive()`, e.g. `Int16/32/64`
