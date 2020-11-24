@@ -1,4 +1,4 @@
-﻿/** Types exported to JSON definition files by 'jparse-code' (https://github.com/TeamworkGuy2/JParserCode)
+﻿/** Types exported to JSON definition files by 'jparse-code@0.20.0' (https://github.com/TeamworkGuy2/JParserCode)
  * @author TeamworkGuy2
  */
 declare module CodeAst {
@@ -38,7 +38,7 @@ declare module CodeAst {
         name: string;
         type: Type;
         accessModifiers: string[];
-        annotations: Annotation[];
+        annotations?: Annotation[];
         initializer?: number | boolean | string | null;
         comments: string[];
         required?: boolean; // for compatiblity with Dto types
@@ -49,7 +49,8 @@ declare module CodeAst {
         name: string;
         parameters: MethodParameter[];
         accessModifiers: string[];
-        annotations: Annotation[];
+        typeParameters?: Type[];
+        annotations?: Annotation[];
         returnType: Type;
         comments: string[];
     }

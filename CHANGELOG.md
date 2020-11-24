@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.24.0](N/A) - 2020-11-14
+### [0.24.1](N/A) - 2020-11-23
+#### Changed
+* Bring `ast-types.d.ts` in line with `jparse-code@0.20.0`
+
+
+--------
+### [0.24.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/28ea33913dacd63b3998ce7ef985bb021cdf6de7) - 2020-11-14
 #### Added
 * `type-usage.d.ts` with `TypeUsage` interfaces
 * Added `TypeTracking` module with `is*Usage()` and `typeUsageToString()` functions
