@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.24.1](N/A) - 2020-11-23
+### [0.24.2](N/A) - 2021-01-01
+#### Changed
+* Fix TypeScript compiler errors in `StringCase` that weren't showing up until this package was imported into another project
+
+
+--------
+### [0.24.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/440cbfafd0e7e09bf34abaf67737b2dc6255abf5) - 2020-11-23
 #### Changed
 * Bring `ast-types.d.ts` in line with `jparse-code@0.20.0`
 
