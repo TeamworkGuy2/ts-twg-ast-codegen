@@ -4,7 +4,15 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.24.2](N/A) - 2021-01-01
+### [0.24.3](N/A) - 2021-01-10
+#### Changed
+* Make ast-types `Field.comments` and `Method.comments` optional so that manually building these objects in code is simpler
+* Add `separator` paramaters to `StringCase` methods to allow customization of underscore casing, can pass '-' to work with `dash-casing` strings
+* Remove private `StringCase.isCharAtUpperCase()` function
+
+
+--------
+### [0.24.2](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/0c7fcf25529ab8df6b3372144440c4301f8bc655) - 2021-01-01
 #### Changed
 * Fix TypeScript compiler errors in `StringCase` that weren't showing up until this package was imported into another project
 

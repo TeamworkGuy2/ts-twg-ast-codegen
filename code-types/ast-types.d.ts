@@ -40,7 +40,7 @@ declare module CodeAst {
         accessModifiers: string[];
         annotations?: Annotation[];
         initializer?: number | boolean | string | null;
-        comments: string[];
+        comments?: string[];
         required?: boolean; // for compatiblity with Dto types
     }
 
@@ -52,7 +52,7 @@ declare module CodeAst {
         typeParameters?: Type[];
         annotations?: Annotation[];
         returnType: Type;
-        comments: string[];
+        comments?: string[];
     }
 
 
