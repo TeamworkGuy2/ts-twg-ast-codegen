@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.24.3](N/A) - 2021-01-10
+### [0.24.4](N/A) - 2021-03-13
+#### Added
+* Added `TransformFile` from `ts-file-io@0.3.0`
+
+
+--------
+### [0.24.3](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/a453aaec370ad9939a26872b8c9d08846226760d) - 2021-01-10
 #### Changed
 * Make ast-types `Field.comments` and `Method.comments` optional so that manually building these objects in code is simpler
 * Add `separator` paramaters to `StringCase` methods to allow customization of underscore casing, can pass '-' to work with `dash-casing` strings
