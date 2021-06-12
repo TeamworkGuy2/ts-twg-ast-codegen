@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.24.4](N/A) - 2021-03-13
+### [0.25.0](N/A) - 2021-06-12
+#### Changed
+* Update to TypeScript 4.3
+
+
+--------
+### [0.24.4](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/aa423838cb5ce3572e88745a02c571e358429121) - 2021-03-13
 #### Added
 * Added `TransformFile` from `ts-file-io@0.3.0`
 
