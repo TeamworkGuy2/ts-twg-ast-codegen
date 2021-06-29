@@ -4,7 +4,19 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.25.0](N/A) - 2021-06-12
+### [0.26.0](N/A) - 2021-06-29
+#### Added
+* `ExtractAst.extractAllTypes()` for extracting all types from a set of classes (includes: 'extends', 'implements', fields, methods)
+
+#### Changed
+* `ExtractAst.extractInheritedTypeNames()` renamed `extractInheritedTypes()` and now returns all levels of inherited types
+
+#### Removed
+* `ExtractAst.extractFieldTypeNames()` (see new `ExtractAst.extractAllTypes()`)
+
+
+--------
+### [0.25.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/4b412aa6426b1797e5a59a47d9309f5adc99f813) - 2021-06-12
 #### Changed
 * Update to TypeScript 4.3
 
