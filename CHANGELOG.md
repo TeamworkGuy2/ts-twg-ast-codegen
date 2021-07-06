@@ -4,7 +4,19 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.26.0](N/A) - 2021-06-29
+### [0.27.0](N/A) - 2021-07-05
+#### Added
+* `TypeConverter.TypeScript.createTypeTemplateToStringCode()` now supports arrays of primitive types
+* `dateToString` parameter to `TypeConverter.TypeScript.createTypeTemplateToStringCode()` to allow Date to string source code customizations
+* `TypeConverter.TypeScript.createDateToStringCodeFunction()` which allows for localization 
+* Open API Spec ('Swagger') TypeScript definition added `code-types/openapi.d.ts`
+
+#### Fixed
+* `TypeConverter.cloneType()` not copying `primitive` flags
+
+
+--------
+### [0.26.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/87ba79db2493c8fb6083e552e1878136ae315074) - 2021-06-29
 #### Added
 * `ExtractAst.extractAllTypes()` for extracting all types from a set of classes (includes: 'extends', 'implements', fields, methods)
 

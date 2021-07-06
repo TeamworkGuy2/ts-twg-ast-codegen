@@ -11,6 +11,12 @@ suite("TypeConverter", function TypeConverterTest() {
             nullable: nullable || false
         };
     }
+    test("cloneType", function cloneTypeTest() {
+        asr.deepEqual(TypeConverter.cloneType({ typeName: "string" }), { typeName: "string", arrayDimensions: undefined, genericParameters: [], nullable: undefined, primitive: undefined });
+        asr.deepEqual(TypeConverter.cloneType({ typeName: "string", arrayDimensions: 1 }), { typeName: "string", arrayDimensions: 1, genericParameters: [], nullable: undefined, primitive: undefined });
+        asr.deepEqual(TypeConverter.cloneType({ typeName: "IList", genericParameters: [{ typeName: "int", primitive: true }] }), { typeName: "IList", genericParameters: [{ typeName: "int", primitive: true, arrayDimensions: undefined, genericParameters: [], nullable: undefined }], arrayDimensions: undefined, nullable: undefined, primitive: undefined });
+        asr.deepEqual(TypeConverter.cloneType({ typeName: "int", arrayDimensions: 0, nullable: true, primitive: true }), { typeName: "int", arrayDimensions: 0, nullable: true, primitive: true, genericParameters: [] });
+    });
     test("typeToString", function typeToStringTest() {
         var types = [
             { typeName: "int" },
@@ -47,21 +53,32 @@ suite("TypeConverter", function TypeConverterTest() {
     });
     suite("TypeScript", function TypeConverterTypeScriptTest() {
         test("createTypeTemplateToStringCode", function createTypeTemplateToStringCodeTest() {
-            var types = [
-                { typeName: "boolean" },
-                { typeName: "number" },
-                { typeName: "byte" },
-                { typeName: "uint" },
-                { typeName: "date" }
-            ];
-            var res = types.map(function (t) { return TypeConverter.TypeScript.createTypeTemplateToStringCode(t, "myVal"); });
-            asr.deepEqual(res, [
-                "(myVal ? \"true\" : \"false\")",
-                "(myVal ? myVal.toString() : \"null\")",
-                "(myVal ? myVal.toString() : \"null\")",
-                "(myVal ? myVal.toString() : \"null\")",
-                "(myVal ? myVal.toString() : \"null\")"
-            ]);
+            var toCode = TypeConverter.TypeScript.createTypeTemplateToStringCode;
+            asr.equal(toCode({ typeName: "boolean" }, "myVal"), "(myVal ? \"true\" : \"false\")");
+            asr.equal(toCode({ typeName: "number" }, "myVal"), "(myVal ? myVal.toString() : \"null\")");
+            asr.equal(toCode({ typeName: "byte" }, "v"), "(v ? v.toString() : \"null\")");
+            asr.equal(toCode({ typeName: "uint" }, "_"), "(_ ? _.toString() : \"null\")");
+            asr.equal(toCode({ typeName: "date" }, "va"), "(va ? va.toString() : \"null\")");
+            asr.equal(toCode({ typeName: "boolean", arrayDimensions: 1 }, "flags"), "(flags ? Array.prototype.map.call(flags, function (v) { return (v ? \"true\" : \"false\"); }) : \"null\")");
+            asr.equal(toCode({ typeName: "float", arrayDimensions: 1 }, "ff"), "(ff ? ff.toString() : \"null\")");
+            asr.throws(function () { return toCode({ typeName: "real", arrayDimensions: 2 }, "v"); });
+        });
+        test("runCreateTypeTemplateToStringCode", function runCreateTypeTemplateToStringCodeTest() {
+            function runToCode(type, value, varName, dateToStringFunction) {
+                if (varName === void 0) { varName = "v"; }
+                var code = TypeConverter.TypeScript.createTypeTemplateToStringCode(type, varName, dateToStringFunction);
+                var func = new Function(varName, "return " + code);
+                return func(value);
+            }
+            asr.equal(runToCode({ typeName: "boolean" }, true), "true");
+            asr.equal(runToCode({ typeName: "number" }, null), "null");
+            asr.equal(runToCode({ typeName: "float", arrayDimensions: 1 }, [0, 1, 2.5, 3.141592]), "0,1,2.5,3.141592");
+            asr.equal(runToCode({ typeName: "date" }, new Date(2020, 1, 2, 17)), new Date(2020, 1, 2, 17).toString()); // default is 'Date.toString()'
+            asr.equal(runToCode({ typeName: "date" }, new Date(2020, 1, 2, 17), "t", "toISOString"), new Date(2020, 1, 2, 17).toISOString());
+            var dateToIsoStringFunc = TypeConverter.TypeScript.createDateToStringCodeFunction("toISOString");
+            asr.equal(runToCode({ typeName: "date" }, new Date(2020, 11, 24), "t", dateToIsoStringFunc), new Date(2020, 11, 24).toISOString());
+            var dateToIsoStringFunc = TypeConverter.TypeScript.createDateToStringCodeFunction("toLocaleString", undefined, { hour12: false });
+            asr.equal(runToCode({ typeName: "date" }, new Date(2020, 1, 29, 19), "t", dateToIsoStringFunc), new Date(2020, 1, 29, 19).toLocaleString(undefined, { hour12: false }));
         });
         test("parseAndConvertTypeTemplate", function parseAndConvertTypeTemplateTest() {
             var parseAndConvert = TypeConverter.TypeScript.parseAndConvertTypeTemplate;

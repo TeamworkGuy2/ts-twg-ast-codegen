@@ -107,7 +107,7 @@ var TypeConverter;
     }
     TypeConverter.isPrimitive = isPrimitive;
     /** Check if a type is a core built-in C#, Java, or TypeScript data type.
-     * A core type is a widely support type that is core to the language - (i.e. C# has string and DateTime)
+     * A core type is a widely support type that is core to the language but not a primitive - (i.e. C# has string and DateTime)
      * @param typeName the simple data type name (i.e. 'number' or 'byte')
      */
     function isCore(typeName) {
@@ -130,6 +130,20 @@ var TypeConverter;
         return dataType && dataType.genericParameters != null && dataType.genericParameters.length > 0;
     }
     TypeConverter.isGeneric = isGeneric;
+    /** Check whether an object is an Open API Spec type
+     * @param obj the object to test
+     */
+    function isOpenApiType(obj) {
+        return "type" in obj && (obj["type"] === "array" ? "items" in obj : (obj["type"] === "object" ? "properties" in obj : true));
+    }
+    TypeConverter.isOpenApiType = isOpenApiType;
+    /** Check whether an object is an Open API Reference type
+     * @param obj the object to test
+     */
+    function isOpenApiReference(obj) {
+        return "$ref" in obj;
+    }
+    TypeConverter.isOpenApiReference = isOpenApiReference;
     /** Create a deep copy of a CodeAst.Type
      * @see mapType()
      * @param type
@@ -156,6 +170,7 @@ var TypeConverter;
             arrayDimensions: type.arrayDimensions,
             genericParameters: resParams,
             nullable: type.nullable,
+            primitive: type.primitive,
             typeName: type.typeName,
         };
         if (typeModifier != null) {
@@ -166,16 +181,15 @@ var TypeConverter;
     TypeConverter.mapType = mapType;
     /** Functions for transforming and manipulating type information into TypesScript types (i.e. number, boolean, string)
      */
-    var TypeScript = /** @class */ (function () {
-        function TypeScript() {
-        }
+    var TypeScript;
+    (function (TypeScript) {
         /** Given a string or a Type, convert either to a TypeScript type:
          * If string, assume it is a simple typeTemplate (see parseAndConvertTypeTemplate()), parse it and convert the types to TypeScript.
          * If Type, convert the types to TypeScript.
          * @param typeTemplate a Type, or string where the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param returnUnknownTypes
          */
-        TypeScript.parseTypeTemplate = function (typeTemplate, returnUnknownTypes) {
+        function parseTypeTemplate(typeTemplate, returnUnknownTypes) {
             if (typeof typeTemplate === "string") {
                 var parsedType = TypeConverter.parseTypeTemplate(typeTemplate);
                 parsedType.typeName = TypeScript.convertSimpleType(parsedType.typeName, returnUnknownTypes);
@@ -186,7 +200,8 @@ var TypeConverter;
                     t.typeName = TypeScript.convertSimpleType(t.typeName, returnUnknownTypes);
                 });
             }
-        };
+        }
+        TypeScript.parseTypeTemplate = parseTypeTemplate;
         /** Given a string or a Type, convert either to a TypeScript type string:
          * If given a string, assume it is a simple typeTemplate (see parseAndConvertTypeTemplate()), parse it, convert the types to TypeScript, and convert to a string (see typeToString()).
          * If given a Type, convert the types to TypeScript and convert to a string (see typeToString()).
@@ -195,12 +210,13 @@ var TypeConverter;
          * @param includeNullability
          * @param [nullableSymbol="?"]
          */
-        TypeScript.parseAndConvertTypeTemplate = function (typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol) {
+        function parseAndConvertTypeTemplate(typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol) {
             if (nullableSymbol === void 0) { nullableSymbol = "?"; }
             return (typeof typeTemplate === "string"
                 ? TypeScript.parseAndConvertTypeTemplateString(typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol)
                 : typeToString(typeTemplate, function (t) { return TypeScript.convertSimpleType(t, returnUnknownTypes); }, includeNullability, nullableSymbol));
-        };
+        }
+        TypeScript.parseAndConvertTypeTemplate = parseAndConvertTypeTemplate;
         /** Parse and convert a simple type template string to a TypeScript type string.
          * The format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
          * @param typeName the format must be 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
@@ -208,7 +224,7 @@ var TypeConverter;
          * @param includeNullability
          * @param nullableSymbol the symbol to put after nullable types (i.e. '?' for C# or ' | null' for TypeScript)
          */
-        TypeScript.parseAndConvertTypeTemplateString = function (typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol) {
+        function parseAndConvertTypeTemplateString(typeTemplate, returnUnknownTypes, includeNullability, nullableSymbol) {
             var typeInfo = TypeConverter.parseTypeTemplate(typeTemplate);
             var arrayCount = typeInfo.arrayDimensions;
             var tsType = TypeScript.convertSimpleType(typeInfo.typeName, returnUnknownTypes);
@@ -217,12 +233,13 @@ var TypeConverter;
             if (needsParens)
                 tsType = "(" + tsType + ")";
             return tsType + (arrayCount > 0 ? "[]".repeat(arrayCount) : "");
-        };
+        }
+        TypeScript.parseAndConvertTypeTemplateString = parseAndConvertTypeTemplateString;
         /** Convert primitive and common builtin C# and Java types to TypeScript equivalent types
          * @param typeName the type name (i.e. 'bool' or 'String')
-         * @param returnUnknownTypes
+         * @param returnUnknownTypes whether to return unknown 'typeName' values or throw an error
          */
-        TypeScript.convertSimpleType = function (typeName, returnUnknownTypes) {
+        function convertSimpleType(typeName, returnUnknownTypes) {
             switch (typeName) {
                 case "boolean":
                 case "string":
@@ -258,12 +275,15 @@ var TypeConverter;
                         throw new Error("unknown type name for TypeScript code: '" + typeName + "'");
                     }
             }
-        };
+        }
+        TypeScript.convertSimpleType = convertSimpleType;
         /** Create a TypeScript source code string that transforms a specific data type into a string (i.e. stringifies the type)
-         * @param typeTemplate
-         * @param variableName
+         * @param typeTemplate a CodeAst.Type or a type template string like 'typeName?[][]...' where typeName has no generic parameters, and the '?' (nullability) and '[][]...' (array dimensions) are optional
+         * @param variableName the name of the variable
+         * @param [dateToString] optional, function that returns source code that converts a given date variable to the format desired, if not provided 'toString()' is used for date/time related types
+         * @returns a line of source code that converts the variable from it's given type specified by 'typeTemplate' to a string
          */
-        TypeScript.createTypeTemplateToStringCode = function (typeTemplate, variableName) {
+        function createTypeTemplateToStringCode(typeTemplate, variableName, dateToString) {
             var typeInfo = typeof typeTemplate === "string" ? TypeConverter.parseTypeTemplate(typeTemplate) : typeTemplate;
             if (typeInfo.genericParameters != null && typeInfo.genericParameters.length > 0) {
                 throw new Error("cannot convert a type containing generic parameters to a string, type = '" + JSON.stringify(typeInfo) + "'");
@@ -273,8 +293,13 @@ var TypeConverter;
             switch (typeName) {
                 case "bool":
                 case "boolean":
-                    if (arrayCount > 0) {
-                        throw new Error("converting array of " + typeName + " to string not supported");
+                    if (arrayCount != null) {
+                        if (arrayCount > 1) {
+                            throw new Error("no source code to string conversion format for " + typeName + "[]".repeat(arrayCount) + "'");
+                        }
+                        else {
+                            return "(" + variableName + " ? Array.prototype.map.call(" + variableName + ", function (v) { return (v ? \"true\" : \"false\"); }) : \"null\")";
+                        }
                     }
                     return "(" + variableName + " ? \"true\" : \"false\")";
                 case "byte":
@@ -291,11 +316,26 @@ var TypeConverter;
                 case "decimal":
                 case "real":
                 case "number":
+                    if (arrayCount != null && arrayCount > 1) {
+                        throw new Error("no source code to string conversion format for " + typeName + "[]".repeat(arrayCount) + "'");
+                    }
+                    return "(" + variableName + " ? " + variableName + ".toString() : \"null\")";
                 case "date":
                 case "DateTime":
+                    if (dateToString != null) {
+                        if (arrayCount != null) {
+                            if (arrayCount > 1) {
+                                throw new Error("no source code to string conversion format for '" + typeName + "[]".repeat(arrayCount) + "'");
+                            }
+                            else {
+                                return "(" + variableName + " ? Array.prototype.map.call(" + variableName + ", function (v) { return (v ? " + (typeof dateToString === "string" ? "v." + dateToString + "()" : dateToString("v")) + " : \"null\"); }) : \"null\")";
+                            }
+                        }
+                        return "(" + variableName + " ? " + (typeof dateToString === "string" ? variableName + "." + dateToString + "()" : dateToString(variableName)) + " : \"null\")";
+                    }
                 case "any":
-                    if (arrayCount > 0) {
-                        throw new Error("converting array of " + typeName + " to strings not supported");
+                    if (arrayCount != null && arrayCount > 1) {
+                        throw new Error("no source code to string conversion format for " + typeName + "[]".repeat(arrayCount) + "'");
                     }
                     return "(" + variableName + " ? " + variableName + ".toString() : \"null\")";
                 case "string":
@@ -303,14 +343,64 @@ var TypeConverter;
                 default:
                     throw new Error("unknown type name for TypeScript code: " + typeName);
             }
-        };
-        /** Convert a map of property names and type template strings into an array of TypeScript source code strings that convert each property to a string */
-        TypeScript.createTypeTemplatesToStringCode = function (props) {
-            var keys = Object.keys(props);
+        }
+        TypeScript.createTypeTemplateToStringCode = createTypeTemplateToStringCode;
+        /** Convert a map of property names and type templates into an array of TypeScript source code strings that convert each property to a string.
+         * @param props maps object property names to their property type templates
+         * @params [keys] optional, list of 'props' keys to map, if not provided 'Object.keys()' is used
+         * @returns an array of results from calling 'createTypeTemplateToStringCode()' on each property in the 'props' map
+         */
+        function createTypeTemplatesToStringCode(props, keys) {
+            keys = keys || Object.keys(props);
             return keys.map(function (k) { return TypeScript.createTypeTemplateToStringCode(props[k], k); });
-        };
-        return TypeScript;
-    }());
-    TypeConverter.TypeScript = TypeScript;
+        }
+        TypeScript.createTypeTemplatesToStringCode = createTypeTemplatesToStringCode;
+        /** Create a function which returns the source code string that converts a 'Date' variable into a string (or other type) when given a variable name.
+         * Can be used as the 3rd argument ('dateToString') when calling 'createTypeTemplateToStringCode()'
+         * @param dateToString the name of the 'Date' function to call on the variable to convert it
+         * @param [locale] optional, locale argument to pass to the 'Date' function defined by 'dateFunction'
+         * @param [dateTimeFormatOptions] optional, date-time format options to pass to the 'Date' function defined by 'dateFunction'
+         */
+        function createDateToStringCodeFunction(dateToString, locale, dateTimeFormatOptions) {
+            var args = (locale != null || dateTimeFormatOptions != null
+                ? (locale != null ? (typeof locale === "string" ? "\"" + locale + "\"" : "[\"" + locale.join("\",\"") + "\"]") : "undefined") +
+                    (dateTimeFormatOptions != null ? ", " + JSON.stringify(dateTimeFormatOptions) : "")
+                : "");
+            var dateStringify = dateToString + "(" + args + ")";
+            return function (variableName) {
+                return variableName + "." + dateStringify;
+            };
+        }
+        TypeScript.createDateToStringCodeFunction = createDateToStringCodeFunction;
+    })(TypeScript = TypeConverter.TypeScript || (TypeConverter.TypeScript = {}));
+    var CSharp;
+    (function (CSharp) {
+        /** Convert an Open API Spec type to C# equivalent type.
+         * based on: https://swagger.io/specification/#data-types
+         * @param typeName the type name (i.e. 'bool' or 'String')
+         * @param format the 'format' field (if available) for this 'typeName' in the Open API document
+         * @param returnUnknownTypes whether to return unknown 'typeName' values or throw an error
+        */
+        function convertOpenApiType(typeName, format, returnUnknownTypes) {
+            switch (typeName) {
+                case "boolean":
+                    return "bool";
+                case "integer":
+                    return format === "int64" ? "long" : "int";
+                case "number":
+                    return format === "double" || format === "float" ? format : "int";
+                case "string":
+                    return format === "date" || format === "date-time" ? "DateTime" : "string";
+                default:
+                    if (returnUnknownTypes) {
+                        return typeName;
+                    }
+                    else {
+                        throw new Error("unknown type name for TypeScript code: '" + typeName + "'");
+                    }
+            }
+        }
+        CSharp.convertOpenApiType = convertOpenApiType;
+    })(CSharp = TypeConverter.CSharp || (TypeConverter.CSharp = {}));
 })(TypeConverter || (TypeConverter = {}));
 module.exports = TypeConverter;
