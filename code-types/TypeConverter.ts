@@ -1,4 +1,6 @@
-﻿/** Helper functions for converting source code data types to and from common CodeAst.Type and between different languages
+﻿/// <reference path="./openapi.d.ts" />
+
+/** Helper functions for converting source code data types to and from common CodeAst.Type and between different languages
  * @author TeamworkGuy2
  */
 module TypeConverter {
@@ -153,7 +155,7 @@ module TypeConverter {
 	/** Check whether an object is an Open API Reference type
 	 * @param obj the object to test
 	 */
-	export function isOpenApiReference(obj: any): obj is OpenApiV3.Reference {
+	export function isOpenApiReference(obj: any): obj is OpenApiV2.Reference {
 		return "$ref" in obj;
 	}
 

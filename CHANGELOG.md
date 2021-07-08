@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.27.0](N/A) - 2021-07-05
+### [0.27.1](N/A) - 2021-07-07
+#### Changed
+* Fix compile error when project is used as a package in another project, need to reference `openapi.d.ts` in `TypeConverter.ts`
+
+
+--------
+### [0.27.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/381cad70c1737c23acb29ee0f2875a58b227d0bb) - 2021-07-05
 #### Added
 * `TypeConverter.TypeScript.createTypeTemplateToStringCode()` now supports arrays of primitive types
 * `dateToString` parameter to `TypeConverter.TypeScript.createTypeTemplateToStringCode()` to allow Date to string source code customizations
