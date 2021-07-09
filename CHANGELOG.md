@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.27.1](N/A) - 2021-07-07
+### [0.27.2](N/A) - 2021-07-08
+#### Changed
+* Fix an error with `arrayDimensions: 0` not producing the same results as `arrayDimensions: null` when passed to `TypeConverter.TypeScript.createTypeTemplateToStringCode()`
+
+
+--------
+### [0.27.1](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/62a2aaeeddf15f5839c72fcad7d8a3942819a970) - 2021-07-07
 #### Changed
 * Fix compile error when project is used as a package in another project, need to reference `openapi.d.ts` in `TypeConverter.ts`
 

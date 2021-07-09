@@ -338,7 +338,7 @@ module TypeConverter {
             switch (typeName) {
                 case "bool":
                 case "boolean":
-                    if (arrayCount != null) {
+                    if (arrayCount != null && arrayCount > 0) {
                         if (arrayCount > 1) {
                             throw new Error("no source code to string conversion format for " + typeName + "[]".repeat(arrayCount) + "'");
                         }
@@ -368,7 +368,7 @@ module TypeConverter {
                 case "date":
                 case "DateTime":
                     if (dateToString != null) {
-                        if (arrayCount != null) {
+                        if (arrayCount != null && arrayCount > 0) {
                             if (arrayCount > 1) {
                                 throw new Error("no source code to string conversion format for '" + typeName + "[]".repeat(arrayCount) + "'");
                             }

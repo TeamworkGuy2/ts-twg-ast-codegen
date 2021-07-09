@@ -55,10 +55,11 @@ suite("TypeConverter", function TypeConverterTest() {
         test("createTypeTemplateToStringCode", function createTypeTemplateToStringCodeTest() {
             var toCode = TypeConverter.TypeScript.createTypeTemplateToStringCode;
             asr.equal(toCode({ typeName: "boolean" }, "myVal"), "(myVal ? \"true\" : \"false\")");
-            asr.equal(toCode({ typeName: "number" }, "myVal"), "(myVal ? myVal.toString() : \"null\")");
-            asr.equal(toCode({ typeName: "byte" }, "v"), "(v ? v.toString() : \"null\")");
-            asr.equal(toCode({ typeName: "uint" }, "_"), "(_ ? _.toString() : \"null\")");
+            asr.equal(toCode({ typeName: "number", nullable: false }, "myVal"), "(myVal ? myVal.toString() : \"null\")");
+            asr.equal(toCode({ typeName: "byte", nullable: true }, "v"), "(v ? v.toString() : \"null\")");
+            asr.equal(toCode({ typeName: "uint", arrayDimensions: 0, primitive: true }, "_"), "(_ ? _.toString() : \"null\")");
             asr.equal(toCode({ typeName: "date" }, "va"), "(va ? va.toString() : \"null\")");
+            asr.equal(toCode({ typeName: "boolean", arrayDimensions: 0 }, "flags"), "(flags ? \"true\" : \"false\")");
             asr.equal(toCode({ typeName: "boolean", arrayDimensions: 1 }, "flags"), "(flags ? Array.prototype.map.call(flags, function (v) { return (v ? \"true\" : \"false\"); }) : \"null\")");
             asr.equal(toCode({ typeName: "float", arrayDimensions: 1 }, "ff"), "(ff ? ff.toString() : \"null\")");
             asr.throws(function () { return toCode({ typeName: "real", arrayDimensions: 2 }, "v"); });
