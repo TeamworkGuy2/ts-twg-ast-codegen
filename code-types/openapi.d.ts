@@ -420,7 +420,7 @@ declare module OpenApiV2 {
         /** Value MUST be a string. Multiple types via an array are not supported. */
         type: "array";
         /** Value MUST be an object and not an array. Inline or referenced schema MUST be of a Schema Object and not a standard JSON Schema. items MUST be present if the type is array. */
-        items?: Schema | Reference;
+        items: Schema | Reference;
         /** The value of this keyword MUST be a non-negative integer.
          * An array instance is valid against "maxItems" if its size is less than, or equal to, the value of this keyword. */
         maxItems?: number;

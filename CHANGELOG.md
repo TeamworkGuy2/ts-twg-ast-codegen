@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.27.2](N/A) - 2021-07-08
+### [0.28.0](N/A) - 2021-08-14
+#### Added
+* Add `OpenApiConverter` for converting Open API V2 `definitions` to `CodeAst` types, also add unit tests
+
+
+--------
+### [0.27.2](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/fd06650321f059c415a3d182038de999aaf5bbf3) - 2021-07-08
 #### Changed
 * Fix an error with `arrayDimensions: 0` not producing the same results as `arrayDimensions: null` when passed to `TypeConverter.TypeScript.createTypeTemplateToStringCode()`
 
