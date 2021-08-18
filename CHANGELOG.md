@@ -4,7 +4,25 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.28.0](N/A) - 2021-08-14
+### [0.29.0](N/A) - 2021-08-17
+#### Added
+* `OpenApiConverter` static fields/methods:
+  * `defaultTypeConverter` for handling type construction when calling `readType()`
+  * `anyOfProp` the name of the prop used for 'anyOf' checks, doesn't currently exist in Open API v2. This property provides a way to detect and generate 'anyOf' types
+  * `readType()` made public
+  * renamed some parameters for clarity
+
+#### Changed
+* Annotation arguments will now be `JSON.stringify()` encoded, this affects the annotation `value` of `EnumOf`, `AllOf`, and `AnyOf`
+* `$ref` type/field naming stack now includes the name (last path segment) of the reference type
+* `TypeConverter.isPrimitive()` now includes `integer` for Open API specs
+
+#### Fixed
+* `required` now correct on object properties
+
+
+--------
+### [0.28.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/55e382ac3275a6c74d91c78aa49236605d7269b8) - 2021-08-14
 #### Added
 * Add `OpenApiConverter` for converting Open API V2 `definitions` to `CodeAst` types, also add unit tests
 

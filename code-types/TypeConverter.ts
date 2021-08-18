@@ -111,6 +111,7 @@ module TypeConverter {
             case "decimal":
             case "real":
             case "number":
+            case "integer":
                 return true;
             default:
                 return false;

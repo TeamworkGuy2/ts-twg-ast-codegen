@@ -44,14 +44,14 @@ suite("OpenApiConverter", function OpenApiConverterTest() {
                 classSignature: { name: "SimpleType", declarationType: "class", access: "public", annotations: [{ name: "OpenApiModel", arguments: { type: "SimpleType" } }] },
                 fields: [{
                     name: "name",
-                    type: { typeName: "string", primitive: true, arrayDimensions: 0 },
+                    type: { typeName: "string" },
                     required: false,
                     annotations: [],
                     accessModifiers: ["public"],
                     comments: undefined,
                 }, {
                     name: "value",
-                    type: { typeName: "int64", primitive: true, arrayDimensions: 0 },
+                    type: { typeName: "int64", primitive: true },
                     required: false,
                     annotations: [],
                     accessModifiers: ["public"],
@@ -59,15 +59,15 @@ suite("OpenApiConverter", function OpenApiConverterTest() {
                 }],
                 methods: [],
             },
-            "ReferenceType": <CodeAst.Class>{
+            "ReferenceType_SimpleType": <CodeAst.Class>{
                 using: [],
                 blockType: "CLASS",
-                classSignature: { name: "ReferenceType", declarationType: "class", access: "public", annotations: [{ name: "OpenApiModel", arguments: { type: "ReferenceType" } }] },
+                classSignature: { name: "ReferenceType_SimpleType", declarationType: "class", access: "public", annotations: [{ name: "OpenApiModel", arguments: { type: "ReferenceType.SimpleType" } }] },
                 fields: [],
                 methods: [],
             }
         };
-        definitions.ReferenceType.fields = definitions.SimpleType.fields.slice();
+        definitions.ReferenceType_SimpleType.fields = definitions.SimpleType.fields.slice();
 
         asr.deepEqual(models, definitions);
     });
@@ -80,7 +80,7 @@ suite("OpenApiConverter", function OpenApiConverterTest() {
                 required: ["name"],
                 properties: {
                     id: { type: "integer", format: "int64" },
-                    name: { type: "string", minLength: 2 }
+                    name: { type: "string", minLength: 2, maxLength: 20 }
                 }
             },
             Tag: {
@@ -99,16 +99,16 @@ suite("OpenApiConverter", function OpenApiConverterTest() {
                 classSignature: { name: "Category", declarationType: "class", access: "public", annotations: [{ name: "OpenApiModel", arguments: { type: "Category" } }] },
                 fields: [{
                     name: "id",
-                    type: { typeName: "int64", primitive: true, arrayDimensions: 0 },
+                    type: { typeName: "int64", primitive: true },
                     required: false,
                     annotations: [],
                     accessModifiers: ["public"],
                     comments: undefined,
                 }, {
                     name: "name",
-                    type: { typeName: "string", primitive: true, arrayDimensions: 0 },
-                    required: false,
-                    annotations: [{ name: "StringLength", arguments: { min: "2" } }],
+                    type: { typeName: "string" },
+                    required: true,
+                    annotations: [{ name: "StringLength", arguments: { min: "2", max: "20" } }],
                     accessModifiers: ["public"],
                     comments: undefined,
                 }],
@@ -120,14 +120,14 @@ suite("OpenApiConverter", function OpenApiConverterTest() {
                 classSignature: { name: "Tag", declarationType: "class", access: "public", annotations: [{ name: "OpenApiModel", arguments: { type: "Tag" } }] },
                 fields: [{
                     name: "tagId",
-                    type: { typeName: "int64", primitive: true, arrayDimensions: 0 },
+                    type: { typeName: "int64", primitive: true },
                     required: false,
                     annotations: [],
                     accessModifiers: ["public"],
                     comments: undefined,
                 }, {
                     name: "description",
-                    type: { typeName: "string", primitive: true, arrayDimensions: 0 },
+                    type: { typeName: "string" },
                     required: false,
                     annotations: [],
                     accessModifiers: ["public"],
@@ -164,7 +164,7 @@ suite("OpenApiConverter", function OpenApiConverterTest() {
                 },
                 fields: [{
                     name: "sid",
-                    type: { typeName: "uniqueidentifier", arrayDimensions: 0, primitive: true },
+                    type: { typeName: "uniqueidentifier" },
                     accessModifiers: ["public"],
                     annotations: [],
                     comments: undefined,

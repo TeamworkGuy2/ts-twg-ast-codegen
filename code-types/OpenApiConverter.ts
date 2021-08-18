@@ -1,6 +1,9 @@
 ﻿import TypeConverter = require("./TypeConverter");
 
 module OpenApiConverter {
+    /** The property name used for detecting 'anyOf' schemas, since this isn't part of the Open API v2 spec */
+    export var anyOfProp = <"anyOf">"anyOf";
+
     /** Default converter for naming models - nested model names are generated
      * based on their parent model and prop name, e.g. 'Root_propName_subPropName...'
      * @param nameStack the stack of model names forming a path through the OpenAPI models that lead up to this model being named
@@ -9,8 +12,26 @@ module OpenApiConverter {
         return nameStack.join("_");
     };
 
+    /** Default converter for types in model fields
+     * @param typeName the Open API type name, e.g. 'number' or 'integer'
+     * @param [format] optional, format of the type, e.g. 'int64' or 'float'
+     */
+    export var defaultTypeConverter: (typeName: string, format?: string | null) => CodeAst.Type = function (typeName, format) {
+        if (TypeConverter.isPrimitive(typeName)) {
+            return {
+                typeName: format || typeName,
+                primitive: true,
+            };
+        }
+        else {
+            return {
+                typeName: format || typeName,
+            };
+        }
+    };
 
-    export function extractOpenApiModels(openApiDefinitions: OpenApiV2.Definitions, modelNamer = defaultModelNamer): StringMap<CodeAst.Class> {
+
+    export function extractOpenApiModels(openApiDefinitions: OpenApiV2.Definitions, modelNamer = defaultModelNamer, typeConverter = defaultTypeConverter): StringMap<CodeAst.Class> {
         var models = <StringMap<CodeAst.Class>>{};
 
         for (var defName in openApiDefinitions) {
@@ -20,21 +41,22 @@ module OpenApiConverter {
                 var clsName = clazz.classSignature.name;
                 if (models[clsName] != null) throw new Error("duplicate model name '" + clsName + "'");
                 models[clsName] = clazz;
-            }, openApiDefinitions, modelNamer);
+            }, openApiDefinitions, modelNamer, typeConverter);
         }
 
         return models;
     }
 
 
-    export function createModelParameterFromType(paramName: string, openApiType: OpenApiV2.Type, openApiDefinitions?: OpenApiV2.Definitions, modelNamer = defaultModelNamer): { parameter: CodeAst.MethodParameter; classes: StringMap<CodeAst.Class> } {
+    export function createModelParameterFromType(paramName: string, paramType: OpenApiV2.Type, openApiDefinitions?: OpenApiV2.Definitions, modelNamer = defaultModelNamer, typeConverter = defaultTypeConverter
+    ): { parameter: CodeAst.MethodParameter; classes: StringMap<CodeAst.Class> } {
         var models = <StringMap<CodeAst.Class>>{};
 
-        var field = readType([paramName], openApiType, (clazz) => {
+        var field = readType([paramName], paramType, (clazz) => {
             var clsName = clazz.classSignature.name;
             if (models[clsName] != null) throw new Error("duplicate model name '" + clsName + "'");
             models[clsName] = clazz;
-        }, openApiDefinitions || null, modelNamer);
+        }, openApiDefinitions || null, modelNamer, typeConverter);
 
         return {
             parameter: {
@@ -48,33 +70,40 @@ module OpenApiConverter {
     }
 
 
-    /** Extract CodeAst.Class and CodeAst.Field models from an OAS JSON type definition
-     * @param nameStack the names of the 'oasType's from the recursive call up to this point, used recursively to track property names
-     * @param oasType the OAS JSON type to convert recursively
+    /** Extract CodeAst.Class and CodeAst.Field models from an Open API JSON type definition
+     * @param nameStack the names of the 'openApiType' models that lead to this point, used recursively to track nested type names
+     * @param openApiType the Open API JSON type to convert recursively
      * @param objectVisitor called for each complete object model read
-     * @param [oasDefs] optional, the OpenAPI document root 'definitions' for looking up '$ref' types
-     * @param [modelNamer] optional (default: 'defaultModelNamer') a function which converts model name stack to a model name
+     * @param [openApiDefinitions] optional, the OpenAPI document root 'definitions' for looking up '$ref' types
+     * @param modelNamer (default: 'defaultModelNamer') a function which converts model name stack to a model name
+     * @param typeConverter (default: 'defaultTypeConverter') a function which converts type names and format hints to 'CodeAst.Type' types
      */
-    function readType(nameStack: string[], oasType: (OpenApiV2.Schema | OpenApiV2.Type | OpenApiV2.Reference), objectVisitor: (clazz: CodeAst.Class) => void, oasDefs: OpenApiV2.Definitions | null, modelNamer: (nameStack: string[]) => string): CodeAst.Field {
+    export function readType(nameStack: string[], openApiType: (OpenApiV2.Schema | OpenApiV2.Type | OpenApiV2.Reference), objectVisitor: (clazz: CodeAst.Class) => void, openApiDefinitions: OpenApiV2.Definitions | null,
+        modelNamer: (nameStack: string[]) => string, typeConverter: (typeName: string, format?: string | null) => CodeAst.Type
+    ): CodeAst.Field {
         // '$ref' Reference
-        if (isOpenApiReference(oasType)) {
-            if (oasDefs != null) {
-                var refType = queryJsonPath(oasType.$ref, oasDefs, ["definitions"]);
+        if (isOpenApiReference(openApiType)) {
+            if (openApiDefinitions != null) {
+                var refType = queryJsonPath(openApiType.$ref, openApiDefinitions, ["definitions"]);
                 if (refType == null) {
-                    throw new Error("reference type not found '" + oasType.$ref + "'");
+                    throw new Error("reference type not found '" + openApiType.$ref + "'");
                 }
-                return readType(nameStack, refType, objectVisitor, oasDefs, modelNamer);
+                nameStack.push(last(openApiType.$ref.split("/")))
+                var resType = readType(nameStack, refType, objectVisitor, openApiDefinitions, modelNamer, typeConverter);
+                nameStack.pop();
+                resType.name = last(nameStack); // avoid '$ref' fields getting named after their '$ref' definition/model instead of the field they come from
+                return resType;
             }
             else {
-                throw new Error("document 'definitions' not provided, cannot follow reference '" + oasType.$ref + "'");
+                throw new Error("document 'definitions' not provided, cannot follow reference '" + openApiType.$ref + "'");
             }
         }
         // 'allOf' schema
-        else if (isOpenApiAllOf(oasType)) {
+        else if (isOpenApiAllOf(openApiType)) {
             // load all the 'allOf' types
             var allTypes: CodeAst.Type[] = [];
-            for (var allType of oasType.allOf) {
-                var allTypeField = readType(nameStack, allType, objectVisitor, oasDefs, modelNamer);
+            for (var allType of openApiType.allOf) {
+                var allTypeField = readType(nameStack, allType, objectVisitor, openApiDefinitions, modelNamer, typeConverter);
                 allTypes.push(allTypeField.type);
             }
 
@@ -82,46 +111,70 @@ module OpenApiConverter {
             var objType = createOpenApiClass(nameStack, [], modelNamer);
             objType.classSignature.implementClassNames = addAll(objType.classSignature.implementClassNames, allTypes);
 
-            objType.classSignature.annotations = addAll(objType.classSignature.annotations, [{ name: "AllOf", arguments: { value: "['" + allTypes.map((type) => TypeConverter.typeToString(type)).join("', '") + "']" } }]);
+            objType.classSignature.annotations = addAll(objType.classSignature.annotations, [{ name: "AllOf", arguments: { value: JSON.stringify(allTypes.map((type) => TypeConverter.typeToString(type))).replace(/\",\"/g, "\", \"") } }]);
 
             objectVisitor(objType);
 
             return {
                 name: last(nameStack),
-                type: {
-                    typeName: objType.classSignature.name,
-                },
+                type: typeConverter(objType.classSignature.name),
+                accessModifiers: ["public"],
+            };
+        }
+        // 'anyOf' schema
+        else if (isOpenApiAnyOf(openApiType, anyOfProp)) {
+            // load all the 'allOf' types
+            var anyTypes: CodeAst.Type[] = [];
+            for (var anyType of openApiType[anyOfProp]) {
+                var anyTypeField = readType(nameStack, anyType, objectVisitor, openApiDefinitions, modelNamer, typeConverter);
+                anyTypes.push(anyTypeField.type);
+            }
+
+            // create a synthetic type union of all the 'anyOf' types
+            var objType = createOpenApiClass(nameStack, [], modelNamer);
+            objType.classSignature.implementClassNames = addAll(objType.classSignature.implementClassNames, anyTypes);
+
+            objType.classSignature.annotations = addAll(objType.classSignature.annotations, [{ name: "AnyOf", arguments: { value: JSON.stringify(anyTypes.map((type) => TypeConverter.typeToString(type))).replace(/\",\"/g, "\", \"") } }]);
+
+            objectVisitor(objType);
+
+            return {
+                name: last(nameStack),
+                type: typeConverter(objType.classSignature.name),
                 accessModifiers: ["public"],
             };
         }
         // array
-        else if (oasType.type === "array") {
-            var item = readType(nameStack, oasType.items, objectVisitor, oasDefs, modelNamer);
+        else if (openApiType.type === "array") {
+            var item = readType(nameStack, openApiType.items, objectVisitor, openApiDefinitions, modelNamer, typeConverter);
             item.type.arrayDimensions = (item.type.arrayDimensions || 0) + 1;
             return item;
         }
         // object
-        else if (oasType.type === "object") {
+        else if (openApiType.type === "object") {
+            var required = openApiType.required || [];
             var fields: CodeAst.Field[] = [];
 
-            for (var propName in oasType.properties) {
-                var prop = oasType.properties[propName];
+            for (var propName in openApiType.properties) {
+                var prop = openApiType.properties[propName];
 
                 nameStack.push(propName);
-                var field = readType(nameStack, prop, objectVisitor, oasDefs, modelNamer);
+                var field = readType(nameStack, prop, objectVisitor, openApiDefinitions, modelNamer, typeConverter);
                 nameStack.pop();
+
+                field.required = required.indexOf(field.name) > -1;
 
                 fields.push(field);
             }
 
             var extendsTypes: CodeAst.Type[] = [];
             var annotations: CodeAst.Annotation[] = []
-            if (oasType.additionalProperties != null) {
-                if (typeof oasType.additionalProperties === "boolean") {
+            if (openApiType.additionalProperties != null) {
+                if (typeof openApiType.additionalProperties === "boolean") {
                     annotations.push({ name: "AdditionalProperties", arguments: { value: "true" } });
                 }
                 else {
-                    var additionalPropsType = readType(nameStack, oasType.additionalProperties, objectVisitor, oasDefs, modelNamer);
+                    var additionalPropsType = readType(nameStack, openApiType.additionalProperties, objectVisitor, openApiDefinitions, modelNamer, typeConverter);
                     extendsTypes.push(additionalPropsType.type);
                 }
             }
@@ -141,39 +194,33 @@ module OpenApiConverter {
             // return a synthetic field based on the class
             return {
                 name: last(nameStack),
-                type: {
-                    typeName: objType.classSignature.name,
-                },
+                type: typeConverter(objType.classSignature.name),
                 accessModifiers: ["public"],
             };
         }
         // primitive
         else {
             var annotations: CodeAst.Annotation[] = [];
-            if (oasType.type === "string" && ((<OpenApiV2.SchemaString><any>oasType).minLength != null || oasType.maxLength != null)) {
+            if (openApiType.type === "string" && ((<OpenApiV2.SchemaString><any>openApiType).minLength != null || openApiType.maxLength != null)) {
                 var annArgs: StringMap<string> = {};
-                if ((<OpenApiV2.SchemaString><any>oasType).minLength != null) {
-                    annArgs["min"] = String((<OpenApiV2.SchemaString><any>oasType).minLength);
+                if ((<OpenApiV2.SchemaString><any>openApiType).minLength != null) {
+                    annArgs["min"] = String((<OpenApiV2.SchemaString><any>openApiType).minLength);
                 }
-                if (oasType.maxLength != null) {
-                    annArgs["max"] = String(oasType.maxLength);
+                if (openApiType.maxLength != null) {
+                    annArgs["max"] = String(openApiType.maxLength);
                 }
                 annotations.push({ name: "StringLength", arguments: annArgs });
             }
-            if (oasType.type === "string" && oasType.enum != null) {
-                annotations.push({ name: "EnumOf", arguments: { value: "['" + oasType.enum.map((enm) => String(enm)).join("', '") + "']" } });
+            if (openApiType.type === "string" && openApiType.enum != null) {
+                annotations.push({ name: "EnumOf", arguments: { value: JSON.stringify(openApiType.enum.map((enm) => String(enm))).replace(/\",\"/g, "\", \"") } });
             }
 
             var field: CodeAst.Field = {
                 name: last(nameStack),
-                type: {
-                    typeName: <string>(oasType.format || oasType.type),
-                    arrayDimensions: 0,
-                    primitive: true,
-                },
+                type: typeConverter(openApiType.type, openApiType.format),
                 accessModifiers: ["public"],
                 annotations: annotations,
-                comments: !(oasType.description == null || oasType.description.length === 0) ? [oasType.description] : undefined,
+                comments: !(openApiType.description == null || openApiType.description.length === 0) ? [openApiType.description] : undefined,
                 required: false,
             };
             return field;
@@ -194,6 +241,14 @@ module OpenApiConverter {
      */
     export function isOpenApiAllOf(obj: any): obj is OpenApiV2.SchemaAllOf {
         return obj != null && "allOf" in obj;
+    }
+
+
+    /** Check whether an object is an Open API spec 'Schema AllOf'
+     * @param obj the object to test
+     */
+    export function isOpenApiAnyOf<K extends string>(obj: any, prop: K): obj is { [P in K]: (OpenApiV2.Schema | OpenApiV2.Reference)[] } {
+        return obj != null && prop in obj;
     }
 
 
@@ -221,7 +276,7 @@ module OpenApiConverter {
         var res = obj;
         var i = 1;
 
-        if (hasAny(skipParts)) {
+        if (skipParts != null) {
             for (var skipCount = skipParts.length; i < skipCount + 1; i++) {
                 if (parts[i] !== skipParts[i - 1]) {
                     break;
@@ -260,11 +315,6 @@ module OpenApiConverter {
         var res = target != null ? Array.prototype.slice.call(target) : [];
         Array.prototype.push.apply(res, <any[]><any>ary);
         return res;
-    }
-
-
-    function hasAny<T>(ary: T[] | null | undefined): ary is T[] {
-        return ary != null && ary.length > 0;
     }
 
 
