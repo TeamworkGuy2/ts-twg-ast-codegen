@@ -4,7 +4,13 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.29.0](N/A) - 2021-08-17
+### [0.30.0](N/A) - 2022-01-02
+#### Changed
+* Update to TypeScript 4.4
+
+
+--------
+### [0.29.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/32a417c3967ff6418bb447213ec2d25fab62828b) - 2021-08-17
 #### Added
 * `OpenApiConverter` static fields/methods:
   * `defaultTypeConverter` for handling type construction when calling `readType()`

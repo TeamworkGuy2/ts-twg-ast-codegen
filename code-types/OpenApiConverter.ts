@@ -1,8 +1,10 @@
 ﻿import TypeConverter = require("./TypeConverter");
 
 module OpenApiConverter {
-    /** The property name used for detecting 'anyOf' schemas, since this isn't part of the Open API v2 spec */
-    export var anyOfProp = <"anyOf">"anyOf";
+    /** The property name used for detecting 'anyOf' schemas, since this isn't part of the Open API v2 spec
+     * This property name should be a property of a 'definitions' value with the type '(OpenApiV2.Schema | OpenApiV2.Type | OpenApiV2.Reference)[]'
+     */
+    export var anyOfProp = "anyOf";
 
     /** Default converter for naming models - nested model names are generated
      * based on their parent model and prop name, e.g. 'Root_propName_subPropName...'
