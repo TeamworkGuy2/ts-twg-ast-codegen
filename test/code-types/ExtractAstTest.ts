@@ -187,7 +187,7 @@ suite("ExtractAst", function ExtractAstTest() {
     test("extractInheritedTypes", function extractInheritedTypesTest() {
         var classes = toMap(getClassAsts(), (obj) => obj.classSignature.name);
 
-        var res = ExtractAst.extractInheritedTypes(Object.keys(classes), classes);
+        var res = ExtractAst.extractInheritedTypes(Object.keys(classes), classes, filterPrimitiveTypes);
 
         asr.deepEqual(Object.keys(res).sort(), ["Base.ApiController", "Base.BaseController", "Base.IService"]);
 
@@ -198,9 +198,9 @@ suite("ExtractAst", function ExtractAstTest() {
     test("extractAllTypes", function extractAllTypesTest() {
         var models = toMap(getModelAsts(), (obj) => obj.classSignature.name);
 
-        var res = ExtractAst.extractAllTypes(Object.keys(models), models, false)
+        var res = ExtractAst.extractAllTypes(Object.keys(models), models, filterPrimitiveTypes);
 
-        asr.deepEqual(Object.keys(res).sort(), ["IList", "T", "TestApp.Models.Base.SearchCriteria", "TestApp.Models.Enums.SortOrder", "TestApp.Models.PhotoHeader", "UserIdentifier"])
+        asr.deepEqual(Object.keys(res).sort(), ["IList", "T", "TestApp.Models.Base.SearchCriteria", "TestApp.Models.Enums.SortOrder", "TestApp.Models.PhotoHeader", "UserIdentifier"]);
 
         //console.log(JSON.stringify(res));
     });
@@ -209,10 +209,10 @@ suite("ExtractAst", function ExtractAstTest() {
     test("extractAllTypes-2", function extractAllTypesTest2() {
         var classes = toMap(getClassAsts(), (obj) => obj.classSignature.name);
 
-        var res = ExtractAst.extractAllTypes(Object.keys(classes), classes, false)
+        var res = ExtractAst.extractAllTypes(Object.keys(classes), classes, filterPrimitiveTypes);
 
         asr.deepEqual(Object.keys(res).sort(), ["Base.ApiController", "Base.BaseController", "Base.IService", "IList", "ISimpleLogger", "TestApp.Models.CoverLog", "TestApp.Models.ErrorLog", "TestApp.Models.PhotoUploadDto",
-            "TestApp.Models.SearchResults", "TestApp.Models.Searching.CoverLogSearchCriteria"])
+            "TestApp.Models.SearchResults", "TestApp.Models.Searching.CoverLogSearchCriteria"]);
 
         //console.log(JSON.stringify(res));
     });
@@ -221,7 +221,7 @@ suite("ExtractAst", function ExtractAstTest() {
     test("extractAnnotationArgumentTypes", function extractAnnotationArgumentTypesTest() {
         var models = toMap(getModelAsts(), (obj) => obj.classSignature.name);
 
-        var res = ExtractAst.extractAnnotationArgumentTypes(Object.keys(models), models, true, (annot, argName, argValue) => {
+        var res = ExtractAst.extractAnnotationArgumentTypes(Object.keys(models), models, (typeName) => true, (annot, argName, argValue) => {
             console.log("annotation '" + argName + "': " + argValue);
             var type = TypeConverter.parseTypeTemplate(argValue).typeName;
             return (TypeConverter.isPrimitive(type) || TypeConverter.isCore(type) || models[type] != null) ? argValue : null;
@@ -233,6 +233,11 @@ suite("ExtractAst", function ExtractAstTest() {
             name: "Criteria", arguments: { "value": "string" }
         }]]);
     });
+
+
+    function filterPrimitiveTypes(typeName: string) {
+        return !TypeConverter.isPrimitive(typeName) && !TypeConverter.isCore(typeName) && typeName !== "void";
+    }
 
 
     function toMap<T>(ary: T[], keyGetter: (obj: T) => string) {

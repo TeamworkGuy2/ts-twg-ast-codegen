@@ -243,44 +243,6 @@ var StringArray = /** @class */ (function () {
         return dst;
     }
     StringArray.joinMulti = joinMulti;
-    /** Add an optional prefix and suffix to a string and return the result
-     */
-    function preAppendStr(prefix, str, suffix) {
-        if (prefix || suffix) {
-            if (prefix && suffix) {
-                return prefix + str + suffix;
-            }
-            else if (prefix && !suffix) {
-                return prefix + str;
-            }
-            else if (!prefix && suffix) {
-                return str + suffix;
-            }
-            else {
-                // impossible
-                return null;
-            }
-        }
-        else {
-            return str;
-        }
-    }
-    StringArray.preAppendStr = preAppendStr;
-    /** Add optional prefix and suffix strings to an array of strings
-     */
-    function preAppendArray(prefix, ary, suffix) {
-        if (prefix) {
-            ary.unshift(prefix);
-        }
-        if (suffix) {
-            ary.push(suffix);
-        }
-        return ary;
-    }
-    StringArray.preAppendArray = preAppendArray;
-    /** Add a common prefix and suffix string to each of the strings in an array of strings
-     * @return 'strs' with prefix and suffix strings added
-     */
     function preAppend(prefix, suffix, strs, dst) {
         if (dst === void 0) { dst = []; }
         if (prefix || suffix) {

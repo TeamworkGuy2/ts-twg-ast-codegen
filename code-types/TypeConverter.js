@@ -1,5 +1,4 @@
 "use strict";
-/// <reference path="./openapi.d.ts" />
 /** Helper functions for converting source code data types to and from common CodeAst.Type and between different languages
  * @author TeamworkGuy2
  */
@@ -132,20 +131,6 @@ var TypeConverter;
         return dataType && dataType.genericParameters != null && dataType.genericParameters.length > 0;
     }
     TypeConverter.isGeneric = isGeneric;
-    /** Check whether an object is an Open API Spec type
-     * @param obj the object to test
-     */
-    function isOpenApiType(obj) {
-        return "type" in obj && (obj["type"] === "array" ? "items" in obj : (obj["type"] === "object" ? "properties" in obj : true));
-    }
-    TypeConverter.isOpenApiType = isOpenApiType;
-    /** Check whether an object is an Open API Reference type
-     * @param obj the object to test
-     */
-    function isOpenApiReference(obj) {
-        return "$ref" in obj;
-    }
-    TypeConverter.isOpenApiReference = isOpenApiReference;
     /** Create a deep copy of a CodeAst.Type
      * @see mapType()
      * @param type

@@ -233,7 +233,7 @@ module StringArray {
     /** Convert a single level object containing string or string[] properties to an array of strings
      * @return the flattened string array with the 'join' string[] inserted between each property
      */
-    export function flattenMapJoin(obj: { [id: string]: string[] }, join: string[], keys: string[] = Object.keys(obj), dst: string[] = []): string[] {
+    export function flattenMapJoin(obj: { [id: string]: string[] }, join: string[] | null, keys: string[] = Object.keys(obj), dst: string[] = []): string[] {
         if (join) {
             for (var i = 0, count = keys.length - 1; i < count; i++) {
                 var prop = obj[keys[i]];
@@ -280,47 +280,12 @@ module StringArray {
     }
 
 
-    /** Add an optional prefix and suffix to a string and return the result
-     */
-    export function preAppendStr(prefix: string, str: string, suffix: string): string {
-        if (prefix || suffix) {
-            if (prefix && suffix) {
-                return prefix + str + suffix;
-            }
-            else if (prefix && !suffix) {
-                return prefix + str;
-            }
-            else if (!prefix && suffix) {
-                return str + suffix;
-            }
-            else {
-                // impossible
-                return <never>null;
-            }
-        }
-        else {
-            return str;
-        }
-    }
-
-
-    /** Add optional prefix and suffix strings to an array of strings
-     */
-    export function preAppendArray(prefix: string, ary: string[], suffix: string): string[] {
-        if (prefix) {
-            ary.unshift(prefix);
-        }
-        if (suffix) {
-            ary.push(suffix);
-        }
-        return ary;
-    }
-
-
     /** Add a common prefix and suffix string to each of the strings in an array of strings
      * @return 'strs' with prefix and suffix strings added
      */
-    export function preAppend(prefix: string, suffix: string, strs: string[], dst: string[] = []): string[] {
+    export function preAppend(prefix: string | null, suffix: string, strs: string[], dst?: string[]): string[];
+    export function preAppend(prefix: string, suffix: string | null, strs: string[], dst?: string[]): string[];
+    export function preAppend(prefix: string | null, suffix: string | null, strs: string[], dst: string[] = []): string[] {
 
         if (prefix || suffix) {
             if (prefix && suffix) {
@@ -352,7 +317,7 @@ module StringArray {
     /** Add a common prefix and suffix string to each of the non-empty strings in an array of strings
      * @return 'strs' with prefix and suffix strings added
      */
-    export function preAppendNonEmpty(prefix: string, suffix: string, strs: string[], dst: string[] = []): string[] {
+    export function preAppendNonEmpty(prefix: string | null, suffix: string | null, strs: string[], dst: string[] = []): string[] {
 
         if (prefix || suffix) {
             if (prefix && suffix) {

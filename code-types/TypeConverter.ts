@@ -1,6 +1,4 @@
-﻿/// <reference path="./openapi.d.ts" />
-
-/** Helper functions for converting source code data types to and from common CodeAst.Type and between different languages
+﻿/** Helper functions for converting source code data types to and from common CodeAst.Type and between different languages
  * @author TeamworkGuy2
  */
 module TypeConverter {
@@ -143,22 +141,6 @@ module TypeConverter {
     export function isGeneric(dataType: CodeAst.Type) {
         return dataType && dataType.genericParameters != null && dataType.genericParameters.length > 0;
     }
-
-
-    /** Check whether an object is an Open API Spec type
-     * @param obj the object to test
-     */
-    export function isOpenApiType(obj: any): obj is OpenApiV2.Type {
-        return "type" in obj && (obj["type"] === "array" ? "items" in obj : (obj["type"] === "object" ? "properties" in obj : true));
-    }
-
-
-	/** Check whether an object is an Open API Reference type
-	 * @param obj the object to test
-	 */
-	export function isOpenApiReference(obj: any): obj is OpenApiV2.Reference {
-		return "$ref" in obj;
-	}
 
 
     /** Create a deep copy of a CodeAst.Type

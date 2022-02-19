@@ -4,7 +4,20 @@ This project 'tries' to adhere to [Semantic Versioning](http://semver.org/).
 
 
 --------
-### [0.30.0](N/A) - 2022-01-02
+### [0.31.0](N/A) - 2022-02-19
+#### Changed
+* Renamed `ast-types.d.ts` -> `code-ast.d.ts`
+* ExtractAst `extractInheritedTypes()`, `extractAllTypes()`, `extractTypesRecursive()`, and `extractAnnotationArgumentTypes()` take a type name filter function instead of an `includePrimitiveTypes` flag
+
+#### Removed
+* `openapi.d.ts` and `OpenApiConverter.ts` to `ts-open-api-spec` project
+* TypeConverter `isOpenApiType()` and `isOpenApiReference()` - moved to `OpenApiConverter` which moved to the `ts-open-api-spec` project
+* StringArray `preAppendStr()` and `preAppendArray()` as they don't provide sufficiently useful functionality as opposed to preAppend()
+
+
+
+--------
+### [0.30.0](https://github.com/TeamworkGuy2/ts-twg-ast-codegen/commit/9d2ac9aeb59402b314a22bcf002238100e9dfd1f) - 2022-01-02
 #### Changed
 * Update to TypeScript 4.4
 

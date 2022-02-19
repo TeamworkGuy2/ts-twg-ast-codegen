@@ -1,4 +1,4 @@
-﻿/// <reference path="./ast-types.d.ts" />
+﻿/// <reference path="./code-ast.d.ts" />
 
 interface GenTools {
 

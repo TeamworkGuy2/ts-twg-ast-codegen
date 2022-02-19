@@ -179,26 +179,26 @@ suite("ExtractAst", function ExtractAstTest() {
     }
     test("extractInheritedTypes", function extractInheritedTypesTest() {
         var classes = toMap(getClassAsts(), function (obj) { return obj.classSignature.name; });
-        var res = ExtractAst.extractInheritedTypes(Object.keys(classes), classes);
+        var res = ExtractAst.extractInheritedTypes(Object.keys(classes), classes, filterPrimitiveTypes);
         asr.deepEqual(Object.keys(res).sort(), ["Base.ApiController", "Base.BaseController", "Base.IService"]);
         //console.log(JSON.stringify(res));
     });
     test("extractAllTypes", function extractAllTypesTest() {
         var models = toMap(getModelAsts(), function (obj) { return obj.classSignature.name; });
-        var res = ExtractAst.extractAllTypes(Object.keys(models), models, false);
+        var res = ExtractAst.extractAllTypes(Object.keys(models), models, filterPrimitiveTypes);
         asr.deepEqual(Object.keys(res).sort(), ["IList", "T", "TestApp.Models.Base.SearchCriteria", "TestApp.Models.Enums.SortOrder", "TestApp.Models.PhotoHeader", "UserIdentifier"]);
         //console.log(JSON.stringify(res));
     });
     test("extractAllTypes-2", function extractAllTypesTest2() {
         var classes = toMap(getClassAsts(), function (obj) { return obj.classSignature.name; });
-        var res = ExtractAst.extractAllTypes(Object.keys(classes), classes, false);
+        var res = ExtractAst.extractAllTypes(Object.keys(classes), classes, filterPrimitiveTypes);
         asr.deepEqual(Object.keys(res).sort(), ["Base.ApiController", "Base.BaseController", "Base.IService", "IList", "ISimpleLogger", "TestApp.Models.CoverLog", "TestApp.Models.ErrorLog", "TestApp.Models.PhotoUploadDto",
             "TestApp.Models.SearchResults", "TestApp.Models.Searching.CoverLogSearchCriteria"]);
         //console.log(JSON.stringify(res));
     });
     test("extractAnnotationArgumentTypes", function extractAnnotationArgumentTypesTest() {
         var models = toMap(getModelAsts(), function (obj) { return obj.classSignature.name; });
-        var res = ExtractAst.extractAnnotationArgumentTypes(Object.keys(models), models, true, function (annot, argName, argValue) {
+        var res = ExtractAst.extractAnnotationArgumentTypes(Object.keys(models), models, function (typeName) { return true; }, function (annot, argName, argValue) {
             console.log("annotation '" + argName + "': " + argValue);
             var type = TypeConverter.parseTypeTemplate(argValue).typeName;
             return (TypeConverter.isPrimitive(type) || TypeConverter.isCore(type) || models[type] != null) ? argValue : null;
@@ -209,6 +209,9 @@ suite("ExtractAst", function ExtractAstTest() {
                     name: "Criteria", arguments: { "value": "string" }
                 }]]);
     });
+    function filterPrimitiveTypes(typeName) {
+        return !TypeConverter.isPrimitive(typeName) && !TypeConverter.isCore(typeName) && typeName !== "void";
+    }
     function toMap(ary, keyGetter) {
         var map = {};
         for (var i = 0, size = ary.length; i < size; i++) {

@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var chai = require("chai");
 var StringArray = require("../../strings/StringArray");
 var asr = chai.assert;
-suite("StringArray", function StringArrayTest() {
-    test("new StringArray", function StringArrayInstTest() {
+suite("StringArray", function () {
+    test("new StringArray()", function () {
         var inst = new StringArray();
         var res = StringArray.of("a")
             .addAll(["", "b", 123])
@@ -18,5 +18,23 @@ suite("StringArray", function StringArrayTest() {
             "\t{\n" +
             "\n" +
             "\t}");
+    });
+    test("flattenMapJoin", function () {
+        var res = StringArray.flattenMapJoin({
+            alpha: ["alpha"],
+            count: ["1", "2", "3", "4", "5"],
+            last: [""],
+        }, ["-"]);
+        asr.deepEqual(res, [
+            "alpha", "-", "1", "2", "3", "4", "5", "-", ""
+        ]);
+    });
+    test("", function () {
+        var prefix = "+";
+        var suffix = ":";
+        var res = StringArray.preAppend(prefix, suffix, ["alpha", "beta", "end"]);
+        asr.deepEqual(res, [
+            "+alpha:", "+beta:", "+end:"
+        ]);
     });
 });
